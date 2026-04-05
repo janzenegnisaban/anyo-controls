@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anyo Controls — KaliArena</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:    #b91c1c;
+      --red-bg: #fef2f2;
+      --blue:   #1d4ed8;
+      --blue-bg: #eff6ff;
+      --green:  #16a34a;
+      --green-bg: #f0fdf4;
+      --green-border: #86efac;
+      --gold:   #d97706;
+      --bg:     #f3f4f6;
+      --card:   #ffffff;
+      --border: #e5e7eb;
+      --muted:  #f9fafb;
+      --muted-fg: #6b7280;
+      --fg:     #111827;
+      --primary: #b91c1c;
+      --primary-fg: #fff;
+      --radius: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,.1);
+    }
+
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; padding-bottom: 48px; }
+
+    /* HEADER */
+    header { background: var(--card); border-bottom: 1px solid var(--border); padding: 10px 16px; position: sticky; top: 0; z-index: 50; box-shadow: var(--shadow); }
+    .header-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .header-left  { display: flex; align-items: center; gap: 10px; }
+    .header-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+    /* MAIN */
+    main { max-width: 1000px; margin: 0 auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 16px; }
+
+    /* CARD */
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .card-header { padding: 16px 20px 10px; border-bottom: 1px solid var(--border); }
+    .card-title  { font-size: 15px; font-weight: 700; }
+    .card-desc   { font-size: 13px; color: var(--muted-fg); margin-top: 2px; }
+    .card-body   { padding: 16px 20px 20px; }
+
+    /* BUTTONS */
+    button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); color: var(--fg); font-size: 13px; font-weight: 500; cursor: pointer; padding: 6px 14px; line-height: 1; transition: opacity .15s; white-space: nowrap; }
+    button:hover { opacity: .85; }
+    button:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-ghost   { border-color: transparent; background: transparent; }
+    .btn-ghost:hover { background: var(--muted); }
+    .btn-outline { border-color: var(--border); background: var(--card); }
+    .btn-primary { background: var(--primary); border-color: var(--primary); color: var(--primary-fg); }
+    .btn-danger  { background: #ef4444; border-color: #ef4444; color: #fff; }
+    .btn-sm   { padding: 4px 10px; font-size: 12px; }
+    .btn-lg   { padding: 10px 18px; font-size: 15px; font-weight: 600; }
+    .btn-xl   { padding: 14px 24px; font-size: 17px; font-weight: 700; width: 100%; }
+    .w-full   { width: 100%; }
+
+    /* BADGE */
+    .badge { display: inline-flex; align-items: center; border-radius: 999px; padding: 2px 9px; font-size: 11px; font-weight: 600; border: 1px solid var(--border); background: var(--muted); }
+    .badge-secondary { background: #e5e7eb; border-color: #d1d5db; }
+    .badge-outline   { background: transparent; border-color: var(--border); }
+
+    /* FORM */
+    label  { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+    select { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); font-size: 13px; color: var(--fg); appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 36px; }
+    select:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+    input[type="number"], input[type="text"] { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-weight: 600; color: var(--fg); background: var(--card); }
+    input[type="number"]:focus, input[type="text"]:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+
+    /* GRID */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-5 { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    @media(max-width:650px){ .grid-5{ grid-template-columns: repeat(2,1fr); } .grid-3{ grid-template-columns:1fr 1fr; } }
+    @media(max-width:500px){ .grid-2{ grid-template-columns:1fr; } }
+
+    /* TIMER */
+    .timer-display {
+      font-size: 80px; font-weight: 900; font-family: 'Courier New', monospace;
+      line-height: 1; text-align: center;
+    }
+    .timer-normal  { color: var(--primary); }
+    .timer-warn    { color: #f97316; }
+    .timer-ended   { color: #ef4444; }
+    .timer-label   { font-size: 13px; color: var(--muted-fg); text-align: center; margin-top: 6px; }
+    .timer-center  { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; }
+
+    /* JUDGE CARD */
+    .judge-card { padding: 10px; border-radius: var(--radius); border: 2px solid var(--border); }
+    .judge-card-current { border-color: var(--primary); background: rgba(185,28,28,.04); }
+    .judge-card-done    { border-color: var(--green); background: var(--green-bg); }
+    .judge-card label   { margin-bottom: 4px; }
+    .judge-entered { font-size: 11px; font-weight: 600; color: var(--green); margin-top: 3px; }
+
+    /* SCORE SUMMARY */
+    .score-box { padding: 14px 16px; border-radius: var(--radius); background: var(--muted); }
+    .score-box-label { font-size: 12px; color: var(--muted-fg); margin-bottom: 4px; }
+    .score-box-value { font-size: 36px; font-weight: 700; }
+    .score-box-final { background: rgba(185,28,28,.07); border: 2px solid var(--primary); }
+    .score-deduct { color: #ef4444; }
+    .score-final  { color: var(--primary); }
+
+    /* PARTICIPANT ROW */
+    .participant-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius); }
+    .participant-row-active { border-color: var(--primary); background: rgba(185,28,28,.04); }
+    .participant-info { display: flex; align-items: center; gap: 10px; }
+    .participant-right { display: flex; align-items: center; gap: 12px; }
+    .check-icon { color: var(--green); font-size: 18px; }
+
+    /* DIVIDER */
+    .divider { height: 1px; background: var(--border); margin: 12px 0; }
+
+    /* MODAL */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px; }
+    .overlay.hidden { display: none; }
+    .dialog { background: var(--card); border-radius: var(--radius); box-shadow: 0 20px 60px rgba(0,0,0,.2); width: 100%; max-width: 420px; }
+    .dialog-header { padding: 20px 24px 12px; border-bottom: 1px solid var(--border); }
+    .dialog-title  { font-size: 16px; font-weight: 700; }
+    .dialog-desc   { font-size: 13px; color: var(--muted-fg); margin-top: 4px; }
+    .dialog-body   { padding: 16px 24px; }
+    .dialog-footer { padding: 12px 24px 20px; display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--border); }
+
+    /* TOAST */
+    #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 500; display: flex; flex-direction: column; gap: 8px; }
+    .toast { background: #1f2937; color: #fff; padding: 10px 16px; border-radius: var(--radius); box-shadow: 0 4px 12px rgba(0,0,0,.2); font-size: 13px; max-width: 300px; animation: slide-in .2s ease; }
+    .toast-title { font-weight: 600; }
+    .toast-desc  { color: #9ca3af; font-size: 12px; margin-top: 2px; }
+    @keyframes slide-in { from{ transform:translateX(120%);opacity:0 } to{ transform:translateX(0);opacity:1 } }
+
+    /* UTILS */
+    .flex { display: flex; } .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-2 { gap: 8px; } .gap-3 { gap: 12px; }
+    .space-y-3 > * + * { margin-top: 12px; }
+    .space-y-2 > * + * { margin-top: 8px; }
+    .mt-1 { margin-top: 4px; } .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; }
+    .mb-1 { margin-bottom: 4px; } .mb-2 { margin-bottom: 8px; }
+    .text-sm  { font-size: 13px; }
+    .text-xs  { font-size: 11px; }
+    .text-lg  { font-size: 18px; }
+    .text-2xl { font-size: 26px; }
+    .font-bold { font-weight: 700; }
+    .font-semibold { font-weight: 600; }
+    .text-muted { color: var(--muted-fg); }
+    .text-red   { color: #ef4444; }
+    .text-green { color: var(--green); }
+    .text-primary { color: var(--primary); }
+    .hidden { display: none !important; }
+    .section-hidden { display: none; }
+    svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
+
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; }
+
+    /* ── EXTENSION: mirrors arnis/app/display/anyo-audience/page.tsx ───────── */
+    body.is-extension header,
+    body.is-extension main,
+    body.is-extension #toast-container { display: none !important; }
+
+    body.is-extension { background: #fff; overflow: hidden; }
+
+    #anyo-extension-root {
+      display: none;
+      flex: 1;
+      min-height: 0;
+      flex-direction: column;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #fff;
+      color: #000;
+      overflow: hidden;
+    }
+    body.is-extension #anyo-extension-root { display: flex; }
+
+    .ax-head {
+      background: linear-gradient(90deg, #facc15, #eab308);
+      border-bottom: 4px solid #ca8a04;
+      padding: 16px 20px;
+    }
+    .ax-head-inner { max-width: 1200px; margin: 0 auto; }
+    .ax-title { font-size: clamp(1.25rem, 3vw, 2.25rem); font-weight: 900; text-transform: uppercase; color: #000; line-height: 1.15; }
+    .ax-sub { font-size: clamp(1rem, 2vw, 1.5rem); font-weight: 700; color: rgba(0,0,0,.82); text-transform: uppercase; margin-top: 6px; }
+    .ax-meta { font-size: 0.85rem; color: rgba(0,0,0,.55); margin-top: 8px; font-weight: 600; }
+
+    .ax-main { flex: 1; overflow-y: auto; background: #fff; }
+    .ax-container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+
+    .ax-empty { text-align: center; padding: 80px 20px; color: #71717a; }
+    .ax-empty .trophy { font-size: 4rem; margin-bottom: 16px; }
+
+    .ax-table-wrap { overflow-x: auto; }
+    .ax-table { width: 100%; border-collapse: collapse; }
+    .ax-table thead tr { background: #facc15; }
+    .ax-table th {
+      border: 2px solid #000; padding: 12px 10px; text-align: center;
+      font-weight: 900; text-transform: uppercase; font-size: 0.8rem; color: #000;
+    }
+    .ax-table th:first-child { text-align: left; }
+    .ax-table td {
+      border: 2px solid #000; padding: 12px 10px; text-align: center;
+      font-weight: 600; color: #000; font-size: 0.95rem;
+    }
+    .ax-table td:first-child { text-align: left; font-weight: 700; text-transform: uppercase; }
+    .ax-table tbody tr:nth-child(even) { background: #fffbeb; }
+    .ax-table tbody tr:nth-child(odd) { background: #fff; }
+    .ax-total { font-weight: 900 !important; font-size: 1.15rem !important; }
+
+    .ax-medals {
+      margin-top: 32px;
+      background: linear-gradient(135deg, #fffbeb, #fef3c7);
+      border: 4px solid #facc15;
+      border-radius: 24px;
+      padding: 28px 20px 36px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.08);
+    }
+    .ax-medals h2 { font-size: 1.75rem; font-weight: 900; text-align: center; text-transform: uppercase; margin-bottom: 24px; color: #000; }
+    .ax-podium {
+      display: flex; flex-direction: row; justify-content: center; align-items: flex-end;
+      gap: 24px; flex-wrap: wrap; max-width: 960px; margin: 0 auto;
+    }
+    .ax-podium .slot { text-align: center; flex: 1; min-width: 160px; max-width: 280px; }
+    .ax-podium .slot.gold { order: 1; }
+    .ax-podium .slot.silver { order: 2; }
+    .ax-podium .slot.bronze { order: 3; }
+    .ax-med-circle {
+      border-radius: 999px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; box-shadow: 0 8px 20px rgba(0,0,0,.12);
+    }
+    .ax-med-circle.silver { width: 96px; height: 96px; background: #d4d4d8; }
+    .ax-med-circle.gold { width: 128px; height: 128px; background: #facc15; border: 4px solid #ca8a04; }
+    .ax-med-circle.bronze { width: 96px; height: 96px; background: #d97706; }
+    .ax-med-label { font-weight: 900; text-transform: uppercase; margin-bottom: 8px; }
+    .ax-med-label.silver { font-size: 1.35rem; color: #52525b; }
+    .ax-med-label.gold { font-size: 1.65rem; color: #a16207; }
+    .ax-med-label.bronze { font-size: 1.35rem; color: #9a3412; }
+    .ax-med-team { font-weight: 700; font-size: 1.1rem; word-break: break-word; }
+    .ax-med-score { margin-top: 6px; font-weight: 800; }
+    .ax-med-score.gold { font-size: 1.25rem; color: #a16207; }
+
+    .ax-foot {
+      background: #000;
+      border-top: 4px solid #facc15;
+      padding: 14px 20px;
+      font-size: 0.8rem;
+      color: #e4e4e7;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .ax-foot .pulse { width: 8px; height: 8px; border-radius: 999px; background: #22c55e; animation: ax-pulse 1.5s ease-in-out infinite; display: inline-block; margin-right: 8px; vertical-align: middle; }
+    @keyframes ax-pulse { 0%,100%{opacity:1} 50%{opacity:.45} }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <button class="btn-ghost btn-sm" onclick="history.back()">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to Events
+      </button>
+      <span style="font-size:17px;font-weight:700">Anyo Controls</span>
+      <span id="court-badge" class="badge badge-outline" style="display:none"></span>
+    </div>
+    <div class="header-right">
+      <button type="button" class="btn-outline btn-sm">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Queue Display
+      </button>
+      <a class="btn-outline btn-sm" id="link-audience-ext" href="#" target="_blank" title="Opens audience-style display for projector"
+        style="text-decoration:none;display:inline-flex;align-items:center;gap:6px">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Audience display
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- SELECTION -->
+  <div class="card">
+    <div class="card-header"><div class="card-title">Select Category &amp; Game Type</div></div>
+    <div class="card-body">
+      <div class="grid-2">
+        <div>
+          <label for="sel-category">Category</label>
+          <select id="sel-category"><option value="">Select category</option></select>
+        </div>
+        <div>
+          <label for="sel-gametype">Game Type</label>
+          <select id="sel-gametype"><option value="">Select game type</option></select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARTICIPANT NAV (shown when both selected and participants exist) -->
+  <div id="section-main" class="section-hidden" style="display:flex;flex-direction:column;gap:16px">
+
+    <!-- Current Participant -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">Current Participant</div></div>
+      <div class="card-body">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-2xl font-bold" id="p-name">—</div>
+            <div class="text-muted text-sm mt-1" id="p-team">—</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="btn-outline" id="btn-prev">Previous</button>
+            <span class="badge badge-secondary" id="p-index">1 / 1</span>
+            <button class="btn-outline" id="btn-next">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timer -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title flex items-center gap-2">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Performance Timer
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="timer-center">
+          <div class="timer-display timer-normal" id="timer-display">1:00</div>
+          <div class="timer-label" id="timer-label">Ready to Start</div>
+        </div>
+        <div class="flex items-center justify-center gap-2" id="timer-controls">
+          <button class="btn-primary btn-lg" id="btn-timer-toggle">
+            <svg viewBox="0 0 24 24" id="play-icon"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg>
+            <svg viewBox="0 0 24 24" id="pause-icon" style="display:none"><rect x="6" y="4" width="4" height="16" fill="currentColor" stroke="none"/><rect x="14" y="4" width="4" height="16" fill="currentColor" stroke="none"/></svg>
+            <span id="timer-btn-label">Start Timer</span>
+          </button>
+          <button class="btn-outline btn-lg" id="btn-timer-reset">
+            <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.88"/></svg>
+            Reset
+          </button>
+        </div>
+        <!-- After timer ends: only Reset Timer shown -->
+        <div class="flex items-center justify-center" id="timer-ended-controls" style="display:none!important">
+          <button class="btn-outline btn-lg" id="btn-timer-reset2">
+            <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.88"/></svg>
+            Reset Timer
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Judge Scores (only after timer ends) -->
+    <div class="card section-hidden" id="section-scores">
+      <div class="card-header">
+        <div class="card-title">Enter Judge Scores</div>
+        <div class="card-desc">Type scores one by one as judges show them. Current: <span id="current-judge-label">Judge 1</span></div>
+      </div>
+      <div class="card-body">
+        <!-- 5 Judge inputs -->
+        <div class="grid-5 mb-3" id="judge-grid">
+          <!-- injected -->
+        </div>
+
+        <!-- Score Summary -->
+        <div class="grid-3 mb-4">
+          <div class="score-box">
+            <div class="score-box-label">Average Score</div>
+            <div class="score-box-value" id="avg-score">0.00</div>
+          </div>
+          <div class="score-box">
+            <div class="score-box-label">Deduction</div>
+            <div class="score-box-value score-deduct" id="deduction-display">0.0</div>
+          </div>
+          <div class="score-box score-box-final">
+            <div class="score-box-label">Final Score</div>
+            <div class="score-box-value score-final" id="final-score">0.00</div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-2">
+          <button class="btn-outline btn-lg" style="flex:1" id="btn-deduction">
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Deduction
+          </button>
+          <button class="btn-primary btn-lg" style="flex:1" id="btn-finish" disabled>
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <span id="finish-label">Finish Perform</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- All Participants Summary -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">All Participants Summary</div></div>
+      <div class="card-body space-y-2" id="participants-list">
+        <!-- injected -->
+      </div>
+    </div>
+
+  </div><!-- /section-main -->
+
+  <!-- No data message -->
+  <div class="card" id="section-empty" style="display:none">
+    <div class="card-body" style="text-align:center;padding:32px;color:var(--muted-fg)">
+      No participants found for the selected category and game type.
+    </div>
+  </div>
+</main>
+
+<!-- EXTENSION: ?display=extension — layout aligned with arnis/app/display/anyo-audience/page.tsx -->
+<div id="anyo-extension-root">
+  <header class="ax-head">
+    <div class="ax-head-inner">
+      <div class="ax-title" id="ax-cat-title">SELECT CATEGORY</div>
+      <div class="ax-sub" id="ax-game-type"></div>
+      <div class="ax-meta">Synced from Anyo Controls · same category &amp; game type</div>
+    </div>
+  </header>
+  <div class="ax-main">
+    <div class="ax-container">
+      <div id="ax-empty" class="ax-empty" style="display:none">
+        <div class="trophy" aria-hidden="true">🏆</div>
+        <p style="font-size:1.35rem;font-weight:700;color:#000;margin-bottom:8px">No participants</p>
+        <p>Participants will appear once the bracket is loaded in Anyo Controls.</p>
+      </div>
+      <div id="ax-content" style="display:none">
+        <div class="ax-table-wrap">
+          <table class="ax-table" aria-label="Scores">
+            <thead>
+              <tr>
+                <th>Participant</th>
+                <th>J1</th><th>J2</th><th>J3</th><th>J4</th><th>J5</th>
+                <th>D</th><th>TOTAL</th>
+              </tr>
+            </thead>
+            <tbody id="ax-tbody"></tbody>
+          </table>
+        </div>
+        <div id="ax-medals" class="ax-medals" style="display:none">
+          <h2>Final standings</h2>
+          <div class="ax-podium">
+            <div class="slot silver">
+              <div class="ax-med-circle silver">🥈</div>
+              <div class="ax-med-label silver">Silver</div>
+              <div class="ax-med-team" id="ax-silver-team">—</div>
+              <div class="ax-med-score" id="ax-silver-score">—</div>
+            </div>
+            <div class="slot gold">
+              <div class="ax-med-circle gold">👑</div>
+              <div class="ax-med-label gold">Gold</div>
+              <div class="ax-med-team" id="ax-gold-team">—</div>
+              <div class="ax-med-score gold" id="ax-gold-score">—</div>
+            </div>
+            <div class="slot bronze">
+              <div class="ax-med-circle bronze">🥉</div>
+              <div class="ax-med-label bronze">Bronze</div>
+              <div class="ax-med-team" id="ax-bronze-team">—</div>
+              <div class="ax-med-score" id="ax-bronze-score">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="ax-foot">
+    <div><span class="pulse"></span> Live sync active · Auto-refresh ~2s</div>
+    <div>KaliArena Championship · Anyo audience display</div>
+  </footer>
+</div>
+
+<!-- Toast -->
+<div id="toast-container"></div>
+
+<!-- Deduction Modal -->
+<div class="overlay hidden" id="overlay-deduction">
+  <div class="dialog">
+    <div class="dialog-header">
+      <div class="dialog-title">Enter Deduction</div>
+      <div class="dialog-desc">The deduction will be subtracted from the average score.</div>
+    </div>
+    <div class="dialog-body">
+      <label for="deduction-input">Deduction Amount</label>
+      <input type="number" id="deduction-input" min="0" step="0.1" placeholder="0.0" />
+      <div class="text-xs text-muted mt-2">Current average: <span id="dlg-avg">0.00</span></div>
+    </div>
+    <div class="dialog-footer">
+      <button class="btn-outline" id="btn-deduct-cancel">Cancel</button>
+      <button class="btn-primary" id="btn-deduct-apply">Apply Deduction</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  MODE: ?display=extension — audience-style display (see arnis anyo-audience page)
+// ═══════════════════════════════════════════════════════
+const IS_EXTENSION = new URLSearchParams(location.search).get('display') === 'extension';
+if (IS_EXTENSION) document.body.classList.add('is-extension');
+
+// ═══════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const fmt = s => `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+function showToast(title, desc='') {
+  const c = $('toast-container');
+  const t = document.createElement('div'); t.className='toast';
+  t.innerHTML=`<div class="toast-title">${title}</div>${desc?`<div class="toast-desc">${desc}</div>`:''}`;
+  c.appendChild(t); setTimeout(()=>t.remove(),3500);
+}
+
+// ═══════════════════════════════════════════════════════
+//  DEFAULT DEMO DATA
+// ═══════════════════════════════════════════════════════
+const DEMO_CATEGORIES = [
+  { id:'cat-1', weight:'Featherweight', gender:'Boys', ageRange:'12-15', fullName:'Featherweight (Boys, 12-15)' },
+  { id:'cat-2', weight:'Bantamweight',  gender:'Girls', ageRange:'10-12', fullName:'Bantamweight (Girls, 10-12)' },
+  { id:'cat-3', weight:'Lightweight',   gender:'Mixed', ageRange:'16-18', fullName:'Lightweight (Mixed, 16-18)' },
+];
+const DEMO_GAME_TYPES = ['anyo-traditional','anyo-non-traditional'];
+const DEMO_BRACKETS = {
+  'cat-1-anyo-traditional': {
+    participants: [
+      { id:'p1', name:'Maria Santos',   team:'Team Alpha' },
+      { id:'p2', name:'Jose Reyes',     team:'Team Beta' },
+      { id:'p3', name:'Ana Garcia',     team:'Team Gamma' },
+    ],
+    scores: {}
+  },
+  'cat-2-anyo-non-traditional': {
+    participants: [
+      { id:'p4', name:'Carlos Mendoza', team:'Cebu Warriors' },
+      { id:'p5', name:'Sofia Cruz',     team:'Manila Fighters' },
+    ],
+    scores: {}
+  }
+};
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+let state = {
+  categories: [],
+  gameTypes: [],
+  selectedCategory: null,
+  selectedGameType: null,
+  participants: [],
+  currentIdx: 0,
+  scores: {},       // { [participantId]: { j1,j2,j3,j4,j5,deduction } }
+  timerSeconds: 60,
+  isRunning: false,
+  timerEnded: false,
+  judgeOrder: [],   // which judges (1-5) have been filled
+  currentJudge: 0,  // 0-indexed
+};
+let timerInterval = null;
+
+function blankScore() { return { j1:0,j2:0,j3:0,j4:0,j5:0,deduction:0 }; }
+function getScore(pId) { return state.scores[pId] || blankScore(); }
+function currentParticipant() { return state.participants[state.currentIdx] || null; }
+function currentScore() { const p=currentParticipant(); return p ? getScore(p.id) : null; }
+
+function calcAvg(sc) {
+  const vals = [sc.j1,sc.j2,sc.j3,sc.j4,sc.j5].filter(v=>v>0);
+  if (!vals.length) return 0;
+  return vals.reduce((a,b)=>a+b,0)/vals.length;
+}
+function calcTotal(sc) { return Math.max(0, calcAvg(sc) - sc.deduction); }
+
+function saveAnyoDisplayContext() {
+  try {
+    localStorage.setItem('anyoDisplayContext', JSON.stringify({
+      selectedCategory: state.selectedCategory,
+      selectedGameType: state.selectedGameType,
+    }));
+  } catch {}
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function renderExtensionFromStorage() {
+  if (!IS_EXTENSION) return;
+  let ctx = {};
+  try { ctx = JSON.parse(localStorage.getItem('anyoDisplayContext') || '{}'); } catch {}
+  let catId = ctx.selectedCategory;
+  let gameType = ctx.selectedGameType;
+
+  let categories = [];
+  try { categories = JSON.parse(localStorage.getItem('eventCategories') || '[]'); } catch {}
+  if (!catId && categories.length) catId = categories[0].id;
+  if (!gameType) {
+    let gts = [];
+    try {
+      gts = JSON.parse(localStorage.getItem('eventGameTypes') || '[]').filter((t) => String(t).includes('anyo'));
+    } catch { gts = []; }
+    if (gts.length) gameType = gts[0];
+  }
+
+  const catData = categories.find((c) => c.id === catId);
+  const titleEl = $('ax-cat-title');
+  const subEl = $('ax-game-type');
+  if (titleEl) titleEl.textContent = catData?.fullName || 'SELECT CATEGORY';
+  if (subEl) {
+    subEl.textContent =
+      gameType === 'anyo-traditional'
+        ? 'ANYO - TRADITIONAL'
+        : gameType === 'anyo-non-traditional'
+          ? 'ANYO - NON-TRADITIONAL'
+          : gameType || '';
+  }
+
+  const emptyEl = $('ax-empty');
+  const contentEl = $('ax-content');
+  if (!catId || !gameType) {
+    if (emptyEl) emptyEl.style.display = '';
+    if (contentEl) contentEl.style.display = 'none';
+    return;
+  }
+
+  const bracketKey = `${catId}-${gameType}`;
+  let brackets = {};
+  try { brackets = JSON.parse(localStorage.getItem('eventBrackets') || '{}'); } catch {}
+  const bracket = brackets[bracketKey];
+  const participants = bracket?.participants || [];
+  const scoreMap = bracket?.scores || {};
+
+  if (!participants.length) {
+    if (emptyEl) emptyEl.style.display = '';
+    if (contentEl) contentEl.style.display = 'none';
+    return;
+  }
+
+  if (emptyEl) emptyEl.style.display = 'none';
+  if (contentEl) contentEl.style.display = '';
+
+  const rows = participants.map((p) => {
+    const sc = scoreMap[p.id] || { j1: 0, j2: 0, j3: 0, j4: 0, j5: 0, deduction: 0 };
+    const total = calcTotal(sc);
+    return { ...p, scores: sc, total };
+  }).sort((a, b) => {
+    if (a.total === 0 && b.total > 0) return 1;
+    if (b.total === 0 && a.total > 0) return -1;
+    return b.total - a.total;
+  });
+
+  const tbody = $('ax-tbody');
+  if (tbody) {
+    tbody.innerHTML = rows
+      .map((participant) => {
+        const s = participant.scores;
+        const hasAny = s.j1 > 0 || s.j2 > 0 || s.j3 > 0 || s.j4 > 0 || s.j5 > 0;
+        const jn = (n) => (s[`j${n}`] > 0 ? Number(s[`j${n}`]).toFixed(1) : '—');
+        const teamCell = escHtml(participant.team || participant.name || '—');
+        return `<tr>
+          <td>${teamCell}</td>
+          <td>${jn(1)}</td><td>${jn(2)}</td><td>${jn(3)}</td><td>${jn(4)}</td><td>${jn(5)}</td>
+          <td>${s.deduction > 0 ? Number(s.deduction).toFixed(1) : '0.0'}</td>
+          <td class="ax-total">${hasAny ? participant.total.toFixed(1) : '—'}</td>
+        </tr>`;
+      })
+      .join('');
+  }
+
+  const completed = rows.filter((p) => p.total > 0);
+  const medals = $('ax-medals');
+  if (medals) {
+    if (completed.length >= 3) {
+      medals.style.display = '';
+      const setMed = (teamId, scoreId, row) => {
+        const t = $(teamId);
+        const sc = $(scoreId);
+        if (t) t.textContent = row.team || row.name || '—';
+        if (sc) sc.textContent = row.total.toFixed(1);
+      };
+      setMed('ax-gold-team', 'ax-gold-score', completed[0]);
+      setMed('ax-silver-team', 'ax-silver-score', completed[1]);
+      setMed('ax-bronze-team', 'ax-bronze-score', completed[2]);
+    } else {
+      medals.style.display = 'none';
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  LOAD DATA
+// ═══════════════════════════════════════════════════════
+function loadData() {
+  // Categories
+  try {
+    const s=localStorage.getItem('eventCategories');
+    state.categories = s ? JSON.parse(s) : DEMO_CATEGORIES;
+  } catch { state.categories=DEMO_CATEGORIES; }
+  if (!state.categories.length) state.categories=DEMO_CATEGORIES;
+
+  // Game types (filter to anyo)
+  try {
+    const s=localStorage.getItem('eventGameTypes');
+    const all = s ? JSON.parse(s) : DEMO_GAME_TYPES;
+    state.gameTypes = all.filter(t=>t.includes('anyo'));
+  } catch { state.gameTypes=DEMO_GAME_TYPES; }
+  if (!state.gameTypes.length) state.gameTypes=DEMO_GAME_TYPES;
+
+  // Populate selects
+  const catSel = $('sel-category');
+  state.categories.forEach(c=>{
+    const o=document.createElement('option'); o.value=c.id; o.textContent=c.fullName; catSel.appendChild(o);
+  });
+  const gtSel = $('sel-gametype');
+  state.gameTypes.forEach(gt=>{
+    const o=document.createElement('option'); o.value=gt;
+    o.textContent = gt==='anyo-traditional'?'Anyo - Traditional':'Anyo - Non-Traditional';
+    gtSel.appendChild(o);
+  });
+
+  // Auto-select first options
+  if (state.categories.length) { state.selectedCategory=state.categories[0].id; catSel.value=state.categories[0].id; }
+  if (state.gameTypes.length)   { state.selectedGameType=state.gameTypes[0]; gtSel.value=state.gameTypes[0]; }
+
+  // Court badge
+  const court=localStorage.getItem('currentCourt');
+  if (court) { $('court-badge').textContent=court; $('court-badge').style.display=''; }
+
+  loadBracket();
+}
+
+function loadBracket() {
+  if (!state.selectedCategory || !state.selectedGameType) return;
+  const key = `${state.selectedCategory}-${state.selectedGameType}`;
+  try {
+    const s=localStorage.getItem('eventBrackets');
+    const brackets = s ? JSON.parse(s) : DEMO_BRACKETS;
+    if (brackets[key]) {
+      state.participants = brackets[key].participants || [];
+      state.scores = brackets[key].scores || {};
+    } else {
+      // Try demo
+      if (DEMO_BRACKETS[key]) {
+        state.participants = DEMO_BRACKETS[key].participants;
+        state.scores = DEMO_BRACKETS[key].scores;
+      } else {
+        state.participants=[]; state.scores={};
+      }
+    }
+  } catch { state.participants=[]; state.scores={}; }
+
+  state.currentIdx=0;
+  resetTimerState();
+  saveAnyoDisplayContext();
+  render();
+}
+
+function resetTimerState() {
+  state.timerSeconds=60; state.isRunning=false; state.timerEnded=false;
+  state.judgeOrder=[]; state.currentJudge=0;
+  clearInterval(timerInterval);
+}
+
+// ═══════════════════════════════════════════════════════
+//  SAVE
+// ═══════════════════════════════════════════════════════
+function saveBracket() {
+  if (!state.selectedCategory || !state.selectedGameType) return;
+  const key=`${state.selectedCategory}-${state.selectedGameType}`;
+  try {
+    const s=localStorage.getItem('eventBrackets');
+    let brackets = s ? JSON.parse(s) : {};
+    if (!brackets[key]) brackets[key]={ categoryId:state.selectedCategory, gameType:state.selectedGameType, participants:state.participants, scores:{} };
+    brackets[key].scores = state.scores;
+    localStorage.setItem('eventBrackets',JSON.stringify(brackets));
+    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new CustomEvent('bracketUpdate'));
+  } catch {}
+}
+
+// ═══════════════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════════════
+function render() {
+  const hasBoth = state.selectedCategory && state.selectedGameType;
+  const hasParticipants = state.participants.length > 0;
+
+  // Show/hide sections
+  $('section-main').style.display = (hasBoth && hasParticipants) ? 'flex' : 'none';
+  $('section-empty').style.display = (hasBoth && !hasParticipants) ? '' : 'none';
+
+  if (!hasBoth || !hasParticipants) return;
+
+  const p = currentParticipant();
+  const sc = currentScore();
+
+  // Participant info
+  $('p-name').textContent  = p?.name || '—';
+  $('p-team').textContent  = p?.team || '—';
+  $('p-index').textContent = `${state.currentIdx+1} / ${state.participants.length}`;
+  $('btn-prev').disabled = state.currentIdx===0;
+  $('btn-next').disabled = state.currentIdx===state.participants.length-1;
+
+  // Timer
+  const td = $('timer-display');
+  td.textContent = fmt(state.timerSeconds);
+  if (state.timerSeconds===0) td.className='timer-display timer-ended';
+  else if (state.timerSeconds<=10) td.className='timer-display timer-warn';
+  else td.className='timer-display timer-normal';
+  $('timer-label').textContent = state.timerEnded
+    ? "Time's Up! Judges can now show scores."
+    : state.isRunning ? 'Timer Running' : 'Ready to Start';
+
+  // Timer control buttons
+  const timerCtrl = $('timer-controls');
+  const timerEndCtrl = $('timer-ended-controls');
+  if (state.timerEnded) {
+    timerCtrl.style.display='none';
+    timerEndCtrl.style.removeProperty('display');
+  } else {
+    timerCtrl.style.display='flex';
+    timerEndCtrl.style.display='none';
+    $('play-icon').style.display  = state.isRunning ? 'none' : '';
+    $('pause-icon').style.display = state.isRunning ? '' : 'none';
+    $('timer-btn-label').textContent = state.isRunning ? 'Pause' : 'Start Timer';
+    $('btn-timer-toggle').className = state.isRunning ? 'btn-outline btn-lg' : 'btn-primary btn-lg';
+  }
+
+  // Judge scores section
+  const scoresSection = $('section-scores');
+  if (state.timerEnded) {
+    scoresSection.style.display='';
+    renderJudges(sc);
+    if (sc) {
+      const avg = calcAvg(sc);
+      const total = calcTotal(sc);
+      $('avg-score').textContent   = avg.toFixed(2);
+      $('deduction-display').textContent = sc.deduction>0 ? `-${sc.deduction.toFixed(1)}` : '0.0';
+      $('final-score').textContent = total.toFixed(2);
+    }
+    $('current-judge-label').textContent = `Judge ${state.currentJudge+1}`;
+    // Finish button: enabled when all 5 judges entered
+    const allEntered = state.judgeOrder.length>=5;
+    $('btn-finish').disabled = !allEntered;
+    $('finish-label').textContent = sc && sc.deduction>0 ? 'Finish & Save' : 'Finish Perform';
+  } else {
+    scoresSection.style.display='none';
+  }
+
+  // Participants list
+  renderParticipantsList();
+}
+
+function renderJudges(sc) {
+  const grid = $('judge-grid');
+  grid.innerHTML = '';
+  for (let i=1; i<=5; i++) {
+    const key = `j${i}`;
+    const hasScore = sc && sc[key] > 0;
+    const isCurrent = state.currentJudge === i-1;
+    const div = document.createElement('div');
+    div.className = 'judge-card' + (isCurrent?' judge-card-current':hasScore?' judge-card-done':'');
+    div.innerHTML = `
+      <label style="${isCurrent?'font-weight:700':''}" for="j${i}">Judge ${i}</label>
+      <input type="number" id="j${i}" min="0" max="100" step="0.1" placeholder="0.0"
+        class="text-lg font-bold" value="${sc&&sc[key]>0?sc[key]:''}" data-judge="${i}"
+        ${isCurrent?'autofocus':''} />
+      ${hasScore?'<div class="judge-entered">✓ Entered</div>':''}
+    `;
+    grid.appendChild(div);
+  }
+  // Bind inputs
+  for (let i=1; i<=5; i++) {
+    const inp = document.getElementById(`j${i}`);
+    inp.addEventListener('input', ()=>handleJudgeInput(i, parseFloat(inp.value)||0));
+  }
+}
+
+function renderParticipantsList() {
+  const list = $('participants-list');
+  list.innerHTML = '';
+  state.participants.forEach((p,idx)=>{
+    const sc = state.scores[p.id];
+    const total = sc ? calcTotal(sc) : null;
+    const isActive = idx===state.currentIdx;
+    const div = document.createElement('div');
+    div.className = 'participant-row' + (isActive?' participant-row-active':'');
+    div.innerHTML = `
+      <div class="participant-info">
+        <span class="badge badge-outline">${idx+1}</span>
+        <div>
+          <div class="font-semibold">${p.name}</div>
+          <div class="text-xs text-muted">${p.team}</div>
+        </div>
+      </div>
+      <div class="participant-right">
+        ${sc ? `
+          <div style="text-align:right">
+            <div class="text-xs text-muted">Total</div>
+            <div class="text-lg font-bold">${total.toFixed(1)}</div>
+          </div>
+          <span class="check-icon">✓</span>
+        ` : '<span class="badge badge-secondary">No scores</span>'}
+      </div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  JUDGE INPUT
+// ═══════════════════════════════════════════════════════
+function handleJudgeInput(judgeNum, value) {
+  const p = currentParticipant();
+  if (!p) return;
+  const key = `j${judgeNum}`;
+  const sc = { ...getScore(p.id), [key]: value };
+  state.scores = { ...state.scores, [p.id]: sc };
+
+  if (value > 0 && !state.judgeOrder.includes(judgeNum)) {
+    state.judgeOrder = [...state.judgeOrder, judgeNum];
+    if (state.currentJudge < 4) state.currentJudge++;
+  }
+  saveBracket();
+  render();
+}
+
+// ═══════════════════════════════════════════════════════
+//  TIMER
+// ═══════════════════════════════════════════════════════
+function startTimer() {
+  clearInterval(timerInterval);
+  timerInterval = setInterval(()=>{
+    if (!state.isRunning) { clearInterval(timerInterval); return; }
+    state.timerSeconds--;
+    if (state.timerSeconds<=0) {
+      state.timerSeconds=0; state.isRunning=false; state.timerEnded=true;
+      clearInterval(timerInterval);
+    }
+    render();
+  },1000);
+}
+
+// ═══════════════════════════════════════════════════════
+//  EVENT LISTENERS
+// ═══════════════════════════════════════════════════════
+if (!IS_EXTENSION) {
+$('sel-category').addEventListener('change', e=>{
+  state.selectedCategory=e.target.value||null;
+  loadBracket();
+});
+$('sel-gametype').addEventListener('change', e=>{
+  state.selectedGameType=e.target.value||null;
+  loadBracket();
+});
+
+$('btn-prev').addEventListener('click', ()=>{
+  if (state.currentIdx>0) { state.currentIdx--; resetTimerState(); render(); }
+});
+$('btn-next').addEventListener('click', ()=>{
+  if (state.currentIdx<state.participants.length-1) { state.currentIdx++; resetTimerState(); render(); }
+});
+
+// Timer toggle
+$('btn-timer-toggle').addEventListener('click', ()=>{
+  state.isRunning=!state.isRunning;
+  if (state.isRunning) startTimer();
+  else clearInterval(timerInterval);
+  render();
+});
+function doResetTimer() {
+  state.timerSeconds=60; state.isRunning=false; state.timerEnded=false;
+  clearInterval(timerInterval); render();
+}
+$('btn-timer-reset').addEventListener('click', doResetTimer);
+$('btn-timer-reset2').addEventListener('click', doResetTimer);
+
+// Deduction modal
+$('btn-deduction').addEventListener('click', ()=>{
+  const sc = currentScore();
+  $('deduction-input').value = sc?.deduction||'';
+  $('dlg-avg').textContent = sc ? calcAvg(sc).toFixed(2) : '0.00';
+  $('overlay-deduction').classList.remove('hidden');
+  setTimeout(()=>$('deduction-input').focus(),50);
+});
+$('btn-deduct-cancel').addEventListener('click', ()=>$('overlay-deduction').classList.add('hidden'));
+$('btn-deduct-apply').addEventListener('click', ()=>{
+  const p=currentParticipant(); if (!p) return;
+  const val=parseFloat($('deduction-input').value)||0;
+  const sc={ ...getScore(p.id), deduction:val };
+  state.scores={ ...state.scores, [p.id]:sc };
+  saveBracket();
+  $('overlay-deduction').classList.add('hidden');
+  render();
+});
+$('overlay-deduction').addEventListener('click',e=>{ if(e.target===e.currentTarget)$('overlay-deduction').classList.add('hidden'); });
+
+// Finish perform
+$('btn-finish').addEventListener('click', ()=>{
+  saveBracket();
+  showToast('Performance completed', 'Scores saved and added to analytics.');
+  if (state.currentIdx < state.participants.length-1) {
+    state.currentIdx++;
+    resetTimerState();
+    render();
+  }
+});
+
+} // end !IS_EXTENSION
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+if (IS_EXTENSION) {
+  renderExtensionFromStorage();
+  setInterval(renderExtensionFromStorage, 2000);
+  window.addEventListener('storage', renderExtensionFromStorage);
+  window.addEventListener('bracketUpdate', renderExtensionFromStorage);
+} else {
+  const la = $('link-audience-ext');
+  if (la) la.href = new URL('?display=extension', window.location.href).href;
+  loadData();
+}
+</script>
+</body>
+</html>
