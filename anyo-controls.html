@@ -1,0 +1,3906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anyo Controls — KaliArena</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      min-height: 100%;
+      min-height: 100dvh;
+      background-color: #f8f9fc;
+    }
+    html:has(body.is-extension),
+    html:has(body.is-queue-display) {
+      background-color: #000;
+    }
+    html:has(body.setup-mode) {
+      min-height: 100%;
+      min-height: 100dvh;
+      background:
+        radial-gradient(120% 80% at 100% 0%, rgba(59, 130, 246, 0.09), transparent 50%),
+        radial-gradient(90% 70% at 0% 0%, rgba(185, 28, 28, 0.08), transparent 45%),
+        linear-gradient(180deg, #eef0f4 0%, #f4f5f8 50%, #f8f9fc 100%);
+    }
+
+    :root {
+      --blue-corner: #3b82f6;
+      --red-corner: #dc2626;
+      --gold-accent: #eab308;
+      --zinc-800: #27272a;
+      --zinc-900: #18181b;
+      --zinc-950: #09090b;
+      --primary: #b91c1c;
+      --secondary: #eab308;
+      --destructive: #ef4444;
+      --red: var(--red-corner);
+      --blue: var(--blue-corner);
+      --gold: var(--gold-accent);
+      --green: #22c55e;
+      --bg: var(--zinc-950);
+      --card: var(--zinc-900);
+      --border: var(--zinc-800);
+      --muted: #27272a;
+      --muted-fg: #a1a1aa;
+      --fg: #fafafa;
+      --red-bg: rgba(220, 38, 38, 0.14);
+      --red-border: rgba(248, 113, 113, 0.45);
+      --blue-bg: rgba(59, 130, 246, 0.14);
+      --blue-border: rgba(96, 165, 250, 0.45);
+      --gold-bg: rgba(234, 179, 8, 0.12);
+      --gold-border: rgba(234, 179, 8, 0.4);
+      --radius: 8px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    }
+
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100%;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Main anyo controls — light shell (match-control) */
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) {
+      background:
+        radial-gradient(120% 80% at 100% 0%, rgba(59, 130, 246, 0.09), transparent 50%),
+        radial-gradient(90% 70% at 0% 0%, rgba(185, 28, 28, 0.08), transparent 45%),
+        linear-gradient(180deg, #eef0f4 0%, #f4f5f8 50%, #f8f9fc 100%);
+      color: #18181b;
+      --fg: #18181b;
+      --card: #ffffff;
+      --border: #e4e4e7;
+      --muted: #f4f4f5;
+      --muted-fg: #71717a;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .badge-green {
+      background: rgba(34, 197, 94, 0.12);
+      border-color: rgba(34, 197, 94, 0.35);
+      color: #15803d;
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .event-badge {
+      background: #f4f4f5;
+      color: #52525b;
+      border-color: #e4e4e7;
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .event-badge-accent {
+      border-color: rgba(234, 179, 8, 0.45);
+      color: #a16207;
+      background: rgba(234, 179, 8, 0.1);
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .anyo-timer-card {
+      background: #ffffff;
+      border: 2px solid rgba(185, 28, 28, 0.22);
+      box-shadow: var(--shadow);
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .anyo-performer-strip {
+      background: #fafafa;
+      border-color: #e4e4e7;
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .anyo-name-display:hover,
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .anyo-team-display:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .anyo-inline-input {
+      background: #ffffff;
+      border-color: #d4d4d8;
+      color: #18181b;
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .anyo-inline-input:focus {
+      border-color: #3b82f6;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .ctl-timer-mega.ok {
+      color: #18181b;
+      text-shadow: none;
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .timer-display.timer-normal {
+      color: #18181b;
+      text-shadow: none;
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .timer-input {
+      background: #ffffff;
+      border-color: #b91c1c;
+      color: #18181b;
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .timer-label {
+      color: #52525b;
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .timer-violation-banner {
+      background: rgba(254, 226, 226, 0.95);
+      border-color: rgba(239, 68, 68, 0.45);
+      color: #991b1b;
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .judge-card {
+      background: #fafafa;
+      border: 1px solid #e4e4e7;
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .judge-card-current {
+      border-color: rgba(234, 179, 8, 0.55);
+      box-shadow: 0 0 0 1px rgba(234, 179, 8, 0.2);
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .judge-card-done {
+      border-color: rgba(34, 197, 94, 0.45);
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .judge-entered {
+      color: #15803d;
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .participant-row-active {
+      background: rgba(234, 179, 8, 0.1);
+      border-color: rgba(234, 179, 8, 0.45);
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .media-zone {
+      background: #fafafa;
+      border-color: #d4d4d8;
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .score-box {
+      background: #f4f4f5;
+      border-color: #e4e4e7;
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .score-box-final {
+      background: rgba(234, 179, 8, 0.1);
+      border-color: rgba(234, 179, 8, 0.4);
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .score-deduct {
+      color: #b91c1c;
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .score-final {
+      color: #a16207;
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .dialog {
+      background: #ffffff;
+      border-color: #e4e4e7;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.12);
+      color: #18181b;
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .dialog-title {
+      color: #18181b;
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .dialog-header,
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .dialog-footer {
+      border-color: #e4e4e7;
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .toast {
+      background: #ffffff;
+      color: #18181b;
+      border-color: #e4e4e7;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) .toast-desc {
+      color: #52525b;
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) select,
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) input[type="number"],
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) input[type="text"] {
+      background: #ffffff;
+      border-color: #d4d4d8;
+      color: #18181b;
+    }
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) select:focus,
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) input:focus {
+      outline: 2px solid rgba(59, 130, 246, 0.35);
+      outline-offset: 1px;
+    }
+
+    body:not(.is-extension):not(.is-queue-display):not(.setup-mode) label {
+      color: #52525b;
+    }
+
+    /* ── SETUP (light panel, match-control style) ── */
+    body.setup-mode {
+      background: transparent;
+      color: #18181b;
+    }
+    body.setup-mode #main-panel,
+    body.setup-mode header { display: none !important; }
+    body.setup-mode #setup-root { display: block !important; }
+
+    #setup-root { display: none; }
+    #setup-root .setup-shell {
+      min-height: 100dvh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: clamp(12px, 2.5vw, 20px) clamp(12px, 3vw, 20px) clamp(16px, 3vw, 28px);
+    }
+    #setup-root .setup-card {
+      width: 100%;
+      max-width: min(720px, 100%);
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e4e4e7;
+      box-shadow: 0 1px 2px rgba(9, 9, 11, 0.06), 0 12px 32px -12px rgba(9, 9, 11, 0.12);
+      overflow: hidden;
+    }
+    #setup-root .setup-card-header { padding: 14px 18px 10px; border-bottom: 1px solid #e4e4e7; }
+    #setup-root .setup-card-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #b91c1c; margin-bottom: 2px; }
+    #setup-root .setup-card-title { font-size: clamp(1.15rem, 2.5vw, 1.35rem); font-weight: 800; color: #18181b; margin-top: 0; line-height: 1.2; }
+    #setup-root .setup-card-body { padding: 0 12px; }
+    @media (min-width: 720px) {
+      #setup-root .setup-card-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 10px;
+        align-items: start;
+      }
+    }
+    #setup-root .setup-section {
+      margin-top: 10px;
+      margin-bottom: 0;
+      padding: 12px 14px 14px;
+      border-radius: 10px;
+      border: 1px solid #e4e4e7;
+      border-left: 3px solid #3b82f6;
+      background: linear-gradient(180deg, #fff 0%, #fafafa 100%);
+    }
+    @media (min-width: 720px) {
+      #setup-root .setup-section:nth-of-type(3),
+      #setup-root .setup-section:nth-of-type(4) {
+        grid-column: 1 / -1;
+      }
+      #setup-root .setup-section {
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+    #setup-root .setup-section:nth-of-type(2) { border-left-color: #dc2626; }
+    #setup-root .setup-section:nth-of-type(3) { border-left-color: #ca8a04; }
+    #setup-root .setup-section:nth-of-type(4) { border-left-color: #3b82f6; }
+    #setup-root .setup-section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #52525b; margin-bottom: 8px; }
+    #setup-root .setup-field { margin-bottom: 10px; }
+    #setup-root .setup-field:last-child { margin-bottom: 0; }
+    #setup-root .setup-field label { display: block; font-size: 12px; font-weight: 600; color: #18181b; margin-bottom: 4px; }
+    #setup-root .setup-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    #setup-root .setup-row-2 > div > label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: #71717a;
+      margin-bottom: 4px;
+    }
+    #setup-root .setup-input,
+    #setup-root select.setup-input,
+    #setup-root textarea.setup-input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #d4d4d8;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      background: #fafafa;
+      color: #18181b;
+      box-sizing: border-box;
+    }
+    #setup-root textarea.setup-input { font-size: 13px; line-height: 1.45; min-height: 64px; resize: vertical; }
+    #setup-root textarea.setup-input--mono { font-family: ui-monospace, monospace; font-size: 12px; min-height: 88px; }
+    #setup-root select.setup-input { cursor: pointer; }
+    #setup-root .setup-input:focus,
+    #setup-root input[type="number"]:focus {
+      outline: 2px solid rgba(59, 130, 246, 0.35);
+      outline-offset: 1px;
+      border-color: #93c5fd;
+      background: #fff;
+    }
+    #setup-root input[type="number"] {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #d4d4d8;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+      background: #fafafa;
+      color: #18181b;
+    }
+    #setup-root .setup-error { color: #b91c1c; font-size: 12px; padding: 8px 16px; display: none; background: rgba(254, 226, 226, 0.6); border-radius: 8px; margin: 0 12px 8px; border: 1px solid rgba(239, 68, 68, 0.35); }
+    #setup-root .setup-error.show { display: block; }
+    #setup-root .setup-actions { padding: 8px 16px 12px; }
+    #setup-root .setup-btn-primary {
+      width: 100%;
+      padding: 11px 18px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #b91c1c, #991b1b);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(185, 28, 28, 0.22);
+    }
+    #setup-root #btn-setup-pdf-extract {
+      margin-top: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      width: auto;
+      display: inline-block;
+    }
+    #setup-root .setup-footnote { text-align: center; font-size: 11px; color: #71717a; padding: 0 16px 14px; line-height: 1.4; }
+
+    /* ── HEADER (same toolbar shell as match-control) ── */
+    header {
+      background: linear-gradient(180deg, #3f3837 0%, #2c2624 100%);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
+      flex-shrink: 0;
+      color: #fafafa;
+    }
+    .header-inner { width: 100%; max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+    .header-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .header-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    button.header-toolbar-btn,
+    a.header-toolbar-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.2;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 0, 0.4);
+      background: #3f3f46;
+      color: #fafafa;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+      white-space: nowrap;
+    }
+    a.header-toolbar-btn { box-sizing: border-box; }
+    button.header-toolbar-btn:hover,
+    a.header-toolbar-btn:hover {
+      background: #52525b;
+      border-color: rgba(0, 0, 0, 0.5);
+      opacity: 1;
+    }
+    button.header-toolbar-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .badge-header-ready {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.2;
+      border-radius: 999px;
+      background: #27272a;
+      border: 1px solid #22c55e;
+      color: #fafafa;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.2);
+    }
+    .badge-header-ready .ready-dot {
+      color: #4ade80;
+      font-size: 10px;
+      line-height: 1;
+    }
+    .header-brand .kicker { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: rgba(250, 204, 21, 0.9); }
+    .header-brand .title-line { font-size: clamp(16px, 2vw, 20px); font-weight: 800; color: #fff; }
+
+    button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      border: 1px solid var(--border); border-radius: var(--radius); background: var(--muted);
+      color: var(--fg); font-size: 13px; font-weight: 500; cursor: pointer;
+      padding: 6px 12px; line-height: 1; transition: opacity .15s, background .15s, border-color .15s;
+      white-space: nowrap;
+    }
+    button:hover { opacity: .9; }
+    button:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-ghost { border-color: transparent; background: transparent; color: #fafafa; }
+    .btn-ghost:hover { background: rgba(255,255,255,.08); }
+    .btn-outline { border-color: var(--border); background: var(--card); color: var(--fg); }
+    .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .btn-green { background: var(--green); border-color: var(--green); color: #fff; }
+    .btn-gold { background: var(--gold); border-color: var(--gold); color: #fff; }
+    .btn-sm { padding: 4px 8px; font-size: 12px; }
+    .btn-lg { padding: 12px 20px; font-size: 15px; font-weight: 700; }
+    .btn-icon-lg { padding: 0; width: 48px; height: 48px; border-radius: 50%; font-size: 18px; }
+    .btn-deduct-chip { min-width: 64px; font-weight: 700; font-size: 13px; }
+
+    .badge {
+      display: inline-flex; align-items: center; border-radius: 999px;
+      padding: 2px 8px; font-size: 11px; font-weight: 600;
+      border: 1px solid var(--border); background: var(--muted); color: var(--muted-fg);
+    }
+    .badge-green { background: rgba(34, 197, 94, 0.15); border-color: rgba(34, 197, 94, 0.45); color: #86efac; }
+
+    /* Main layout — match-control spacing */
+    #main-panel {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      margin: 0 auto;
+      padding: clamp(12px, 1.5vw, 20px) clamp(12px, 2vw, 28px);
+      display: grid;
+      grid-template-columns: minmax(240px, 340px) minmax(0, 1fr);
+      gap: clamp(12px, 1.5vw, 24px);
+      align-content: start;
+      max-width: 1280px;
+    }
+    @media (max-width: 900px) {
+      #main-panel { grid-template-columns: 1fr; }
+      .col-left { order: 2; }
+      .col-right { order: 1; }
+    }
+    .col-left, .col-right { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); color: var(--fg); }
+    .card-compact .card-header { padding: 10px 14px 6px; border-bottom: 1px solid var(--border); }
+    .card-compact .card-body { padding: 10px 14px 12px; }
+    .card-title-sm { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-fg); }
+    .performers-lineup-cat-label {
+      font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-fg);
+      margin-top: 8px;
+    }
+    .performers-lineup-cat {
+      font-size: 13px; font-weight: 800; color: #18181b; line-height: 1.35; margin-top: 4px;
+    }
+    .card-header { padding: 12px 16px 8px; border-bottom: 1px solid var(--border); }
+    .card-title { font-size: 14px; font-weight: 600; }
+    .card-desc { font-size: 12px; color: var(--muted-fg); margin-top: 2px; line-height: 1.35; }
+    .card-body { padding: 12px 16px 14px; }
+
+    .anyo-readonly-box {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fafafa;
+    }
+
+    .event-badges-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .event-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+      padding: 4px 8px; border-radius: 6px;
+      border: 1px solid var(--border); background: rgba(0,0,0,.25); color: var(--muted-fg);
+    }
+    .event-badge-accent { border-color: rgba(234, 179, 8, 0.35); color: #fde68a; background: rgba(234, 179, 8, 0.08); }
+
+    /* Timer card — center column feel */
+    .anyo-timer-card {
+      background: #000;
+      border: 2px solid rgba(185, 28, 28, 0.28);
+      border-radius: var(--radius);
+    }
+    .anyo-timer-card .timer-block { padding: 4px 0 8px; }
+    .anyo-timer-card .timer-display.ctl-timer-mega { cursor: pointer; }
+    .anyo-timer-card .btn-icon-lg { width: 44px; height: 44px; }
+    .anyo-performer-strip {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      padding: 12px 14px; border-radius: var(--radius);
+      border: 1px solid var(--border); background: rgba(0,0,0,.2);
+    }
+    .anyo-edit-stack { position: relative; min-width: 0; flex: 1; }
+    .anyo-name-display, .anyo-team-display {
+      cursor: text; border-radius: 6px; padding: 2px 4px; margin: -2px -4px;
+    }
+    .anyo-name-display:hover, .anyo-team-display:hover { background: rgba(255,255,255,.06); }
+    .anyo-name-display { font-size: 1.15rem; font-weight: 800; line-height: 1.25; }
+    .anyo-team-display { font-size: 12px; color: var(--muted-fg); margin-top: 4px; }
+    .anyo-inline-input {
+      width: 100%; max-width: 520px; padding: 6px 10px; border-radius: 6px;
+      border: 1px solid var(--border); background: var(--muted); color: var(--fg); font-size: 14px;
+      display: none; margin-top: 2px;
+    }
+    .anyo-edit-hint { font-size: 10px; color: var(--muted-fg); margin-top: 4px; display: none; }
+    .ctl-hero-timer {
+      text-align: center; padding: 8px 8px 4px;
+    }
+    .ctl-timer-mega {
+      font-size: clamp(3.25rem, 12vw, 6.5rem);
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      margin: 8px 0 6px;
+      letter-spacing: -0.04em;
+    }
+    .ctl-timer-mega.ok { color: #fafafa; text-shadow: 0 4px 32px rgba(255,255,255,.08); }
+    .ctl-timer-mega.warn { color: var(--gold); }
+    .ctl-timer-mega.violation { color: #ef4444; text-shadow: 0 0 40px rgba(239,68,68,.45); }
+    .ctl-timer-limit-line {
+      font-size: clamp(0.85rem, 2.2vw, 1rem);
+      font-weight: 700;
+      color: var(--muted-fg);
+      letter-spacing: 0.04em;
+    }
+    .ctl-timer-note { font-size: 13px; color: var(--muted-fg); margin-top: 8px; line-height: 1.35; }
+    .anyo-deduct-card .grid-3 { margin-bottom: 0; }
+
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--muted-fg); }
+    select, input[type="number"], input[type="text"] {
+      width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--muted); color: var(--fg); font-size: 14px;
+    }
+    select:focus, input:focus { outline: 2px solid rgba(234, 179, 8, 0.4); outline-offset: 1px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-judges { display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 8px; }
+    @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* Timer — match-control style */
+    .timer-block { text-align: center; padding: 8px 0 16px; }
+    .timer-display {
+      font-size: clamp(3.5rem, 12vw, 5.5rem); font-weight: 900; font-variant-numeric: tabular-nums;
+      line-height: 1; letter-spacing: -0.03em; cursor: pointer; user-select: none;
+    }
+    .timer-display.timer-normal { color: #fafafa; text-shadow: 0 4px 24px rgba(0,0,0,.4); }
+    .timer-display.timer-warn { color: var(--gold); }
+    .timer-display.timer-violation {
+      color: #ef4444 !important;
+      text-shadow: 0 0 40px rgba(239, 68, 68, 0.45);
+      animation: timer-violation-pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes timer-violation-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.82; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .timer-display.timer-violation { animation: none; }
+    }
+    .timer-input {
+      display: none; font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 900; text-align: center;
+      width: 100%; max-width: 320px; margin: 0 auto; padding: 8px;
+      background: var(--muted); border: 2px solid var(--gold); border-radius: var(--radius); color: var(--fg);
+    }
+    .timer-label { font-size: 13px; color: var(--muted-fg); margin-top: 8px; font-weight: 600; }
+    .timer-hint { font-size: 11px; color: var(--muted-fg); margin-top: 4px; opacity: 0.85; }
+
+    .timer-violation-banner {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(239, 68, 68, 0.55);
+      background: rgba(127, 29, 29, 0.35);
+      color: #fecaca;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.35;
+    }
+    .timer-violation-banner.hidden { display: none !important; }
+
+    .judge-card { padding: 8px 10px; border-radius: var(--radius); border: 2px solid var(--border); background: rgba(0,0,0,.15); }
+    .judge-card label { font-size: 11px; margin-bottom: 4px; }
+    .judge-card input[type="number"] { padding: 6px 8px; font-size: 13px; }
+    .judge-card-current { border-color: var(--gold); box-shadow: 0 0 0 1px rgba(234, 179, 8, 0.25); }
+    .judge-card-done { border-color: rgba(34, 197, 94, 0.45); }
+    .judge-entered { font-size: 11px; font-weight: 600; color: #86efac; margin-top: 4px; }
+
+    .score-box { padding: 14px 16px; border-radius: var(--radius); background: var(--muted); border: 1px solid var(--border); }
+    .score-box-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-fg); margin-bottom: 6px; }
+    .score-box-value { font-size: clamp(22px, 4vw, 28px); font-weight: 800; font-variant-numeric: tabular-nums; }
+    .score-box-final { border-color: rgba(234, 179, 8, 0.45); background: rgba(234, 179, 8, 0.08); }
+    .score-deduct { color: #fca5a5; }
+    .score-final { color: #fde047; }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    @media (max-width: 700px) { .grid-3 { grid-template-columns: 1fr; } }
+
+    .participant-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); gap: 8px; font-size: 13px; }
+    .participant-row-active { border-color: rgba(234, 179, 8, 0.5); background: rgba(234, 179, 8, 0.06); }
+
+    .media-zone {
+      border: 1px dashed var(--border); border-radius: var(--radius); padding: 10px;
+      background: rgba(0,0,0,.2); text-align: center;
+    }
+    .media-zone audio {
+      width: 100%;
+      max-width: 360px;
+      margin: 8px auto;
+      display: block;
+      border-radius: 8px;
+      min-height: 40px;
+    }
+    .space-y-1 > * + * { margin-top: 4px; }
+    .space-y-2 > * + * { margin-top: 8px; }
+
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px; }
+    .overlay.hidden { display: none !important; }
+    .dialog { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); width: 100%; max-width: 400px; box-shadow: var(--shadow); }
+    .dialog-header { padding: 18px 20px 8px; }
+    .dialog-title { font-size: 17px; font-weight: 700; }
+    .dialog-body { padding: 8px 20px 16px; }
+    .dialog-footer { padding: 12px 20px 18px; display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--border); }
+
+    #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 500; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+    .toast { background: var(--zinc-900); border: 1px solid var(--border); color: #fff; padding: 12px 16px; border-radius: var(--radius); font-size: 13px; max-width: 320px; box-shadow: var(--shadow); }
+    .toast-title { font-weight: 600; }
+    .toast-desc { color: var(--muted-fg); font-size: 12px; margin-top: 4px; }
+
+    .text-sm { font-size: 13px; }
+    .text-xs { font-size: 11px; }
+    .text-muted { color: var(--muted-fg); }
+    .hidden { display: none !important; }
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-2 { gap: 8px; }
+    .mt-1 { margin-top: 4px; }
+    .mb-2 { margin-bottom: 8px; }
+    .w-full { width: 100%; }
+    svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* ── AUDIENCE EXTENSION (dark, match-control extension style) ── */
+    body.is-extension header,
+    body.is-extension #main-panel,
+    body.is-extension #toast-container,
+    body.is-extension #setup-root,
+    body.is-extension #anyo-queue-root { display: none !important; }
+
+    body.is-queue-display header,
+    body.is-queue-display #main-panel,
+    body.is-queue-display #toast-container,
+    body.is-queue-display #setup-root,
+    body.is-queue-display #anyo-extension-root { display: none !important; }
+
+    html:has(body.is-extension) {
+      height: 100%;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
+    }
+    body.is-extension {
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      min-height: 100dvh;
+      height: 100dvh;
+      max-height: 100dvh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    body.is-queue-display {
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #anyo-extension-root {
+      display: none;
+      flex: 1;
+      min-height: 0;
+      flex-direction: column;
+      background: #000;
+      color: var(--fg);
+      overflow-x: hidden;
+      overflow-y: hidden;
+      width: 100%;
+      max-width: 100%;
+    }
+    body.is-extension #anyo-extension-root {
+      display: flex;
+      flex: 1 1 auto;
+      min-height: 0;
+      /* Fills body; scroll only in .ax-ext-main */
+      --ax-audience-header: 6.5rem;
+      --ax-audience-footer: 3.75rem;
+    }
+    body.is-extension .ax-ext-header,
+    body.is-extension .ax-foot {
+      flex-shrink: 0;
+    }
+
+    .ax-ext-header {
+      background: linear-gradient(90deg, rgba(185,28,28,.35), rgba(234,88,12,.18));
+      border-bottom: 3px solid rgba(185,28,28,.55);
+      padding: 10px 18px;
+      flex-shrink: 0;
+    }
+    .ax-ext-header-inner {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(10px, 2vw, 24px);
+      flex-wrap: wrap;
+      box-sizing: border-box;
+    }
+    .ax-ext-brand { display: flex; align-items: center; gap: 14px; }
+    .ax-ext-logo {
+      width: clamp(44px, 5vw, 72px);
+      height: clamp(44px, 5vw, 72px);
+      border-radius: 10px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba(255,255,255,.12);
+      flex-shrink: 0;
+    }
+    .ax-ext-logo svg {
+      width: clamp(22px, 2.8vw, 38px);
+      height: clamp(22px, 2.8vw, 38px);
+      stroke: #fff;
+    }
+    .ax-ext-title {
+      font-size: clamp(1rem, 2.2vw, 2.25rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: #fff;
+      line-height: 1.1;
+    }
+    .ax-ext-sub {
+      font-size: clamp(0.55rem, 1.1vw, 0.85rem);
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--secondary);
+      margin-top: 2px;
+      opacity: 0.95;
+    }
+
+    .ax-ext-main {
+      flex: 1;
+      overflow-x: hidden;
+      overflow-y: auto;
+      min-height: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 100%;
+      -webkit-overflow-scrolling: touch;
+    }
+    body.is-extension .ax-ext-main {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+    /* One page scroll: hero fills first view; standings only after scrolling */
+    body.is-extension .ax-ext-container {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 0 clamp(10px, 2.5vw, 36px) clamp(28px, 4vh, 48px);
+      box-sizing: border-box;
+    }
+
+    .ax-ext-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 0 clamp(10px, 2.5vw, 36px) clamp(12px, 2vh, 28px);
+      box-sizing: border-box;
+    }
+
+    body.is-extension #ax-table-section {
+      margin-top: clamp(20px, 4vh, 40px);
+      padding-bottom: clamp(8px, 2vh, 24px);
+    }
+    body.is-extension #ax-table-section .ax-table-wrap {
+      overflow-x: auto;
+      overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .ax-hero {
+      text-align: center;
+      padding: 16px;
+      border: 1px solid var(--zinc-800);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(24,24,27,.95), rgba(9,9,11,.98));
+      margin-bottom: 16px;
+    }
+    body.is-extension .ax-hero.ax-hero-fullbleed {
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      margin-bottom: 0;
+      padding: clamp(16px, 3vw, 32px) clamp(12px, 3vw, 28px);
+      box-sizing: border-box;
+      /* Exactly fills scroll area (viewport minus header + footer): standings start below fold */
+      min-height: calc(100dvh - var(--ax-audience-header) - var(--ax-audience-footer));
+      justify-content: center;
+    }
+    .ax-hero-fullbleed {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      box-sizing: border-box;
+    }
+    .ax-hero-top {
+      flex: 0 0 auto;
+      text-align: center;
+      padding: clamp(12px, 2.5vw, 28px) clamp(8px, 3vw, 48px) clamp(8px, 1.5vh, 16px);
+      max-width: 100%;
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    /* Audience: performer block — larger type pushes standings below the fold */
+    body.is-extension .ax-hero-top {
+      padding: clamp(10px, 2vw, 20px) clamp(8px, 2vw, 24px) clamp(10px, 1.5vh, 18px);
+    }
+    body.is-extension #ax-phase {
+      display: none !important;
+    }
+    .ax-hero-stage {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+      padding: 8px 16px clamp(12px, 2.5vh, 24px);
+      width: 100%;
+    }
+    body.is-extension .ax-hero-stage {
+      padding: clamp(8px, 2vh, 20px) clamp(10px, 2.5vw, 20px) clamp(6px, 1.5vh, 14px);
+    }
+    body.is-extension .ax-timer-mega {
+      font-size: clamp(4.75rem, min(19vw, min(38vmin, 26rem)), 30rem) !important;
+      line-height: 0.92 !important;
+      letter-spacing: -0.06em !important;
+    }
+    .ax-hero-bottom {
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0 clamp(8px, 2vw, 24px) clamp(10px, 2vh, 24px);
+      box-sizing: border-box;
+    }
+    .ax-hero-cat {
+      font-size: clamp(0.8rem, 2.2vw, 1.75rem);
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--secondary);
+      margin-bottom: clamp(6px, 1.2vh, 14px);
+    }
+    body.is-extension .ax-hero-cat {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 800;
+      font-size: clamp(0.95rem, 2.2vw, 1.5rem);
+      color: #fde047;
+      margin-bottom: clamp(8px, 1.2vh, 14px);
+    }
+    .ax-perf-clock {
+      width: 100%;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .ax-hero-stage .ax-perf-score {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      box-sizing: border-box;
+      padding: 0 clamp(4px, 1.5vw, 16px);
+    }
+    .ax-timer-mega.ax-timer-small {
+      font-size: clamp(1.75rem, 6vw, 3rem) !important;
+      margin: 12px 0 4px !important;
+    }
+    .ax-final-label {
+      font-size: clamp(0.65rem, 1.4vw, 1.35rem);
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--secondary);
+      margin-bottom: clamp(6px, 1vh, 14px);
+      opacity: 0.9;
+    }
+    .ax-final-mega {
+      font-size: clamp(5rem, min(18vw, min(26vh, 22rem)), 28rem);
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      color: #fde047;
+      text-shadow: 0 0 60px rgba(234, 179, 8, 0.35);
+    }
+    .ax-final-meta {
+      margin-top: clamp(8px, 1.5vh, 16px);
+      font-size: clamp(0.9rem, 2.2vw, 2rem);
+      color: var(--muted-fg);
+      font-weight: 600;
+    }
+    .ax-timer-mini-wrap {
+      margin-top: clamp(10px, 2vh, 20px);
+      padding: clamp(8px, 1.2vw, 16px) clamp(12px, 2vw, 24px);
+      border-radius: 8px;
+      border: 1px solid var(--zinc-800);
+      background: rgba(0,0,0,.35);
+      font-size: clamp(0.8rem, 2vw, 1.5rem);
+      font-weight: 600;
+      color: var(--muted-fg);
+    }
+    .ax-timer-mini-wrap span { color: #fafafa; font-variant-numeric: tabular-nums; }
+    .ax-hero-phase {
+      font-size: clamp(0.65rem, 1.4vw, 1.25rem);
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      color: var(--muted-fg);
+      text-transform: uppercase;
+      margin-bottom: clamp(4px, 1vh, 10px);
+    }
+    .ax-hero-name {
+      font-size: clamp(1.25rem, 3.5vw, 2.75rem);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.15;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      padding: 0 clamp(4px, 2vw, 24px);
+    }
+    body.is-extension .ax-hero-name {
+      font-size: clamp(1.35rem, 3.5vw, 2.35rem);
+      font-weight: 900;
+      line-height: 1.15;
+    }
+    body.is-extension .ax-hero-team {
+      font-size: clamp(1rem, 2vw, 1.45rem);
+      font-weight: 600;
+      color: rgba(250, 250, 250, 0.9);
+      margin-top: clamp(6px, 1vh, 12px);
+    }
+    .ax-hero-team {
+      font-size: clamp(0.9rem, 2.8vw, 2.5rem);
+      color: var(--muted-fg);
+      margin-top: clamp(4px, 1vh, 12px);
+      font-weight: 600;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      padding: 0 clamp(4px, 2vw, 24px);
+    }
+
+    .ax-timer-mega {
+      font-size: clamp(5.5rem, min(20vw, min(30vh, 18rem)), 26rem);
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      margin: 0;
+      letter-spacing: -0.04em;
+      max-width: 100%;
+    }
+    .ax-timer-mega.ok { color: #fafafa; text-shadow: 0 4px 32px rgba(255,255,255,.08); }
+    .ax-timer-mega.warn { color: var(--gold); }
+    .ax-timer-mega.violation { color: #ef4444; text-shadow: 0 0 48px rgba(239,68,68,.35); }
+    .ax-timer-limit-line {
+      margin-top: clamp(8px, 1.5vh, 20px);
+      font-size: clamp(0.75rem, 1.8vw, 1.5rem);
+      font-weight: 600;
+      color: var(--muted-fg);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+    body.is-extension .ax-timer-limit-line {
+      margin-top: clamp(5px, 1vh, 12px);
+      font-size: clamp(0.48rem, 0.95vw, 0.68rem);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      opacity: 0.78;
+    }
+    #ax-timer-note:not(.ax-timer-note--alert) {
+      display: none !important;
+    }
+    #ax-timer-note.ax-timer-note--alert {
+      margin-top: 12px;
+      font-size: clamp(0.8rem, 2vw, 0.95rem);
+      font-weight: 700;
+      color: #fca5a5;
+      max-width: 36rem;
+      line-height: 1.35;
+    }
+    body.is-extension #ax-timer-note.ax-timer-note--alert {
+      display: block !important;
+      margin-top: clamp(8px, 1.5vh, 16px);
+    }
+
+    .ax-score-panel {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(10px, 2vw, 28px);
+      margin-top: clamp(16px, 3vh, 36px);
+      width: 100%;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      box-sizing: border-box;
+    }
+    @media (max-width: 640px) { .ax-score-panel { grid-template-columns: 1fr; } }
+
+    .ax-judges-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: stretch;
+      gap: clamp(8px, 1.5vw, 20px);
+      margin-top: clamp(12px, 2.5vh, 28px);
+      width: 100%;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      box-sizing: border-box;
+    }
+    .ax-judge-pill {
+      min-width: min(100%, clamp(72px, 12vw, 140px));
+      flex: 1 1 auto;
+      max-width: min(280px, 100%);
+      padding: clamp(10px, 1.8vw, 20px) clamp(12px, 2vw, 24px);
+      border-radius: clamp(10px, 1.2vw, 16px);
+      border: 1px solid var(--zinc-800);
+      background: rgba(24,24,27,.9);
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .ax-judge-pill .ax-jl {
+      font-size: clamp(0.55rem, 1.2vw, 1rem);
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--muted-fg);
+      text-transform: uppercase;
+    }
+    .ax-judge-pill .ax-jv {
+      font-size: clamp(1.35rem, 4.5vw, 4rem);
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      color: #fff;
+      margin-top: clamp(4px, 0.8vh, 10px);
+      line-height: 1;
+    }
+    .ax-judge-pill.ax-j-empty .ax-jv {
+      color: var(--muted-fg);
+      font-size: clamp(1rem, 3vw, 2.5rem);
+      font-weight: 600;
+    }
+    .ax-deduct-line {
+      margin-top: clamp(10px, 2vh, 20px);
+      font-size: clamp(0.85rem, 2vw, 1.5rem);
+      color: #fca5a5;
+      font-weight: 600;
+      text-align: center;
+      width: 100%;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.4;
+      padding: 0 clamp(8px, 2vw, 24px);
+      box-sizing: border-box;
+    }
+    .ax-event-meta {
+      font-size: clamp(0.65rem, 1.4vw, 1.35rem);
+      font-weight: 600;
+      color: var(--muted-fg);
+      margin-top: clamp(4px, 0.8vh, 10px);
+      line-height: 1.35;
+      word-wrap: break-word;
+    }
+    .ax-ext-event-kicker {
+      font-size: clamp(0.55rem, 1.1vw, 0.95rem);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--muted-fg);
+      text-transform: uppercase;
+    }
+    .ax-ext-event-line {
+      font-size: clamp(0.9rem, 2.4vw, 2.35rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      word-wrap: break-word;
+    }
+    .ax-ext-event-col {
+      text-align: right;
+      max-width: min(100%, 52vw);
+      min-width: 0;
+      flex: 1 1 200px;
+    }
+
+    .ax-score-card {
+      border: 1px solid var(--zinc-800);
+      border-radius: clamp(10px, 1.2vw, 18px);
+      padding: clamp(12px, 2vw, 28px) clamp(10px, 1.5vw, 20px);
+      background: rgba(24,24,27,.85);
+      text-align: center;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    .ax-score-card.ax-highlight {
+      border-color: rgba(234, 179, 8, 0.45);
+      background: rgba(234, 179, 8, 0.08);
+    }
+    .ax-score-label {
+      font-size: clamp(0.55rem, 1.3vw, 1.1rem);
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--muted-fg);
+      text-transform: uppercase;
+      margin-bottom: clamp(4px, 1vh, 10px);
+    }
+    .ax-score-val {
+      font-size: clamp(1.75rem, 5.5vw, 5rem);
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      color: #fff;
+      line-height: 1.05;
+      word-break: break-word;
+    }
+    .ax-score-val.gold { color: #fde047; }
+
+    .ax-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      max-width: 100%;
+      border: 1px solid var(--zinc-800);
+      border-radius: 12px;
+      box-sizing: border-box;
+    }
+    .ax-table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+      font-size: clamp(0.7rem, 1.5vw, 1.35rem);
+    }
+    .ax-table th {
+      background: linear-gradient(180deg, rgba(39,39,42,.95), rgba(24,24,27,.98));
+      border-bottom: 2px solid var(--zinc-800);
+      padding: clamp(8px, 1.2vw, 18px) clamp(6px, 1vw, 14px);
+      text-align: center;
+      font-weight: 800;
+      font-size: clamp(0.55rem, 1.1vw, 0.95rem);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .ax-table th:first-child { text-align: left; padding-left: clamp(8px, 1.5vw, 18px); }
+    .ax-table td {
+      border-bottom: 1px solid var(--zinc-800);
+      padding: clamp(8px, 1.2vw, 18px) clamp(6px, 1vw, 14px);
+      text-align: center;
+      color: #e4e4e7;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
+    .ax-table td:first-child {
+      text-align: left;
+      font-weight: 700;
+      padding-left: clamp(8px, 1.5vw, 18px);
+    }
+    .ax-table tbody tr.ax-category-heading td {
+      background: linear-gradient(90deg, rgba(185, 28, 28, 0.22), rgba(234, 179, 8, 0.12));
+      font-weight: 800;
+      font-size: clamp(0.85rem, 1.6vw, 1.2rem);
+      letter-spacing: 0.02em;
+      text-transform: none;
+      color: #fde047;
+      padding: clamp(10px, 1.5vh, 16px) clamp(10px, 2vw, 18px);
+      border-bottom: 2px solid rgba(234, 179, 8, 0.35);
+      text-align: left;
+    }
+    .ax-table tbody tr:not(.ax-category-heading):nth-child(even) { background: rgba(24, 24, 27, 0.5); }
+    .ax-total {
+      font-weight: 900 !important;
+      color: #fde047 !important;
+      font-size: clamp(0.85rem, 1.8vw, 1.75rem) !important;
+    }
+
+    .ax-medals {
+      margin-top: clamp(20px, 4vh, 40px);
+      border: 1px solid rgba(234, 179, 8, 0.35);
+      border-radius: 16px;
+      padding: clamp(16px, 3vw, 36px) clamp(12px, 2vw, 28px) clamp(24px, 4vh, 44px);
+      background: linear-gradient(180deg, rgba(234, 179, 8, 0.08), transparent);
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .ax-medals-block {
+      margin-top: clamp(20px, 4vh, 36px);
+    }
+    .ax-medals-block:first-child {
+      margin-top: 0;
+    }
+    .ax-medals h2,
+    .ax-medals-cat {
+      font-size: clamp(1rem, 2.5vw, 2rem);
+      font-weight: 900;
+      text-align: center;
+      text-transform: uppercase;
+      margin-bottom: clamp(14px, 2.5vh, 28px);
+      color: var(--secondary);
+      letter-spacing: 0.06em;
+    }
+    .ax-podium { display: flex; flex-direction: row; justify-content: center; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
+
+    .ax-foot {
+      border-top: 4px solid rgba(185, 28, 28, 0.45);
+      padding: clamp(10px, 1.5vh, 18px) clamp(14px, 2.5vw, 28px);
+      font-size: clamp(0.7rem, 1.4vw, 1.1rem);
+      color: var(--muted-fg);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      background: #0a0a0b;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .ax-foot .live-dot { width: 6px; height: 6px; border-radius: 999px; background: #22c55e; animation: ax-pulse 1.5s ease-in-out infinite; display: inline-block; margin-right: 6px; }
+    @keyframes ax-pulse { 0%,100%{opacity:1} 50%{opacity:.45} }
+
+    .ax-empty {
+      text-align: center;
+      padding: clamp(24px, 5vh, 56px) clamp(12px, 3vw, 32px);
+      color: var(--muted-fg);
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    #ax-table-section {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    #ax-table-section > h3 {
+      font-size: clamp(0.65rem, 1.3vw, 1.15rem);
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--secondary);
+      text-transform: uppercase;
+      margin-bottom: clamp(10px, 2vh, 18px);
+    }
+    body.is-extension #ax-table-section > h3 {
+      text-align: left;
+      font-size: clamp(0.75rem, 1.5vw, 1.25rem);
+    }
+
+    /* Queue display (?display=queue) */
+    #anyo-queue-root { display: none; flex: 1; flex-direction: column; min-height: 0; background: #000; color: #fff; }
+    body.is-queue-display #anyo-queue-root { display: flex; }
+    .q-header {
+      background: linear-gradient(90deg, rgba(185,28,28,.35), rgba(234,88,12,.18));
+      border-bottom: 4px solid rgba(185,28,28,.55);
+      padding: 16px 24px;
+      flex-shrink: 0;
+    }
+    .q-header h1 { font-size: clamp(1.1rem, 3vw, 1.5rem); font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; }
+    .q-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      min-height: 0;
+    }
+    @media (max-width: 800px) { .q-grid { grid-template-columns: 1fr; } }
+    .q-panel {
+      padding: clamp(20px, 4vw, 40px);
+      border-right: 1px solid var(--zinc-800);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+    @media (max-width: 800px) { .q-panel { border-right: none; border-bottom: 1px solid var(--zinc-800); } }
+    .q-panel.next { background: rgba(24,24,27,.6); }
+    .q-panel h2 {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--secondary);
+      margin-bottom: 4px;
+    }
+    .q-cat-title { font-size: clamp(1.25rem, 3.5vw, 2rem); font-weight: 900; color: #fff; line-height: 1.2; }
+    .q-now-name { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 900; color: #fde047; margin-top: 8px; }
+    .q-team { font-size: clamp(0.95rem, 2.5vw, 1.2rem); color: var(--muted-fg); font-weight: 600; margin-top: 6px; }
+    .q-list { list-style: none; margin: 0; padding: 0; }
+    .q-list li {
+      padding: 12px 14px;
+      border: 1px solid var(--zinc-800);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      background: rgba(9,9,11,.85);
+      font-weight: 700;
+      font-size: clamp(0.9rem, 2vw, 1.05rem);
+    }
+    .q-list li .qm { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; color: var(--muted-fg); text-transform: uppercase; margin-bottom: 4px; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="mock-data.js"></script>
+</head>
+<body>
+<script>
+(function () {
+  try {
+    const d = new URLSearchParams(window.location.search).get('display');
+    if (d === 'extension' || d === 'queue') return;
+    var rulesOk = false;
+    try {
+      var r = JSON.parse(localStorage.getItem('anyoEventRules') || '{}');
+      var hasCatOrder = (r.categoryOrderIds && r.categoryOrderIds.length >= 1) || r.selectedCategoryId;
+      rulesOk =
+        !!hasCatOrder &&
+        !!r.selectedGameType &&
+        r.performanceSec != null &&
+        r.numJudges != null &&
+        r.formCategory &&
+        r.weaponCategory;
+    } catch (e2) {}
+    if (localStorage.getItem('anyoSetupComplete') && !rulesOk) {
+      localStorage.removeItem('anyoSetupComplete');
+    }
+    if (localStorage.getItem('anyoSetupComplete')) return;
+    document.body.classList.add('setup-mode');
+    var el = document.getElementById('setup-root');
+    if (el) el.style.display = 'block';
+  } catch (e) {}
+})();
+</script>
+
+<!-- SETUP -->
+<div id="setup-root" style="display:none">
+  <div class="setup-shell">
+    <div class="setup-card">
+      <div class="setup-card-header">
+        <p class="setup-card-eyebrow">KaliArena</p>
+        <h1 class="setup-card-title">Anyo event setup</h1>
+      </div>
+      <div class="setup-card-body">
+        <section class="setup-section">
+          <h2 class="setup-section-title">Category &amp; division</h2>
+          <div class="setup-field">
+            <label for="setup-sel-category">Bracket category</label>
+            <select id="setup-sel-category" class="setup-input">
+              <option value="">Select category</option>
+            </select>
+          </div>
+          <div class="setup-field">
+            <label for="setup-sel-gametype">Game type</label>
+            <select id="setup-sel-gametype" class="setup-input">
+              <option value="">Select game type</option>
+            </select>
+          </div>
+        </section>
+        <section class="setup-section">
+          <h2 class="setup-section-title">Performance &amp; category order</h2>
+          <div class="setup-field">
+            <label for="setup-category-order">Categories (order)</label>
+            <textarea id="setup-category-order" class="setup-input" rows="4" placeholder="Featherweight (Boys, 12-15)&#10;Bantamweight (Girls, 10-12)"></textarea>
+          </div>
+          <div class="setup-field">
+            <label for="setup-team-order">Team order (uniform rotation)</label>
+            <input type="text" id="setup-team-order" class="setup-input" placeholder="Team Alpha, Team Beta, Team Gamma" />
+          </div>
+        </section>
+        <section class="setup-section">
+          <h2 class="setup-section-title">Roster (CSV or PDF)</h2>
+          <div class="setup-field">
+            <label for="setup-roster-pdf">Players PDF (optional)</label>
+            <input type="file" id="setup-roster-pdf" accept=".pdf,application/pdf" style="font-size:12px;margin-top:2px" />
+            <button type="button" class="setup-btn-primary" id="btn-setup-pdf-extract">Extract text to roster box</button>
+          </div>
+          <div class="setup-field">
+            <label for="setup-roster-text">Roster lines</label>
+            <textarea id="setup-roster-text" class="setup-input setup-input--mono" rows="6" placeholder="Maria Santos, Team Alpha, Featherweight"></textarea>
+          </div>
+        </section>
+        <section class="setup-section">
+          <h2 class="setup-section-title">Performance &amp; judging</h2>
+          <div class="setup-field">
+            <label>Performance time limit</label>
+            <div class="setup-row-2">
+              <div>
+                <label for="setup-anyo-min">Minutes</label>
+                <input type="number" id="setup-anyo-min" min="0" max="30" value="1" />
+              </div>
+              <div>
+                <label for="setup-anyo-sec">Seconds</label>
+                <input type="number" id="setup-anyo-sec" min="0" max="59" value="30" />
+              </div>
+            </div>
+          </div>
+          <div class="setup-field">
+            <label for="setup-num-judges">Number of judges</label>
+            <input type="number" id="setup-num-judges" min="1" max="9" value="5" />
+          </div>
+          <div class="setup-field">
+            <label for="setup-form-category">Form category</label>
+            <select id="setup-form-category" class="setup-input">
+              <option value="traditional">Traditional — strict, combative focus</option>
+              <option value="non-traditional">Non-traditional — creative; may include stunts or music</option>
+            </select>
+          </div>
+          <div class="setup-field">
+            <label for="setup-weapon-category">Weapon category</label>
+            <select id="setup-weapon-category" class="setup-input">
+              <option value="single-stick">Single stick (Solo Baston)</option>
+              <option value="double-stick">Double stick (Doble Baston)</option>
+              <option value="espada-y-daga">Sword and dagger (Espada y Daga)</option>
+              <option value="mixed">Mixed weapons</option>
+            </select>
+          </div>
+        </section>
+      </div>
+      <div class="setup-error" id="setup-anyo-error" role="alert"></div>
+      <div class="setup-actions">
+        <button type="button" class="setup-btn-primary" id="btn-anyo-setup-continue">Continue to Anyo controls</button>
+      </div>
+      <p class="setup-footnote">Stored in this browser only.</p>
+    </div>
+  </div>
+</div>
+
+<header id="anyo-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="header-brand">
+        <span class="kicker">Arnis · Anyo</span>
+        <span class="title-line">Controls</span>
+      </div>
+      <span id="court-badge" class="badge" style="display:none"></span>
+    </div>
+    <div class="header-right">
+      <div class="header-toolbar" role="toolbar" aria-label="Setup, display, and export">
+        <button type="button" class="header-toolbar-btn" id="btn-anyo-setup" title="Bracket, game type, form, weapon, time, judges">Event setup</button>
+        <a class="header-toolbar-btn" id="link-audience-ext" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Audience display
+        </a>
+        <button type="button" class="header-toolbar-btn" id="btn-open-queue" title="Open queue in a separate window">Players queue</button>
+        <button type="button" class="header-toolbar-btn" id="btn-export-anyo-results" title="Print or save results from this browser">Export results</button>
+      </div>
+      <span class="badge-header-ready" aria-hidden="true"><span class="ready-dot">●</span> Ready</span>
+    </div>
+  </div>
+</header>
+
+<main id="main-panel">
+  <div class="col-left">
+    <div class="card card-compact">
+      <div class="card-header"><span class="card-title-sm">Event (from setup)</span></div>
+      <div class="card-body">
+        <div class="anyo-readonly-box">
+          <div class="text-xs text-muted">Performance categories (order)</div>
+          <div class="text-sm" style="font-weight:700;margin-top:2px;white-space:pre-wrap;line-height:1.35" id="readonly-cat-name">—</div>
+          <div class="text-xs text-muted" style="margin-top:10px">Game type</div>
+          <div class="text-sm" style="font-weight:700;margin-top:2px" id="readonly-gt-name">—</div>
+        </div>
+        <div id="event-rules-badges" class="event-badges-row" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="card card-compact hidden" id="card-standings-sidebar">
+      <div class="card-header">
+        <span class="card-title-sm">Performers</span>
+        <div id="wrap-performers-lineup-category" class="hidden">
+          <div class="performers-lineup-cat-label">Current category · this lineup</div>
+          <div id="performers-lineup-category" class="performers-lineup-cat">—</div>
+        </div>
+      </div>
+      <div class="card-body space-y-2" style="padding-top:8px;max-height:min(50vh,420px);overflow-y:auto" id="participants-list"></div>
+    </div>
+  </div>
+
+  <div class="col-right">
+    <div class="card card-compact hidden" id="section-prompt">
+      <div class="card-body text-sm text-muted" style="text-align:center;padding:16px">
+        Open <strong>Event setup</strong> to load performers.
+      </div>
+    </div>
+
+    <div class="card card-compact hidden" id="section-empty">
+      <div class="card-body" style="text-align:center;padding:20px;color:var(--muted-fg);font-size:13px">
+        No participants for this selection. Configure brackets or import roster elsewhere.
+      </div>
+    </div>
+
+    <div id="section-main" class="hidden" style="display:none;flex-direction:column;gap:10px">
+
+      <div class="anyo-performer-strip">
+        <div class="anyo-edit-stack">
+          <div class="text-xs text-muted" id="p-category" style="font-weight:700;letter-spacing:0.06em;margin-bottom:4px">—</div>
+          <div class="anyo-name-display" id="anyo-name-display" title="Double-click to edit">—</div>
+          <input type="text" class="anyo-inline-input" id="anyo-name-input" maxlength="120" autocomplete="off" tabindex="-1" />
+          <div class="anyo-edit-hint" id="anyo-name-hint">Enter or blur to save · Esc to cancel</div>
+          <div class="anyo-team-display" id="anyo-team-display" title="Double-click to edit">—</div>
+          <input type="text" class="anyo-inline-input" id="anyo-team-input" maxlength="120" autocomplete="off" tabindex="-1" />
+          <div class="anyo-edit-hint" id="anyo-team-hint">Enter or blur to save · Esc to cancel</div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="btn-outline btn-sm" type="button" id="btn-prev">Prev</button>
+          <span class="badge" id="p-index">1 / 1</span>
+          <button class="btn-outline btn-sm" type="button" id="btn-next">Next</button>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap" style="margin-top:8px" id="row-category-nav">
+          <button class="btn-outline btn-sm" type="button" id="btn-skip-performer" title="Skip if absent or not performing">
+            Skip performer
+          </button>
+          <button class="btn-outline btn-sm" type="button" id="btn-next-category" title="Open the next performance category">
+            Next category
+          </button>
+        </div>
+      </div>
+
+      <div class="card card-compact anyo-timer-card">
+        <div class="card-header" style="border-bottom-color:rgba(185,28,28,.2)">
+          <span class="card-title-sm">Performance timer</span>
+        </div>
+        <div class="card-body">
+          <div class="ctl-hero-timer timer-block">
+            <div class="timer-label" id="timer-label">Ready</div>
+            <div class="ctl-timer-mega ok" id="timer-display">0:00</div>
+            <input type="text" class="timer-input" id="timer-input" placeholder="M:SS" autocomplete="off" style="margin:8px auto 0;max-width:200px" />
+            <div class="ctl-timer-limit-line" id="ctl-timer-limit-line">Limit —</div>
+            <div class="ctl-timer-note" id="timer-hint">—</div>
+          </div>
+          <div id="timer-violation-banner" class="timer-violation-banner hidden" role="alert">
+            Violation — performance has exceeded the official time limit. Note for deductions.
+          </div>
+          <div class="flex items-center justify-center gap-2 flex-wrap" id="timer-controls">
+            <button type="button" class="btn-outline btn-icon-lg" id="btn-timer-reset" title="Reset performance timer">
+              <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.88"/></svg>
+            </button>
+            <button type="button" class="btn-green btn-icon-lg" id="btn-timer-toggle">
+              <svg viewBox="0 0 24 24" id="play-icon"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg>
+              <svg viewBox="0 0 24 24" id="pause-icon" style="display:none"><rect x="6" y="4" width="4" height="16" fill="currentColor"/><rect x="14" y="4" width="4" height="16" fill="currentColor"/></svg>
+            </button>
+          </div>
+          <div class="flex justify-center mt-2" id="wrap-end-performance">
+            <button type="button" class="btn-primary btn-sm" id="btn-end-performance" style="min-height:36px;padding:8px 16px;font-weight:700">End performance — scores</button>
+          </div>
+          <div class="flex justify-center hidden mt-2" id="timer-ended-controls">
+            <button type="button" class="btn-outline btn-sm" id="btn-timer-reset2">Reset for next run</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-compact">
+        <div class="card-header">
+          <span class="card-title-sm">Music / backing track (this performer only)</span>
+        </div>
+        <div class="card-body">
+          <input type="file" id="media-file" accept="audio/*,video/*" class="hidden" />
+          <div class="flex gap-2 flex-wrap">
+            <button type="button" class="btn-outline btn-sm" id="btn-media-pick">File…</button>
+            <button type="button" class="btn-outline btn-sm" id="btn-media-play" disabled>Play</button>
+            <button type="button" class="btn-outline btn-sm" id="btn-media-pause" disabled>Pause</button>
+            <button type="button" class="btn-outline btn-sm" id="btn-media-clear">Clear</button>
+          </div>
+          <div id="media-status" class="text-xs text-muted mt-1">No file loaded for this performer.</div>
+          <div id="media-container" class="media-zone hidden"></div>
+        </div>
+      </div>
+
+      <div class="card card-compact anyo-deduct-card">
+        <div class="card-header"><span class="card-title-sm">Violation deductions</span></div>
+        <div class="card-body">
+          <div class="flex items-center justify-between gap-2 flex-wrap mb-2">
+            <div>
+              <div class="text-xs text-muted">Deduction total</div>
+              <div class="score-box-value score-deduct" style="font-size:1.5rem;font-weight:800" id="deduction-display">0.00</div>
+            </div>
+          </div>
+          <p class="text-xs text-muted mb-2" id="deduct-detail-line" style="display:none"></p>
+          <div class="flex gap-2 flex-wrap mb-1">
+            <button type="button" class="btn-outline btn-deduct-chip" data-deduct="0.25">−0.25</button>
+            <button type="button" class="btn-outline btn-deduct-chip" data-deduct="0.5">−0.50</button>
+            <button type="button" class="btn-outline btn-deduct-chip" data-deduct="0.75">−0.75</button>
+            <button type="button" class="btn-outline btn-deduct-chip" data-deduct="1">−1.00</button>
+            <button type="button" class="btn-outline btn-sm" id="btn-deduct-undo">Undo</button>
+          </div>
+          <p class="text-xs text-muted" id="deduct-hint" style="margin:0">Apply after you end the performance. Each performer has a separate deduction total.</p>
+        </div>
+      </div>
+
+      <div class="card card-compact hidden" id="section-scores">
+        <div class="card-header">
+          <span class="card-title-sm">Judges (1–10)</span>
+        </div>
+        <div class="card-body">
+          <div class="grid-judges mb-2" id="judge-grid"></div>
+
+          <div class="grid-2 mb-2">
+            <div class="score-box">
+              <div class="score-box-label">Average</div>
+              <div class="score-box-value" id="avg-score">0.00</div>
+            </div>
+            <div class="score-box score-box-final">
+              <div class="score-box-label">Final</div>
+              <div class="score-box-value score-final" id="final-score">0.00</div>
+            </div>
+          </div>
+
+          <button type="button" class="btn-primary btn-sm w-full" id="btn-finish" disabled style="min-height:40px;font-weight:700">
+            Finish &amp; save performance
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- AUDIENCE -->
+<div id="anyo-extension-root">
+  <header class="ax-ext-header">
+    <div class="ax-ext-header-inner">
+      <div class="ax-ext-brand">
+        <div class="ax-ext-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/></svg>
+        </div>
+        <div>
+          <div class="ax-ext-title">KaliArena · Anyo</div>
+          <div class="ax-ext-sub" id="ax-live-sub">Audience display</div>
+        </div>
+      </div>
+      <div class="ax-ext-event-col">
+        <div class="ax-ext-event-kicker">Event</div>
+        <div id="ax-event-line" class="ax-ext-event-line">—</div>
+        <div id="ax-event-form-weapon" class="ax-event-meta">—</div>
+      </div>
+    </div>
+  </header>
+  <div class="ax-ext-main">
+    <div class="ax-ext-container">
+      <div id="ax-hero" class="ax-hero ax-hero-fullbleed">
+        <div class="ax-hero-top">
+          <div class="ax-hero-phase" id="ax-phase">—</div>
+          <div class="ax-hero-cat hidden" id="ax-hero-cat"></div>
+          <div class="ax-hero-name" id="ax-performer">—</div>
+          <div class="ax-hero-team" id="ax-team"></div>
+        </div>
+
+        <div class="ax-hero-stage">
+          <div id="ax-perf-clock" class="ax-perf-clock">
+            <div class="ax-timer-mega ok" id="ax-timer">0:00</div>
+            <div class="ax-timer-limit-line" id="ax-timer-limit-line">Limit —</div>
+            <div id="ax-timer-note" class="text-sm" aria-live="polite"></div>
+          </div>
+
+          <div id="ax-perf-score" class="ax-perf-score hidden">
+            <div class="ax-final-label">Final score</div>
+            <div class="ax-final-mega" id="ax-final-mega">—</div>
+            <div class="ax-final-meta" id="ax-final-meta"></div>
+            <div class="ax-timer-mini-wrap">Elapsed <span id="ax-timer-mini-val">—</span> · <span id="ax-timer-mini-limit">—</span></div>
+          </div>
+        </div>
+
+        <div class="ax-hero-bottom">
+          <div class="ax-judges-row hidden" id="ax-judges-row" aria-live="polite"></div>
+          <div class="ax-deduct-line hidden" id="ax-deduct-detail"></div>
+
+          <div class="ax-score-panel hidden" id="ax-live-scores" style="display:none">
+            <div class="ax-score-card">
+              <div class="ax-score-label">Judge average</div>
+              <div class="ax-score-val" id="ax-live-avg">—</div>
+            </div>
+            <div class="ax-score-card">
+              <div class="ax-score-label">Deduction total</div>
+              <div class="ax-score-val" style="color:#fca5a5" id="ax-live-ded">—</div>
+            </div>
+            <div class="ax-score-card ax-highlight">
+              <div class="ax-score-label">Final score</div>
+              <div class="ax-score-val gold" id="ax-live-final">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ax-empty" class="ax-empty" style="display:none">
+        <p style="font-size:1.1rem;font-weight:700;margin-bottom:8px">No bracket data</p>
+        <p class="text-muted">Select category &amp; game type in Anyo controls.</p>
+      </div>
+      <div id="ax-table-section" style="display:none">
+        <h3>Standings</h3>
+        <p class="ax-standings-hint text-muted text-sm" style="margin-bottom:12px">
+          By category · best to worst within each · scroll horizontally for all columns
+        </p>
+        <div class="ax-table-wrap">
+          <table class="ax-table">
+            <thead id="ax-thead"></thead>
+            <tbody id="ax-tbody"></tbody>
+          </table>
+        </div>
+        <div id="ax-medals" class="ax-medals hidden" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+  <footer class="ax-foot">
+    <div><span class="live-dot"></span> Live sync · Anyo audience</div>
+    <div>National KaliArena Championship</div>
+  </footer>
+</div>
+
+<div id="anyo-queue-root">
+  <header class="q-header">
+    <h1>Players queue</h1>
+    <p style="font-size:0.8rem;color:var(--muted-fg);margin-top:6px;font-weight:600">Ongoing category and who is on floor · Next category lineup</p>
+  </header>
+  <div class="q-grid">
+    <section class="q-panel" aria-labelledby="q-ongoing-h">
+      <h2 id="q-ongoing-h">Now on floor</h2>
+      <div class="q-cat-title" id="q-ongoing-cat">—</div>
+      <div class="q-now-name" id="q-ongoing-performer">—</div>
+      <div class="q-team" id="q-ongoing-team"></div>
+    </section>
+    <section class="q-panel next" aria-labelledby="q-next-h">
+      <h2 id="q-next-h">Up next</h2>
+      <div class="q-cat-title" id="q-next-cat">—</div>
+      <ul class="q-list" id="q-next-list"></ul>
+    </section>
+  </div>
+  <footer class="ax-foot">
+    <div><span class="live-dot"></span> Queue · KaliArena Anyo</div>
+    <div id="q-foot-line">—</div>
+  </footer>
+</div>
+
+<div id="toast-container"></div>
+
+<div class="overlay hidden" id="overlay-setup-confirm">
+  <div class="dialog">
+    <div class="dialog-header"><div class="dialog-title">Open event setup?</div></div>
+    <div class="dialog-body"><p class="text-sm text-muted">Bracket category, game type, form, weapon, time limit, and judge count can be changed. Timer preset updates on next reset.</p></div>
+    <div class="dialog-footer">
+      <button type="button" class="btn-outline" id="btn-setup-cancel">Cancel</button>
+      <button type="button" class="btn-primary" id="btn-setup-open">Open setup</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DISPLAY_PARAM = new URLSearchParams(location.search).get('display') || '';
+const IS_EXTENSION = DISPLAY_PARAM === 'extension';
+const IS_QUEUE_DISPLAY = DISPLAY_PARAM === 'queue';
+if (IS_EXTENSION) document.body.classList.add('is-extension');
+if (IS_QUEUE_DISPLAY) document.body.classList.add('is-queue-display');
+
+let anyoExtensionBracketNormalized = false;
+
+const $ = (id) => document.getElementById(id);
+const ANYO_RULES_KEY = 'anyoEventRules';
+const ANYO_LIVE_KEY = 'anyoLiveState';
+const ANYO_QUEUE_KEY = 'anyoQueueState';
+const QUEUE_WIN_NAME = 'kaliarena-anyo-queue';
+
+const FORM_CATEGORY_LABEL = {
+  traditional: 'Traditional',
+  'non-traditional': 'Non-traditional',
+};
+const WEAPON_LABEL = {
+  'single-stick': 'Single stick (Solo Baston)',
+  'double-stick': 'Double stick (Doble Baston)',
+  'espada-y-daga': 'Espada y Daga',
+  mixed: 'Mixed weapons',
+};
+function labelFormCategory(k) {
+  return k === 'non-traditional' ? FORM_CATEGORY_LABEL['non-traditional'] : FORM_CATEGORY_LABEL.traditional;
+}
+function labelWeapon(k) {
+  return WEAPON_LABEL[k] || WEAPON_LABEL['single-stick'];
+}
+const IDB_NAME = 'KaliArenaAnyoMedia';
+const IDB_VER = 1;
+const IDB_STORE = 'files';
+
+function fmtTimer(sec) {
+  const neg = sec < 0;
+  const t = Math.abs(sec | 0);
+  const m = Math.floor(t / 60);
+  const s = t % 60;
+  return (neg ? '−' : '') + m + ':' + String(s).padStart(2, '0');
+}
+
+function parseTimeInput(str) {
+  const v = String(str || '').trim();
+  const parts = v.replace('−', '-').split(':');
+  if (parts.length === 2) {
+    const m = parseInt(parts[0], 10) || 0;
+    const s = parseInt(parts[1], 10) || 0;
+    return m * 60 + s;
+  }
+  const n = parseInt(v, 10);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function showToast(title, desc) {
+  const c = $('toast-container');
+  if (!c) return;
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = '<div class="toast-title">' + title + '</div>' + (desc ? '<div class="toast-desc">' + desc + '</div>' : '');
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+function getAnyoRules() {
+  try {
+    const r = JSON.parse(localStorage.getItem(ANYO_RULES_KEY) || '{}');
+    const sec = Math.max(30, Math.min(30 * 60, (parseInt(r.performanceSec, 10) || 90)));
+    const nj = Math.max(1, Math.min(9, parseInt(r.numJudges, 10) || 5));
+    const formCategory = r.formCategory === 'non-traditional' ? 'non-traditional' : 'traditional';
+    const weaponOk = ['single-stick', 'double-stick', 'espada-y-daga', 'mixed'];
+    const weaponCategory = weaponOk.includes(r.weaponCategory) ? r.weaponCategory : 'single-stick';
+    const selectedCategoryId =
+      typeof r.selectedCategoryId === 'string' && r.selectedCategoryId.trim() ? r.selectedCategoryId.trim() : null;
+    const selectedGameType =
+      typeof r.selectedGameType === 'string' && r.selectedGameType.trim() ? r.selectedGameType.trim() : null;
+    let categoryOrderIds = Array.isArray(r.categoryOrderIds) ? r.categoryOrderIds.filter((x) => typeof x === 'string' && x) : [];
+    if (!categoryOrderIds.length && selectedCategoryId) categoryOrderIds = [selectedCategoryId];
+    const teamOrder = Array.isArray(r.teamOrder)
+      ? r.teamOrder.map((t) => String(t).trim()).filter(Boolean)
+      : typeof r.teamOrderStr === 'string'
+        ? r.teamOrderStr.split(/[,;]/).map((t) => t.trim()).filter(Boolean)
+        : [];
+    const teamOrderStr = typeof r.teamOrderStr === 'string' ? r.teamOrderStr : teamOrder.join(', ');
+    return {
+      performanceSec: sec,
+      numJudges: nj,
+      formCategory,
+      weaponCategory,
+      selectedCategoryId,
+      selectedGameType,
+      categoryOrderIds,
+      teamOrder,
+      teamOrderStr,
+    };
+  } catch {
+    return {
+      performanceSec: 90,
+      numJudges: 5,
+      formCategory: 'traditional',
+      weaponCategory: 'single-stick',
+      selectedCategoryId: null,
+      selectedGameType: null,
+      categoryOrderIds: [],
+      teamOrder: [],
+      teamOrderStr: '',
+    };
+  }
+}
+
+function categoryLabelById(catId, categories) {
+  const c = categories.find((x) => x.id === catId);
+  if (c?.fullName) return c.fullName;
+  const demo = DEMO_CATEGORIES.find((x) => x.id === catId);
+  if (demo?.fullName) return demo.fullName;
+  return catId || '—';
+}
+
+function orderByTeamRotation(players, teamOrder) {
+  if (!teamOrder.length) return players.slice();
+  const byTeam = {};
+  teamOrder.forEach((t) => {
+    byTeam[t] = [];
+  });
+  players.forEach((p) => {
+    const t = p.team || '—';
+    if (!byTeam[t]) byTeam[t] = [];
+    byTeam[t].push(p);
+  });
+  const order = teamOrder.filter((t) => byTeam[t]?.length);
+  Object.keys(byTeam).forEach((t) => {
+    if (!order.includes(t)) order.push(t);
+  });
+  const out = [];
+  let round = 0;
+  let added = true;
+  while (added) {
+    added = false;
+    for (const t of order) {
+      if (byTeam[t][round]) {
+        out.push(byTeam[t][round]);
+        added = true;
+      }
+    }
+    round++;
+  }
+  return out;
+}
+
+function buildPerformanceOrder(rows, categoryOrderIds, teamOrder, categories) {
+  const out = [];
+  let pid = 0;
+  for (const catId of categoryOrderIds) {
+    const inCat = rows.filter((r) => r.categoryId === catId);
+    const label = categoryLabelById(catId, categories);
+    const rotated = orderByTeamRotation(
+      inCat.map((r) => ({ ...r, categoryLabel: r.categoryLabel || label })),
+      teamOrder
+    );
+    rotated.forEach((r) => {
+      pid++;
+      out.push({
+        id: 'anyo-p-' + pid,
+        name: r.name,
+        team: r.team || '',
+        categoryId: catId,
+        categoryLabel: r.categoryLabel || label,
+      });
+    });
+  }
+  return out;
+}
+
+function parseCategoryOrderLines(text, categories) {
+  const lines = String(text || '')
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean);
+  const ids = [];
+  for (const line of lines) {
+    const m = matchCategoryHint(line, categories);
+    if (m?.id && !ids.includes(m.id)) ids.push(m.id);
+  }
+  return ids;
+}
+
+function matchCategoryHint(hint, categories) {
+  const h = String(hint || '').trim().toLowerCase();
+  if (!h) return categories[0] || { id: 'cat-1', fullName: '—' };
+  const exact = categories.find((c) => c.id === hint);
+  if (exact) return exact;
+  const byName = categories.find((c) => (c.fullName || '').toLowerCase() === h);
+  if (byName) return byName;
+  const partial = categories.find((c) => (c.fullName || '').toLowerCase().includes(h) || h.includes((c.fullName || '').toLowerCase().slice(0, 8)));
+  return partial || categories[0];
+}
+
+function parseRosterLines(text, categories) {
+  const lines = String(text || '')
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter((l) => l && !/^name[,;\t|]/i.test(l));
+  const rows = [];
+  for (const line of lines) {
+    const parts = line.split(/[,;\t|]/).map((s) => s.trim()).filter(Boolean);
+    if (parts.length < 2) continue;
+    const name = parts[0];
+    const team = parts[1] || '';
+    const catHint = parts[2] || '';
+    const cat = matchCategoryHint(catHint, categories);
+    rows.push({ name, team, categoryId: cat.id, categoryLabel: cat.fullName || cat.id });
+  }
+  return rows;
+}
+
+async function extractTextFromPdfFile(file) {
+  const pdfjs =
+    typeof pdfjsLib !== 'undefined'
+      ? pdfjsLib
+      : typeof globalThis.pdfjsLib !== 'undefined'
+        ? globalThis.pdfjsLib
+        : null;
+  if (!pdfjs) throw new Error('PDF library not loaded');
+  const buf = await file.arrayBuffer();
+  pdfjs.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const pdf = await pdfjs.getDocument({ data: buf }).promise;
+  let text = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    text += content.items.map((it) => it.str).join(' ') + '\n';
+  }
+  return text;
+}
+
+function getUpNextCategoryId(participants, currentIdx, categoryOrderIds) {
+  if (!participants.length || !categoryOrderIds.length) return null;
+  const cur = participants[currentIdx];
+  if (!cur) return categoryOrderIds[0] || null;
+  const ix = categoryOrderIds.indexOf(cur.categoryId);
+  if (ix === -1) return categoryOrderIds[0] || null;
+  return categoryOrderIds[ix + 1] || null;
+}
+
+/** Ordered category ids for the current event (from rules). */
+function getCategoryOrderIds() {
+  const rules = getAnyoRules();
+  const ids = Array.isArray(rules.categoryOrderIds) ? rules.categoryOrderIds.filter((x) => typeof x === 'string' && x.trim()) : [];
+  if (ids.length) return ids;
+  return rules.selectedCategoryId ? [rules.selectedCategoryId] : state.selectedCategory ? [state.selectedCategory] : [];
+}
+
+function hasNextCategory() {
+  const order = getCategoryOrderIds();
+  const ix = order.indexOf(state.selectedCategory);
+  return ix >= 0 && ix < order.length - 1;
+}
+
+function goToNextCategory() {
+  const order = getCategoryOrderIds();
+  const ix = order.indexOf(state.selectedCategory);
+  if (ix < 0 || ix >= order.length - 1) {
+    showToast('Last category', 'There is no next category in the event order.');
+    return;
+  }
+  state.selectedCategory = order[ix + 1];
+  loadBracket();
+  updateReadonlyDivisionDisplay();
+  syncAnyoQueueState();
+  render();
+  const label = categoryLabelById(state.selectedCategory, state.categories);
+  showToast('Next category', label);
+}
+
+/** Skip current slot (absent / not performing): next performer, or next category if last in division. */
+function skipCurrentPerformer() {
+  if (!state.participants.length) return;
+  if (state.currentIdx < state.participants.length - 1) {
+    state.currentIdx++;
+    resetTimerState();
+    loadMediaForParticipant(currentParticipant());
+    saveBracket();
+    syncAnyoQueueState();
+    render();
+    showToast('Skipped', 'Moved to next performer in this category.');
+    return;
+  }
+  if (hasNextCategory()) {
+    goToNextCategory();
+  } else {
+    showToast('End of event', 'No more performers or categories.');
+  }
+}
+
+function syncAnyoQueueState() {
+  try {
+    const rules = getAnyoRules();
+    const { categories } = loadCategoriesFromStorage();
+    const parts = state.participants || [];
+    const idx = state.currentIdx | 0;
+    const cur = parts[idx];
+    const catOrder = rules.categoryOrderIds?.length ? rules.categoryOrderIds : rules.selectedCategoryId ? [rules.selectedCategoryId] : [];
+    const ongoingCat = cur?.categoryId;
+    const ongoingLabel = cur?.categoryLabel || categoryLabelById(ongoingCat, categories);
+    const nextCatId = getUpNextCategoryId(parts, idx, catOrder);
+    const nextLabel = nextCatId ? categoryLabelById(nextCatId, categories) : '—';
+    const nextNames = nextCatId
+      ? parts.filter((p) => p.categoryId === nextCatId).slice(0, 24)
+      : [];
+    localStorage.setItem(
+      ANYO_QUEUE_KEY,
+      JSON.stringify({
+        ongoingCategory: ongoingLabel,
+        ongoingPerformer: cur?.name || '—',
+        ongoingTeam: cur?.team || '',
+        upNextCategory: nextLabel,
+        upNextNames: nextNames.map((p) => ({ name: p.name, team: p.team })),
+        index: idx,
+        total: parts.length,
+      })
+    );
+    window.dispatchEvent(new Event('storage'));
+  } catch (_) {}
+}
+
+function renderQueueFromStorage() {
+  if (!IS_QUEUE_DISPLAY) return;
+  let q = {};
+  try {
+    q = JSON.parse(localStorage.getItem(ANYO_QUEUE_KEY) || '{}');
+  } catch {
+    q = {};
+  }
+  const oc = $('q-ongoing-cat');
+  const op = $('q-ongoing-performer');
+  const ot = $('q-ongoing-team');
+  const nc = $('q-next-cat');
+  const nl = $('q-next-list');
+  const fl = $('q-foot-line');
+  if (oc) oc.textContent = q.ongoingCategory || '—';
+  if (op) op.textContent = q.ongoingPerformer || '—';
+  if (ot) ot.textContent = q.ongoingTeam || '';
+  if (nc) nc.textContent = q.upNextCategory || '—';
+  if (nl) {
+    const names = q.upNextNames || [];
+    nl.innerHTML = names.length
+      ? names
+          .map(
+            (n) =>
+              '<li><div class="qm">' +
+              escHtml(n.team || '') +
+              '</div>' +
+              escHtml(n.name || '') +
+              '</li>'
+          )
+          .join('')
+      : '<li style="opacity:.6;font-weight:600">No next block yet</li>';
+  }
+  if (fl) fl.textContent = 'Performer ' + ((q.index | 0) + 1) + ' / ' + (q.total || '—');
+}
+
+function openAnyoQueueDisplay() {
+  const url = new URL('?display=queue', window.location.href).href;
+  const sw = window.screen.availWidth;
+  const sh = window.screen.availHeight;
+  const w = window.open(
+    url,
+    QUEUE_WIN_NAME,
+    'width=' + sw + ',height=' + sh + ',left=0,top=0,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes'
+  );
+  if (!w) showToast('Popup blocked', 'Allow pop-ups to open the queue display.');
+  else try { w.focus(); } catch (_) {}
+}
+
+function loadCategoriesFromStorage() {
+  let categories = [];
+  try {
+    categories = JSON.parse(localStorage.getItem('eventCategories') || '[]');
+  } catch {
+    categories = [];
+  }
+  if (!categories.length) categories = DEMO_CATEGORIES;
+  let gameTypes = [];
+  try {
+    const all = JSON.parse(localStorage.getItem('eventGameTypes') || '[]');
+    gameTypes = all.filter((t) => String(t).includes('anyo'));
+  } catch {
+    gameTypes = [];
+  }
+  if (!gameTypes.length) gameTypes = DEMO_GAME_TYPES;
+  return { categories, gameTypes };
+}
+
+function populateSetupDivisionSelects() {
+  const catSel = $('setup-sel-category');
+  const gtSel = $('setup-sel-gametype');
+  if (!catSel || !gtSel) return;
+  const { categories, gameTypes } = loadCategoriesFromStorage();
+  const rules = getAnyoRules();
+  catSel.innerHTML = '<option value="">Select category</option>';
+  categories.forEach((c) => {
+    const o = document.createElement('option');
+    o.value = c.id;
+    o.textContent = c.fullName || c.id;
+    catSel.appendChild(o);
+  });
+  gtSel.innerHTML = '<option value="">Select game type</option>';
+  gameTypes.forEach((gt) => {
+    const o = document.createElement('option');
+    o.value = gt;
+    o.textContent = gt === 'anyo-traditional' ? 'Anyo — Traditional' : 'Anyo — Non-traditional';
+    gtSel.appendChild(o);
+  });
+  if (rules.selectedCategoryId && categories.some((c) => c.id === rules.selectedCategoryId)) {
+    catSel.value = rules.selectedCategoryId;
+  }
+  if (rules.selectedGameType && gameTypes.includes(rules.selectedGameType)) {
+    gtSel.value = rules.selectedGameType;
+  }
+}
+
+function updateReadonlyDivisionDisplay() {
+  const cn = $('readonly-cat-name');
+  const gn = $('readonly-gt-name');
+  if (!cn || !gn) return;
+  const rules = getAnyoRules();
+  const orderIds = rules.categoryOrderIds?.length ? rules.categoryOrderIds : state.selectedCategory ? [state.selectedCategory] : [];
+  const lines = orderIds.map((id) => categoryLabelById(id, state.categories));
+  cn.textContent = lines.length ? lines.join('\n') : '—';
+  const gt = state.selectedGameType;
+  gn.textContent =
+    gt === 'anyo-traditional'
+      ? 'Anyo — Traditional'
+      : gt === 'anyo-non-traditional'
+        ? 'Anyo — Non-traditional'
+        : gt || '—';
+}
+
+function getNumJudges() {
+  return getAnyoRules().numJudges;
+}
+
+function blankScore() {
+  const n = getNumJudges();
+  const o = { deduction: 0, deductHistory: [] };
+  for (let i = 1; i <= n; i++) o['j' + i] = 0;
+  return o;
+}
+
+function migrateScore(raw) {
+  const n = getNumJudges();
+  const base = blankScore();
+  if (!raw || typeof raw !== 'object') return base;
+  for (let i = 1; i <= n; i++) {
+    const k = 'j' + i;
+    if (raw[k] != null) base[k] = raw[k];
+  }
+  base.deduction = Math.max(0, parseFloat(raw.deduction) || 0);
+  if (Array.isArray(raw.deductHistory)) base.deductHistory = raw.deductHistory.slice(-20);
+  return base;
+}
+
+function getScore(pId) {
+  return migrateScore(state.scores[pId]);
+}
+
+function currentParticipant() {
+  return state.participants[state.currentIdx] || null;
+}
+
+function currentScore() {
+  const p = currentParticipant();
+  return p ? getScore(p.id) : null;
+}
+
+function calcAvg(sc) {
+  const n = getNumJudges();
+  const vals = [];
+  for (let i = 1; i <= n; i++) {
+    const v = parseFloat(sc['j' + i]);
+    if (Number.isFinite(v) && v >= 1 && v <= 10) vals.push(v);
+  }
+  if (!vals.length) return 0;
+  return vals.reduce((a, b) => a + b, 0) / vals.length;
+}
+
+function calcTotal(sc) {
+  return Math.max(0, Math.round((calcAvg(sc) - (sc.deduction || 0)) * 100) / 100);
+}
+
+const DEMO_CATEGORIES = [
+  { id: 'cat-1', fullName: 'Featherweight (Boys, 12-15)' },
+  { id: 'cat-2', fullName: 'Bantamweight (Girls, 10-12)' },
+  { id: 'cat-3', fullName: 'Lightweight (Mixed, 16-18)' },
+];
+const DEMO_GAME_TYPES = ['anyo-traditional', 'anyo-non-traditional'];
+/** Fallback when `mock-data.js` did not load (empty bracket). */
+const DEMO_BRACKETS =
+  typeof KaliArenaMock !== 'undefined' && KaliArenaMock.anyoBrackets
+    ? KaliArenaMock.anyoBrackets
+    : { 'cat-1-anyo-traditional': { participants: [], scores: {} } };
+
+let state = {
+  categories: [],
+  gameTypes: [],
+  selectedCategory: null,
+  selectedGameType: null,
+  participants: [],
+  currentIdx: 0,
+  scores: {},
+  timeLeft: 90,
+  isRunning: false,
+  timerEnded: false,
+  isEditingTime: false,
+  judgeFilled: [],
+};
+
+let timerInterval = null;
+let mediaObjectUrl = null;
+let currentMediaEl = null;
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function officialSec() {
+  return getAnyoRules().performanceSec;
+}
+
+/** Elapsed performance seconds (0 at start, equals official at limit, &gt; official in overtime). */
+function elapsedPerformanceSec() {
+  return officialSec() - state.timeLeft;
+}
+
+function syncAnyoLiveState() {
+  const p = currentParticipant();
+  const sc = currentScore();
+  const rules = getAnyoRules();
+  const avg = sc ? calcAvg(sc) : 0;
+  const fin = sc ? calcTotal(sc) : 0;
+  const violation = state.timeLeft < 0 && !state.timerEnded;
+  const official = rules.performanceSec;
+  const elapsedSec = official - state.timeLeft;
+  const elapsedFmt = fmtTimer(Math.max(0, elapsedSec));
+  const judgeScores = [];
+  for (let i = 1; i <= rules.numJudges; i++) {
+    const v = sc ? parseFloat(sc['j' + i]) : NaN;
+    const ok = Number.isFinite(v) && v >= 1 && v <= 10;
+    judgeScores.push({ j: i, label: 'J' + i, value: ok ? Math.round(v * 100) / 100 : null, display: ok ? v.toFixed(1) : '—' });
+  }
+  const dh = Array.isArray(sc?.deductHistory) ? sc.deductHistory.map((x) => Math.round(x * 100) / 100) : [];
+  try {
+    localStorage.setItem(
+      ANYO_LIVE_KEY,
+      JSON.stringify({
+        performer: p?.name || '—',
+        team: p?.team || '',
+        performerId: p?.id || '',
+        currentCategoryLabel: p?.categoryLabel || '',
+        timeLeft: state.timeLeft,
+        timeFmt: fmtTimer(state.timeLeft),
+        elapsedSec,
+        elapsedFmt,
+        limitFmt: fmtTimer(official),
+        violation,
+        timerRunning: state.isRunning,
+        timerEnded: state.timerEnded,
+        phase: state.timerEnded ? 'scoring' : state.isRunning ? 'run' : 'ready',
+        avg: avg.toFixed(2),
+        deduction: (sc?.deduction || 0).toFixed(2),
+        deductHistory: dh,
+        final: fin.toFixed(2),
+        showScores: state.timerEnded,
+        officialSec: rules.performanceSec,
+        numJudges: rules.numJudges,
+        judgeScores,
+        formCategory: rules.formCategory,
+        formCategoryLabel: labelFormCategory(rules.formCategory),
+        weaponCategory: rules.weaponCategory,
+        weaponLabel: labelWeapon(rules.weaponCategory),
+      })
+    );
+  } catch (_) {}
+}
+
+function saveAnyoDisplayContext() {
+  try {
+    localStorage.setItem(
+      'anyoDisplayContext',
+      JSON.stringify({
+        selectedCategory: state.selectedCategory,
+        selectedGameType: state.selectedGameType,
+      })
+    );
+  } catch (_) {}
+}
+
+/**
+ * Legacy layouts stored every athlete under the first category key (e.g. cat-1-gt only).
+ * Standings need one bracket per category. Split once when multiple categoryIds are present.
+ */
+function normalizeEventBracketsPerCategory() {
+  const rules = getAnyoRules();
+  const gt = rules.selectedGameType;
+  const order = Array.isArray(rules.categoryOrderIds) ? rules.categoryOrderIds.filter((x) => typeof x === 'string' && x.trim()) : [];
+  if (!gt || order.length < 2) return;
+  try {
+    let brackets = JSON.parse(localStorage.getItem('eventBrackets') || '{}');
+    const primary = order[0];
+    const pk = primary + '-' + gt;
+    const bucket = brackets[pk];
+    if (!bucket?.participants?.length) return;
+    const catIds = new Set(bucket.participants.map((p) => p.categoryId || primary));
+    if (catIds.size <= 1) return;
+    const next = { ...brackets };
+    for (const cid of order) {
+      const sub = bucket.participants.filter((p) => (p.categoryId || primary) === cid);
+      if (!sub.length) continue;
+      const k = cid + '-' + gt;
+      const scores = {};
+      sub.forEach((p) => {
+        if (bucket.scores?.[p.id] != null) scores[p.id] = bucket.scores[p.id];
+      });
+      next[k] = {
+        categoryId: cid,
+        gameType: gt,
+        participants: sub,
+        scores,
+      };
+    }
+    localStorage.setItem('eventBrackets', JSON.stringify(next));
+    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new CustomEvent('bracketUpdate'));
+  } catch (_) {}
+}
+
+function saveBracket() {
+  if (!state.selectedCategory || !state.selectedGameType) return;
+  const key = state.selectedCategory + '-' + state.selectedGameType;
+  try {
+    let brackets = {};
+    try {
+      brackets = JSON.parse(localStorage.getItem('eventBrackets') || '{}');
+    } catch {
+      brackets = {};
+    }
+    if (!brackets[key]) {
+      brackets[key] = {
+        categoryId: state.selectedCategory,
+        gameType: state.selectedGameType,
+        participants: state.participants,
+        scores: {},
+      };
+    }
+    brackets[key].scores = state.scores;
+    brackets[key].participants = state.participants;
+    localStorage.setItem('eventBrackets', JSON.stringify(brackets));
+    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new CustomEvent('bracketUpdate'));
+  } catch (_) {}
+}
+
+function resetTimerState() {
+  state.timeLeft = officialSec();
+  state.isRunning = false;
+  state.timerEnded = false;
+  state.isEditingTime = false;
+  state.judgeFilled = [];
+  clearInterval(timerInterval);
+  timerInterval = null;
+  const inp = $('timer-input');
+  const disp = $('timer-display');
+  if (inp) inp.style.display = 'none';
+  if (disp) disp.style.display = '';
+}
+
+function loadData() {
+  const { categories, gameTypes } = loadCategoriesFromStorage();
+  state.categories = categories;
+  state.gameTypes = gameTypes;
+
+  const rules = getAnyoRules();
+  let ctx = {};
+  try {
+    ctx = JSON.parse(localStorage.getItem('anyoDisplayContext') || '{}');
+  } catch {
+    ctx = {};
+  }
+
+  const orderIds =
+    Array.isArray(rules.categoryOrderIds) && rules.categoryOrderIds.length
+      ? rules.categoryOrderIds.filter((x) => typeof x === 'string' && x.trim())
+      : rules.selectedCategoryId
+        ? [rules.selectedCategoryId]
+        : [];
+
+  let catId = orderIds.length ? orderIds[0] : rules.selectedCategoryId;
+  let gt = rules.selectedGameType;
+
+  if (ctx.selectedGameType && state.gameTypes.includes(ctx.selectedGameType)) {
+    gt = ctx.selectedGameType;
+  }
+  if (!gt || !state.gameTypes.includes(gt)) {
+    gt = state.gameTypes[0] || null;
+  }
+
+  if (
+    ctx.selectedCategory &&
+    orderIds.includes(ctx.selectedCategory) &&
+    state.categories.some((c) => c.id === ctx.selectedCategory)
+  ) {
+    catId = ctx.selectedCategory;
+  }
+  if (!catId || !state.categories.some((c) => c.id === catId)) {
+    catId = orderIds[0] || state.categories[0]?.id || null;
+  }
+
+  state.selectedCategory = catId;
+  state.selectedGameType = gt;
+
+  updateReadonlyDivisionDisplay();
+  normalizeEventBracketsPerCategory();
+
+  const court = localStorage.getItem('currentCourt');
+  if (court) {
+    $('court-badge').textContent = court;
+    $('court-badge').style.display = '';
+  }
+
+  loadBracket();
+}
+
+function loadBracket() {
+  if (!state.selectedCategory || !state.selectedGameType) return;
+  const key = state.selectedCategory + '-' + state.selectedGameType;
+  try {
+    const s = localStorage.getItem('eventBrackets');
+    const brackets = s ? JSON.parse(s) : {};
+    if (brackets[key]) {
+      state.participants = brackets[key].participants || [];
+      state.scores = brackets[key].scores || {};
+    } else if (DEMO_BRACKETS[key]) {
+      state.participants = DEMO_BRACKETS[key].participants;
+      state.scores = DEMO_BRACKETS[key].scores || {};
+    } else {
+      state.participants = [];
+      state.scores = {};
+    }
+  } catch {
+    state.participants = [];
+    state.scores = {};
+  }
+  state.currentIdx = 0;
+  state.participants = (state.participants || []).map((p) => {
+    const cid = p.categoryId || state.selectedCategory;
+    return {
+      ...p,
+      categoryId: cid,
+      categoryLabel: p.categoryLabel || categoryLabelById(cid, state.categories),
+    };
+  });
+  resetTimerState();
+  saveAnyoDisplayContext();
+  render();
+}
+
+function timerTick() {
+  if (!state.isRunning) return;
+  state.timeLeft--;
+  render();
+  if (state.timerEnded) return;
+}
+
+function startTimerLoop() {
+  clearInterval(timerInterval);
+  timerInterval = setInterval(timerTick, 1000);
+}
+
+function openTimeEdit() {
+  if (state.isRunning || state.timerEnded) return;
+  state.isEditingTime = true;
+  $('timer-display').style.display = 'none';
+  $('timer-input').style.display = 'block';
+  $('timer-input').value = fmtTimer(state.timeLeft);
+  $('timer-input').focus();
+  $('timer-input').select();
+}
+
+function closeTimeEdit(save) {
+  const inp = $('timer-input');
+  if (save) {
+    state.timeLeft = parseTimeInput(inp.value);
+  }
+  state.isEditingTime = false;
+  $('timer-display').style.display = '';
+  inp.style.display = 'none';
+  render();
+}
+
+function renderEventRulesBadges() {
+  const el = $('event-rules-badges');
+  if (!el) return;
+  const r = getAnyoRules();
+  el.innerHTML =
+    '<span class="event-badge event-badge-accent">' +
+    escHtml(labelFormCategory(r.formCategory)) +
+    '</span><span class="event-badge">' +
+    escHtml(labelWeapon(r.weaponCategory)) +
+    '</span><span class="event-badge">' +
+    escHtml(fmtTimer(r.performanceSec)) +
+    ' · ' +
+    r.numJudges +
+    ' judges</span>';
+  updateReadonlyDivisionDisplay();
+}
+
+function render() {
+  syncAnyoLiveState();
+  renderEventRulesBadges();
+
+  const hasBoth = state.selectedCategory && state.selectedGameType;
+  const hasP = state.participants.length > 0;
+
+  const sp = $('section-prompt');
+  if (sp) {
+    sp.classList.toggle('hidden', hasBoth);
+    sp.style.display = hasBoth ? 'none' : 'block';
+  }
+  const cs = $('card-standings-sidebar');
+  if (cs) {
+    cs.classList.toggle('hidden', !(hasBoth && hasP));
+  }
+
+  $('section-main').style.display = hasBoth && hasP ? 'flex' : 'none';
+  $('section-main').classList.toggle('hidden', !(hasBoth && hasP));
+  $('section-empty').style.display = hasBoth && !hasP ? 'block' : 'none';
+  $('section-empty').classList.toggle('hidden', !(hasBoth && !hasP));
+
+  if (!hasBoth || !hasP) {
+    const list = $('participants-list');
+    if (list) list.innerHTML = '';
+    const plcWrapEarly = $('wrap-performers-lineup-category');
+    if (plcWrapEarly) plcWrapEarly.classList.add('hidden');
+    return;
+  }
+
+  const p = currentParticipant();
+  const sc = currentScore();
+  const nJ = getNumJudges();
+
+  const nd = $('anyo-name-display');
+  const tmd = $('anyo-team-display');
+  if (nd) nd.textContent = p?.name || '—';
+  if (tmd) tmd.textContent = p?.team || '—';
+  const pc = $('p-category');
+  if (pc) pc.textContent = p?.categoryLabel || '—';
+  const plcWrap = $('wrap-performers-lineup-category');
+  const plc = $('performers-lineup-category');
+  if (plc && plcWrap) {
+    if (hasBoth && hasP) {
+      plc.textContent =
+        categoryLabelById(state.selectedCategory, state.categories) ||
+        state.participants[0]?.categoryLabel ||
+        '—';
+      plcWrap.classList.remove('hidden');
+    } else {
+      plcWrap.classList.add('hidden');
+    }
+  }
+  $('p-index').textContent = state.currentIdx + 1 + ' / ' + state.participants.length;
+  $('btn-prev').disabled = state.currentIdx === 0;
+  $('btn-next').disabled = state.currentIdx === state.participants.length - 1;
+
+  const btnSkip = $('btn-skip-performer');
+  const btnNextCat = $('btn-next-category');
+  const multiCat = getCategoryOrderIds().length > 1;
+  if (btnNextCat) {
+    btnNextCat.style.display = multiCat ? '' : 'none';
+    btnNextCat.disabled = !hasNextCategory();
+  }
+  if (btnSkip) {
+    const canSkip =
+      state.participants.length > 0 &&
+      (state.currentIdx < state.participants.length - 1 || hasNextCategory());
+    btnSkip.disabled = !canSkip;
+  }
+
+  const td = $('timer-display');
+  const official = officialSec();
+  const elapsedSec = elapsedPerformanceSec();
+  const elapsedFmt = fmtTimer(Math.max(0, elapsedSec));
+  if (!state.isEditingTime) td.textContent = elapsedFmt;
+  const violation = state.timeLeft < 0 && !state.timerEnded;
+  const warn = !violation && state.timeLeft <= 10 && state.timeLeft > 0 && state.isRunning;
+  td.className = 'ctl-timer-mega ' + (violation ? 'violation' : warn ? 'warn' : 'ok');
+  const limLn = $('ctl-timer-limit-line');
+  if (limLn) limLn.textContent = 'Limit ' + fmtTimer(official);
+
+  const vb = $('timer-violation-banner');
+  if (vb) vb.classList.toggle('hidden', !violation);
+
+  $('timer-label').textContent = violation
+    ? 'Violation — overtime (past official limit)'
+    : state.timerEnded
+      ? "Performance stopped — enter judges' scores (1–10)"
+      : state.isRunning
+        ? 'Performance running (elapsed time)'
+        : 'Ready';
+  $('timer-hint').textContent = violation
+    ? 'Over limit · Tap time to adjust remaining'
+    : state.timerEnded
+      ? ''
+      : state.timerRunning && state.timeLeft <= 10 && state.timeLeft > 0
+        ? 'Approaching official limit'
+        : state.timerRunning
+          ? 'Elapsed time toward limit'
+          : 'Performance clock starts at 0:00 · Tap time to adjust remaining';
+
+  const tCtrl = $('timer-controls');
+  const tEnd = $('timer-ended-controls');
+  const wrapEnd = $('wrap-end-performance');
+  if (state.timerEnded) {
+    tCtrl.style.display = 'none';
+    if (wrapEnd) wrapEnd.style.display = 'none';
+    tEnd.classList.remove('hidden');
+    tEnd.style.display = 'flex';
+  } else {
+    tCtrl.style.display = 'flex';
+    if (wrapEnd) wrapEnd.style.display = 'flex';
+    tEnd.classList.add('hidden');
+    tEnd.style.display = 'none';
+    $('play-icon').style.display = state.isRunning ? 'none' : '';
+    $('pause-icon').style.display = state.isRunning ? '' : 'none';
+  }
+
+  const dedTot = sc ? (sc.deduction || 0) : 0;
+  const ddisp = $('deduction-display');
+  if (ddisp) ddisp.textContent = dedTot.toFixed(2);
+  const dl = $('deduct-detail-line');
+  if (dl && sc) {
+    const hist = sc.deductHistory;
+    if (Array.isArray(hist) && hist.length) {
+      dl.style.display = '';
+      dl.textContent = 'Steps: ' + hist.map((x) => '−' + Number(x).toFixed(2)).join(' · ');
+    } else if (dedTot > 0) {
+      dl.style.display = '';
+      dl.textContent = 'Total deductions applied for this performer.';
+    } else {
+      dl.style.display = 'none';
+      dl.textContent = '';
+    }
+  } else if (dl) {
+    dl.style.display = 'none';
+    dl.textContent = '';
+  }
+  const dh = $('deduct-hint');
+  if (dh) dh.style.display = state.timerEnded ? 'none' : '';
+  document.querySelectorAll('.btn-deduct-chip').forEach((b) => {
+    b.disabled = !state.timerEnded;
+  });
+  const uBtn = $('btn-deduct-undo');
+  if (uBtn) uBtn.disabled = !state.timerEnded;
+
+  const secScores = $('section-scores');
+  if (state.timerEnded) {
+    secScores.classList.remove('hidden');
+    secScores.style.display = 'block';
+    const scJ = sc || {};
+    renderJudges(scJ);
+    const avg = calcAvg(scJ);
+    const tot = calcTotal(scJ);
+    $('avg-score').textContent = avg.toFixed(2);
+    $('final-score').textContent = tot.toFixed(2);
+
+    let filled = 0;
+    for (let i = 1; i <= nJ; i++) {
+      const v = parseFloat(scJ['j' + i]);
+      if (Number.isFinite(v) && v >= 1 && v <= 10) filled++;
+    }
+    $('btn-finish').disabled = filled < nJ;
+  } else {
+    secScores.classList.add('hidden');
+    secScores.style.display = 'none';
+  }
+
+  renderParticipantsList();
+  syncAnyoQueueState();
+}
+
+function renderJudges(sc) {
+  const grid = $('judge-grid');
+  const nJ = getNumJudges();
+  grid.innerHTML = '';
+  for (let i = 1; i <= nJ; i++) {
+    const key = 'j' + i;
+    const v = sc[key];
+    const ok = Number.isFinite(parseFloat(v)) && parseFloat(v) >= 1 && parseFloat(v) <= 10;
+    const div = document.createElement('div');
+    div.className = 'judge-card' + (ok ? ' judge-card-done' : '');
+    div.innerHTML =
+      '<label for="judge-' +
+      i +
+      '">Judge ' +
+      i +
+      '</label>' +
+      '<input type="number" id="judge-' +
+      i +
+      '" min="1" max="10" step="0.1" placeholder="1–10" value="' +
+      (ok ? v : '') +
+      '" data-j="' +
+      i +
+      '" />' +
+      (ok ? '<div class="judge-entered">✓</div>' : '');
+    grid.appendChild(div);
+    $('judge-' + i).addEventListener('input', function () {
+      handleJudgeInput(i, parseFloat(this.value));
+    });
+  }
+}
+
+function handleJudgeInput(judgeNum, value) {
+  const p = currentParticipant();
+  if (!p) return;
+  let v = value;
+  if (!Number.isFinite(v)) v = 0;
+  if (v > 10) v = 10;
+  if (v < 0) v = 0;
+  const sc = { ...getScore(p.id), ['j' + judgeNum]: v };
+  state.scores = { ...state.scores, [p.id]: sc };
+  saveBracket();
+  render();
+}
+
+function renderParticipantsList() {
+  const list = $('participants-list');
+  list.innerHTML = '';
+  state.participants.forEach((p, idx) => {
+    const sc = state.scores[p.id] ? migrateScore(state.scores[p.id]) : null;
+    const tot = sc ? calcTotal(sc) : null;
+    const done = sc && getNumJudges() > 0;
+    let filled = 0;
+    if (sc) {
+      for (let i = 1; i <= getNumJudges(); i++) {
+        const v = parseFloat(sc['j' + i]);
+        if (Number.isFinite(v) && v >= 1 && v <= 10) filled++;
+      }
+    }
+    const complete = filled >= getNumJudges();
+    const div = document.createElement('div');
+    div.className = 'participant-row' + (idx === state.currentIdx ? ' participant-row-active' : '');
+    div.innerHTML =
+      '<div class="flex items-center gap-2">' +
+      '<span class="badge">' +
+      (idx + 1) +
+      '</span><div><div style="font-weight:700">' +
+      escHtml(p.name) +
+      '</div><div class="text-xs text-muted">' +
+      escHtml(p.team || '') +
+      '</div>' +
+      '</div></div>' +
+      '<div style="text-align:right">' +
+      (complete && tot != null
+        ? '<div class="text-xs text-muted">Final</div><div style="font-size:1.25rem;font-weight:800">' +
+          tot.toFixed(2) +
+          '</div>'
+        : '<span class="badge">' +
+          (complete ? 'Done' : 'Pending') +
+          '</span>') +
+      '</div>';
+    list.appendChild(div);
+  });
+}
+
+function renderExtensionFromStorage() {
+  if (!IS_EXTENSION) return;
+  if (!anyoExtensionBracketNormalized) {
+    normalizeEventBracketsPerCategory();
+    anyoExtensionBracketNormalized = true;
+  }
+
+  let live = {};
+  try {
+    live = JSON.parse(localStorage.getItem(ANYO_LIVE_KEY) || '{}');
+  } catch {
+    live = {};
+  }
+
+  let ctx = {};
+  try {
+    ctx = JSON.parse(localStorage.getItem('anyoDisplayContext') || '{}');
+  } catch {
+    ctx = {};
+  }
+  let catId = ctx.selectedCategory;
+  let gameType = ctx.selectedGameType;
+
+  let categories = [];
+  try {
+    categories = JSON.parse(localStorage.getItem('eventCategories') || '[]');
+  } catch {
+    categories = [];
+  }
+  if (!catId && categories.length) catId = categories[0].id;
+  if (!gameType) {
+    let gts = [];
+    try {
+      gts = JSON.parse(localStorage.getItem('eventGameTypes') || '[]').filter((t) => String(t).includes('anyo'));
+    } catch {
+      gts = [];
+    }
+    if (gts.length) gameType = gts[0];
+  }
+
+  const rulesFb = getAnyoRules();
+  const primaryEvtCat = rulesFb.categoryOrderIds?.length ? rulesFb.categoryOrderIds[0] : catId;
+  const catData = categories.find((c) => c.id === primaryEvtCat) || categories.find((c) => c.id === catId);
+  const gtLabel =
+    gameType === 'anyo-traditional'
+      ? 'Anyo — Traditional'
+      : gameType === 'anyo-non-traditional'
+        ? 'Anyo — Non-traditional'
+        : gameType || '';
+
+  $('ax-event-line').textContent = (catData?.fullName || '—') + (gtLabel ? ' · ' + gtLabel : '');
+  const fw = $('ax-event-form-weapon');
+  if (fw) {
+    fw.textContent =
+      (live.formCategoryLabel || labelFormCategory(rulesFb.formCategory)) +
+      ' · ' +
+      (live.weaponLabel || labelWeapon(rulesFb.weaponCategory));
+  }
+
+  $('ax-live-sub').textContent = live.timerRunning ? 'Performance in progress' : live.timerEnded ? 'Scoring' : 'Audience display';
+
+  $('ax-performer').textContent = live.performer || '—';
+  $('ax-team').textContent = live.team || '';
+  $('ax-phase').textContent = live.violation
+    ? 'Overtime / violation'
+    : live.timerEnded
+      ? 'Judging'
+      : live.timerRunning
+        ? 'Performance'
+        : 'Waiting';
+
+  const officialLive = typeof live.officialSec === 'number' ? live.officialSec : getAnyoRules().performanceSec;
+  let elapsedSec =
+    typeof live.elapsedSec === 'number'
+      ? live.elapsedSec
+      : officialLive - (typeof live.timeLeft === 'number' ? live.timeLeft : officialLive);
+  if (!Number.isFinite(elapsedSec)) elapsedSec = 0;
+  const elapsedFmt = live.elapsedFmt || fmtTimer(Math.max(0, elapsedSec));
+
+  const tm = $('ax-timer');
+  tm.textContent = elapsedFmt;
+  tm.className =
+    'ax-timer-mega ' +
+    (live.violation ? 'violation' : live.timerRunning && live.timeLeft <= 10 && live.timeLeft > 0 ? 'warn' : 'ok');
+
+  const limEl = $('ax-timer-limit-line');
+  if (limEl) {
+    limEl.textContent = 'Limit ' + (live.limitFmt || fmtTimer(officialLive));
+  }
+
+  const noteEl = $('ax-timer-note');
+  if (noteEl) {
+    if (live.violation) {
+      noteEl.textContent = 'Time limit exceeded';
+      noteEl.classList.add('ax-timer-note--alert');
+    } else {
+      noteEl.textContent = '';
+      noteEl.classList.remove('ax-timer-note--alert');
+    }
+  }
+
+  const hCat = $('ax-hero-cat');
+  if (hCat) {
+    const cl = live.currentCategoryLabel || '';
+    hCat.textContent = cl;
+    hCat.classList.toggle('hidden', !cl);
+  }
+
+  const scoring = !!(live.timerEnded && live.showScores);
+  const perfClock = $('ax-perf-clock');
+  const perfScore = $('ax-perf-score');
+  if (perfClock && perfScore) {
+    perfClock.classList.toggle('hidden', scoring);
+    perfScore.classList.toggle('hidden', !scoring);
+  }
+  if (scoring) {
+    const fm = $('ax-final-mega');
+    const fmeta = $('ax-final-meta');
+    const tmini = $('ax-timer-mini-val');
+    const tlim = $('ax-timer-mini-limit');
+    if (fm) fm.textContent = live.final != null ? live.final : '—';
+    if (fmeta) {
+      fmeta.textContent =
+        'Avg ' + (live.avg || '—') + ' · Ded. ' + (live.deduction != null ? live.deduction : '—');
+    }
+    if (tmini) tmini.textContent = live.elapsedFmt || elapsedFmt;
+    if (tlim) tlim.textContent = live.limitFmt || fmtTimer(officialLive);
+  }
+
+  const jr = $('ax-judges-row');
+  if (live.timerEnded && Array.isArray(live.judgeScores) && jr) {
+    jr.classList.remove('hidden');
+    jr.innerHTML = live.judgeScores
+      .map((js) => {
+        const empty = js.display === '—' || js.value == null;
+        return (
+          '<div class="ax-judge-pill' +
+          (empty ? ' ax-j-empty' : '') +
+          '"><div class="ax-jl">' +
+          escHtml(js.label) +
+          '</div><div class="ax-jv">' +
+          escHtml(String(js.display)) +
+          '</div></div>'
+        );
+      })
+      .join('');
+  } else if (jr) {
+    jr.classList.add('hidden');
+    jr.innerHTML = '';
+  }
+
+  const dd = $('ax-deduct-detail');
+  if (live.timerEnded && live.showScores && dd) {
+    const hist = live.deductHistory;
+    const tot = parseFloat(live.deduction) || 0;
+    if (Array.isArray(hist) && hist.length) {
+      dd.classList.remove('hidden');
+      dd.textContent =
+        'Deductions applied: ' +
+        hist.map((x) => '−' + Number(x).toFixed(2)).join(', ') +
+        ' → total −' +
+        tot.toFixed(2);
+    } else if (tot > 0) {
+      dd.classList.remove('hidden');
+      dd.textContent = 'Deduction total: −' + tot.toFixed(2);
+    } else {
+      dd.classList.remove('hidden');
+      dd.textContent = 'No violation deductions';
+    }
+  } else if (dd) {
+    dd.classList.add('hidden');
+    dd.textContent = '';
+  }
+
+  const panel = $('ax-live-scores');
+  if (panel) {
+    panel.classList.add('hidden');
+    panel.style.display = 'none';
+  }
+
+  const rulesR = getAnyoRules();
+  let brackets = {};
+  try {
+    brackets = JSON.parse(localStorage.getItem('eventBrackets') || '{}');
+  } catch {
+    brackets = {};
+  }
+  const gt = gameType || '';
+  let categoryOrderIds = Array.isArray(rulesR.categoryOrderIds) ? rulesR.categoryOrderIds.slice() : [];
+  const seenCat = new Set(categoryOrderIds);
+  if (gt) {
+    const suf = '-' + gt;
+    Object.keys(brackets).forEach((k) => {
+      if (!k.endsWith(suf)) return;
+      const cid = k.slice(0, -suf.length);
+      if (cid && !seenCat.has(cid)) {
+        categoryOrderIds.push(cid);
+        seenCat.add(cid);
+      }
+    });
+  }
+  if (!categoryOrderIds.length && catId) categoryOrderIds = [catId];
+
+  const nJ = live.numJudges || getNumJudges();
+  const colCount = 1 + nJ + 2;
+
+  const sections = [];
+  for (const cid of categoryOrderIds) {
+    const bk = cid && gt ? cid + '-' + gt : '';
+    const bracket = bk ? brackets[bk] : null;
+    const participants = bracket?.participants || [];
+    if (!participants.length) continue;
+    const scoreMap = bracket?.scores || {};
+    const catRows = participants.map((p) => {
+      const sc = migrateScore(scoreMap[p.id]);
+      const total = calcTotal(sc);
+      return { ...p, sc, total };
+    });
+    catRows.sort((a, b) => {
+      if (a.total === 0 && b.total > 0) return 1;
+      if (b.total === 0 && a.total > 0) return -1;
+      return b.total - a.total;
+    });
+    const rowLabel = catRows.find((r) => r.categoryLabel && String(r.categoryLabel).trim())?.categoryLabel;
+    sections.push({
+      categoryId: cid,
+      label: rowLabel || categoryLabelById(cid, categories),
+      rows: catRows,
+    });
+  }
+
+  const emptyEl = $('ax-empty');
+  const tableSec = $('ax-table-section');
+  const medals = $('ax-medals');
+  if (!sections.length) {
+    emptyEl.style.display = '';
+    tableSec.style.display = 'none';
+    if (medals) {
+      medals.classList.add('hidden');
+      medals.innerHTML = '';
+    }
+    return;
+  }
+  emptyEl.style.display = 'none';
+  tableSec.style.display = '';
+
+  let head = '<tr><th>Performer</th>';
+  for (let i = 1; i <= nJ; i++) head += '<th>J' + i + '</th>';
+  head += '<th>Ded</th><th>Final</th></tr>';
+  $('ax-thead').innerHTML = head;
+
+  function axStandingsRowHtml(r) {
+    const s = r.sc;
+    let cells = '';
+    for (let i = 1; i <= nJ; i++) {
+      const v = s['j' + i];
+      const ok = Number.isFinite(parseFloat(v)) && parseFloat(v) >= 1;
+      cells += '<td>' + (ok ? parseFloat(v).toFixed(1) : '—') + '</td>';
+    }
+    const hasF = r.total > 0 || calcAvg(s) > 0;
+    return (
+      '<tr><td>' +
+      escHtml(r.name) +
+      '<div class="text-xs text-muted">' +
+      escHtml(r.team || '') +
+      '</div></td>' +
+      cells +
+      '<td>' +
+      ((s.deduction || 0) > 0 ? Number(s.deduction).toFixed(2) : '—') +
+      '</td><td class="ax-total">' +
+      (hasF ? r.total.toFixed(2) : '—') +
+      '</td></tr>'
+    );
+  }
+
+  let tbodyHtml = '';
+  for (const sec of sections) {
+    tbodyHtml +=
+      '<tr class="ax-category-heading"><td colspan="' +
+      colCount +
+      '">' +
+      escHtml(sec.label) +
+      '</td></tr>';
+    tbodyHtml += sec.rows.map(axStandingsRowHtml).join('');
+  }
+  $('ax-tbody').innerHTML = tbodyHtml;
+
+  if (medals) {
+    const blocks = sections
+      .map((sec) => {
+        const completed = sec.rows.filter((r) => r.total > 0);
+        if (completed.length < 3) return '';
+        const g = completed[0];
+        const s = completed[1];
+        const b = completed[2];
+        return (
+          '<div class="ax-medals-block">' +
+          '<h2 class="ax-medals-cat">' +
+          escHtml(sec.label) +
+          '</h2>' +
+          '<div class="ax-podium">' +
+          '<div style="text-align:center;min-width:140px">' +
+          '<div style="font-size:2rem">🥈</div>' +
+          '<div style="font-weight:800;color:#d4d4d8;margin-top:8px">' +
+          escHtml(s.team || s.name) +
+          '</div>' +
+          '<div style="font-weight:700;color:var(--muted-fg)">' +
+          s.total.toFixed(2) +
+          '</div></div>' +
+          '<div style="text-align:center;min-width:160px">' +
+          '<div style="font-size:2.75rem">👑</div>' +
+          '<div style="font-weight:900;color:#fde047;margin-top:8px;font-size:1.1rem">' +
+          escHtml(g.team || g.name) +
+          '</div>' +
+          '<div style="font-weight:800;color:#fde047">' +
+          g.total.toFixed(2) +
+          '</div></div>' +
+          '<div style="text-align:center;min-width:140px">' +
+          '<div style="font-size:2rem">🥉</div>' +
+          '<div style="font-weight:800;color:#fdba74;margin-top:8px">' +
+          escHtml(b.team || b.name) +
+          '</div>' +
+          '<div style="font-weight:700;color:var(--muted-fg)">' +
+          b.total.toFixed(2) +
+          '</div></div></div></div>'
+        );
+      })
+      .filter(Boolean)
+      .join('');
+    if (blocks) {
+      medals.classList.remove('hidden');
+      medals.innerHTML = blocks;
+    } else {
+      medals.classList.add('hidden');
+      medals.innerHTML = '';
+    }
+  }
+}
+
+function idbOpen() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(IDB_NAME, IDB_VER);
+    req.onerror = () => reject(req.error);
+    req.onsuccess = () => resolve(req.result);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE, { keyPath: 'id' });
+    };
+  });
+}
+
+function idbPutMedia(id, buffer, name, mime) {
+  return idbOpen().then(
+    (db) =>
+      new Promise((resolve, reject) => {
+        const tx = db.transaction(IDB_STORE, 'readwrite');
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+        tx.objectStore(IDB_STORE).put({ id, buffer, name, mime: mime || '', savedAt: Date.now() });
+      })
+  );
+}
+
+function idbGetMedia(id) {
+  return idbOpen().then(
+    (db) =>
+      new Promise((resolve, reject) => {
+        const tx = db.transaction(IDB_STORE, 'readonly');
+        const r = tx.objectStore(IDB_STORE).get(id);
+        r.onsuccess = () => resolve(r.result || null);
+        r.onerror = () => reject(r.error);
+      })
+  );
+}
+
+function clearMediaPlayback() {
+  if (currentMediaEl) {
+    try {
+      currentMediaEl.pause();
+      currentMediaEl.removeAttribute('src');
+      currentMediaEl.load();
+    } catch (_) {}
+  }
+  if (mediaObjectUrl) {
+    URL.revokeObjectURL(mediaObjectUrl);
+    mediaObjectUrl = null;
+  }
+  const c = $('media-container');
+  if (c) {
+    c.innerHTML = '';
+    c.classList.add('hidden');
+  }
+  currentMediaEl = null;
+}
+
+/** Prefer audio MIME for MP4/MOV blobs so the audio element plays the soundtrack without video UI. */
+function mimeForAudioPlayback(mime) {
+  const m = String(mime || '').toLowerCase();
+  if (m.startsWith('audio/')) return m;
+  if (m.includes('mp4') || m === 'video/quicktime') return 'audio/mp4';
+  if (m.includes('webm')) return 'audio/webm';
+  if (m.includes('ogg')) return 'audio/ogg';
+  return m || 'application/octet-stream';
+}
+
+async function loadMediaForParticipant(p) {
+  clearMediaPlayback();
+  if (!p) return;
+  try {
+    const rec = await idbGetMedia('anyo-' + p.id);
+    if (!rec || !rec.buffer) {
+      $('media-status').textContent = 'No file stored for this performer.';
+      return;
+    }
+    const blob = new Blob([rec.buffer], { type: mimeForAudioPlayback(rec.mime) });
+    mediaObjectUrl = URL.createObjectURL(blob);
+    const el = document.createElement('audio');
+    el.controls = true;
+    el.preload = 'auto';
+    el.src = mediaObjectUrl;
+    el.addEventListener(
+      'error',
+      () => {
+        $('media-status').textContent =
+          'Could not play as audio. Try MP3, or MP4 with a supported audio codec.';
+        $('btn-media-play').disabled = true;
+        $('btn-media-pause').disabled = true;
+      },
+      { once: true }
+    );
+    currentMediaEl = el;
+    $('media-container').innerHTML = '';
+    $('media-container').appendChild(el);
+    $('media-container').classList.remove('hidden');
+    $('media-status').textContent = 'Loaded (audio only): ' + (rec.name || 'media');
+    $('btn-media-play').disabled = false;
+    $('btn-media-pause').disabled = false;
+  } catch {
+    $('media-status').textContent = 'Could not load media.';
+  }
+}
+
+function completeAnyoSetupFromForm() {
+  const err = $('setup-anyo-error');
+  if (err) {
+    err.textContent = '';
+    err.classList.remove('show');
+  }
+  const { categories, gameTypes } = loadCategoriesFromStorage();
+  const gameTypeSel = $('setup-sel-gametype')?.value?.trim() || '';
+  const catIdSingle = $('setup-sel-category')?.value?.trim() || '';
+  let orderText = $('setup-category-order')?.value || '';
+  let teamStr = $('setup-team-order')?.value || '';
+  let rosterText = $('setup-roster-text')?.value || '';
+  const pdfRosterIn = $('setup-roster-pdf');
+  const hasPlayersPdf = pdfRosterIn && pdfRosterIn.files && pdfRosterIn.files[0];
+  if (!hasPlayersPdf && typeof KaliArenaMock !== 'undefined') {
+    const m = KaliArenaMock;
+    if (!orderText.trim() && m.anyoCategoryOrderText) orderText = m.anyoCategoryOrderText;
+    if (!teamStr.trim() && m.anyoTeamOrder) teamStr = m.anyoTeamOrder;
+    if (!rosterText.trim() && m.anyoRosterText) rosterText = m.anyoRosterText;
+  }
+  let categoryOrderIds = parseCategoryOrderLines(orderText, categories);
+  if (!categoryOrderIds.length && catIdSingle && categories.some((c) => c.id === catIdSingle)) {
+    categoryOrderIds = [catIdSingle];
+  }
+  if (!categoryOrderIds.length) {
+    if (err) {
+      err.textContent = 'Set performance category order (one per line), or select one bracket category above.';
+      err.classList.add('show');
+    }
+    return false;
+  }
+  if (!gameTypeSel || !gameTypes.includes(gameTypeSel)) {
+    if (err) {
+      err.textContent = 'Select a game type.';
+      err.classList.add('show');
+    }
+    return false;
+  }
+  const min = parseInt($('setup-anyo-min').value, 10) || 0;
+  const sec = parseInt($('setup-anyo-sec').value, 10) || 0;
+  const total = min * 60 + sec;
+  const nj = parseInt($('setup-num-judges').value, 10) || 5;
+  if (total < 30 || total > 30 * 60) {
+    if (err) {
+      err.textContent = 'Performance length must be between 30 seconds and 30 minutes.';
+      err.classList.add('show');
+    }
+    return false;
+  }
+  if (nj < 1 || nj > 9) {
+    if (err) {
+      err.textContent = 'Judges must be between 1 and 9.';
+      err.classList.add('show');
+    }
+    return false;
+  }
+  const formCat = $('setup-form-category')?.value === 'non-traditional' ? 'non-traditional' : 'traditional';
+  const weaponEl = $('setup-weapon-category');
+  const wv = weaponEl ? weaponEl.value : 'single-stick';
+  const weaponOk = ['single-stick', 'double-stick', 'espada-y-daga', 'mixed'];
+  const weaponCat = weaponOk.includes(wv) ? wv : 'single-stick';
+  const teamOrder = teamStr.split(/[,;]/).map((t) => t.trim()).filter(Boolean);
+  const rows = parseRosterLines(rosterText, categories);
+  if (!rows.length) {
+    if (err) {
+      err.textContent = 'Add roster lines (Name, Team, Category) or extract text from a PDF into the box.';
+      err.classList.add('show');
+    }
+    return false;
+  }
+  const participants = buildPerformanceOrder(rows, categoryOrderIds, teamOrder, categories);
+  if (!participants.length) {
+    if (err) {
+      err.textContent = 'No athletes matched your category order. Check spelling against event categories.';
+      err.classList.add('show');
+    }
+    return false;
+  }
+  const primaryCat = categoryOrderIds[0];
+  try {
+    localStorage.setItem(
+      ANYO_RULES_KEY,
+      JSON.stringify({
+        performanceSec: total,
+        numJudges: nj,
+        formCategory: formCat,
+        weaponCategory: weaponCat,
+        selectedCategoryId: primaryCat,
+        selectedGameType: gameTypeSel,
+        categoryOrderIds,
+        teamOrder,
+        teamOrderStr: teamStr,
+      })
+    );
+    localStorage.setItem('anyoRosterRaw', rosterText);
+    localStorage.setItem('anyoCategoryOrderRaw', orderText);
+    localStorage.setItem('anyoSetupComplete', '1');
+    let brackets = {};
+    try {
+      brackets = JSON.parse(localStorage.getItem('eventBrackets') || '{}');
+    } catch {
+      brackets = {};
+    }
+    const mergedScores = {};
+    const primaryKey = primaryCat + '-' + gameTypeSel;
+    if (brackets[primaryKey]?.scores && typeof brackets[primaryKey].scores === 'object') {
+      Object.assign(mergedScores, brackets[primaryKey].scores);
+    }
+    for (const cid of categoryOrderIds) {
+      const sub = participants.filter((p) => p.categoryId === cid);
+      if (!sub.length) continue;
+      const k = cid + '-' + gameTypeSel;
+      const prev = brackets[k];
+      const scores = {};
+      sub.forEach((p) => {
+        const sid = p.id;
+        if (prev?.scores?.[sid] != null) scores[sid] = prev.scores[sid];
+        else if (mergedScores[sid] != null) scores[sid] = mergedScores[sid];
+      });
+      brackets[k] = {
+        categoryId: cid,
+        gameType: gameTypeSel,
+        participants: sub,
+        scores,
+      };
+    }
+    localStorage.setItem('eventBrackets', JSON.stringify(brackets));
+  } catch {
+    if (err) {
+      err.textContent = 'Could not save.';
+      err.classList.add('show');
+    }
+    return false;
+  }
+  document.body.classList.remove('setup-mode');
+  const sr = $('setup-root');
+  if (sr) sr.style.display = 'none';
+  resetTimerState();
+  try {
+    localStorage.setItem(
+      'anyoDisplayContext',
+      JSON.stringify({ selectedCategory: primaryCat, selectedGameType: gameTypeSel })
+    );
+  } catch {}
+  loadData();
+  const catName = categories.find((c) => c.id === primaryCat)?.fullName || primaryCat;
+  showToast(
+    'Event configured',
+    participants.length + ' athletes · ' + catName + ' first · ' + fmtTimer(total)
+  );
+  return true;
+}
+
+const ANYO_EDITING = { active: null };
+
+function startAnyoEdit(which) {
+  if (ANYO_EDITING.active && ANYO_EDITING.active !== which) finishAnyoEdit(ANYO_EDITING.active, true);
+  const p = currentParticipant();
+  if (!p) return;
+  const disp = $(which === 'name' ? 'anyo-name-display' : 'anyo-team-display');
+  const inp = $(which === 'name' ? 'anyo-name-input' : 'anyo-team-input');
+  const hint = $(which === 'name' ? 'anyo-name-hint' : 'anyo-team-hint');
+  if (!disp || !inp) return;
+  disp.style.display = 'none';
+  inp.style.display = 'block';
+  if (hint) hint.style.display = 'block';
+  inp.value = which === 'name' ? (p.name || '') : (p.team || '');
+  inp.focus();
+  inp.select();
+  ANYO_EDITING.active = which;
+}
+
+function finishAnyoEdit(which, save) {
+  if (ANYO_EDITING.active !== which) return;
+  const p = currentParticipant();
+  if (!p) {
+    ANYO_EDITING.active = null;
+    return;
+  }
+  const disp = $(which === 'name' ? 'anyo-name-display' : 'anyo-team-display');
+  const inp = $(which === 'name' ? 'anyo-name-input' : 'anyo-team-input');
+  const hint = $(which === 'name' ? 'anyo-name-hint' : 'anyo-team-hint');
+  if (!disp || !inp) return;
+  if (save) {
+    const v = inp.value.trim();
+    if (which === 'name') p.name = v || '—';
+    else p.team = v;
+    state.participants[state.currentIdx] = p;
+    saveBracket();
+  }
+  inp.style.display = 'none';
+  if (hint) hint.style.display = 'none';
+  disp.style.display = '';
+  ANYO_EDITING.active = null;
+  render();
+}
+
+function exportAnyoResultsPrint() {
+  const rules = getAnyoRules();
+  const key = (state.selectedCategory || '') + '-' + (state.selectedGameType || '');
+  let brackets = {};
+  try {
+    brackets = JSON.parse(localStorage.getItem('eventBrackets') || '{}');
+  } catch {
+    brackets = {};
+  }
+  const b = brackets[key] || {};
+  const participants = Array.isArray(b.participants) && b.participants.length ? b.participants : state.participants || [];
+  const scoreMap = b.scores && typeof b.scores === 'object' ? b.scores : state.scores || {};
+  const nJ = rules.numJudges || 5;
+  const rows = participants.map((p) => {
+    const sc = migrateScore(scoreMap[p.id]);
+    const tot = calcTotal(sc);
+    const ded = sc.deduction || 0;
+    return { ...p, sc, tot, ded, avg: calcAvg(sc) };
+  });
+  const ranked = rows
+    .filter((r) => r.tot > 0)
+    .sort((a, b) => b.tot - a.tot)
+    .map((r, i) => ({ ...r, rank: i + 1 }));
+  const title = 'KaliArena · Anyo results';
+  const when = new Date().toLocaleString();
+  const html =
+    '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' +
+    escHtml(title) +
+    '</title><style>body{font-family:system-ui,sans-serif;padding:24px;color:#111}table{border-collapse:collapse;width:100%;max-width:900px}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#f4f4f5}.muted{color:#666}.rank{width:48px}</style></head><body>' +
+    '<h1>' +
+    escHtml(title) +
+    '</h1>' +
+    '<p class="muted">' +
+    escHtml(when) +
+    '</p>' +
+    '<p><strong>Time limit</strong> ' +
+    escHtml(fmtTimer(rules.performanceSec)) +
+    ' · <strong>Judges</strong> ' +
+    nJ +
+    ' · <strong>Form</strong> ' +
+    escHtml(labelFormCategory(rules.formCategory)) +
+    '</p>' +
+    '<h2>Standings (by final score)</h2>' +
+    '<table><thead><tr><th class="rank">#</th><th>Name</th><th>Team</th><th>Category</th><th>Avg</th><th>Deduction</th><th>Final</th></tr></thead><tbody>' +
+    (ranked.length
+      ? ranked
+          .map(
+            (r) =>
+              '<tr><td>' +
+              r.rank +
+              '</td><td>' +
+              escHtml(r.name || '') +
+              '</td><td>' +
+              escHtml(r.team || '') +
+              '</td><td>' +
+              escHtml(r.categoryLabel || '') +
+              '</td><td>' +
+              r.avg.toFixed(2) +
+              '</td><td>' +
+              r.ded.toFixed(2) +
+              '</td><td><strong>' +
+              r.tot.toFixed(2) +
+              '</strong></td></tr>'
+          )
+          .join('')
+      : '<tr><td colspan="7">No completed scores in storage for this bracket.</td></tr>') +
+    '</tbody></table>' +
+    '<h2>Start order</h2>' +
+    '<table><thead><tr><th>#</th><th>Name</th><th>Team</th><th>Category</th><th>Final</th></tr></thead><tbody>' +
+    rows
+      .map(
+        (r, i) =>
+          '<tr><td>' +
+          (i + 1) +
+          '</td><td>' +
+          escHtml(r.name || '') +
+          '</td><td>' +
+          escHtml(r.team || '') +
+          '</td><td>' +
+          escHtml(r.categoryLabel || '') +
+          '</td><td>' +
+          (r.tot > 0 ? r.tot.toFixed(2) : '—') +
+          '</td></tr>'
+      )
+      .join('') +
+    '</tbody></table>' +
+    '<scr' +
+    'ipt>window.onload=function(){ window.print(); }</scr' +
+    'ipt></body></html>';
+  const w = window.open('', '_blank');
+  if (!w) {
+    showToast('Popup blocked', 'Allow pop-ups to export.');
+    return;
+  }
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+}
+
+function openAnyoSetupScreen() {
+  document.body.classList.add('setup-mode');
+  populateSetupDivisionSelects();
+  const r = getAnyoRules();
+  $('setup-anyo-min').value = Math.floor(r.performanceSec / 60);
+  $('setup-anyo-sec').value = r.performanceSec % 60;
+  $('setup-num-judges').value = r.numJudges;
+  const sfc = $('setup-form-category');
+  if (sfc) sfc.value = r.formCategory === 'non-traditional' ? 'non-traditional' : 'traditional';
+  const swc = $('setup-weapon-category');
+  if (swc) swc.value = ['single-stick', 'double-stick', 'espada-y-daga', 'mixed'].includes(r.weaponCategory) ? r.weaponCategory : 'single-stick';
+  const co = $('setup-category-order');
+  if (co) {
+    try {
+      const { categories: cats } = loadCategoriesFromStorage();
+      co.value =
+        localStorage.getItem('anyoCategoryOrderRaw') ||
+        (r.categoryOrderIds?.length ? r.categoryOrderIds.map((id) => categoryLabelById(id, cats)).join('\n') : '');
+    } catch {
+      co.value = '';
+    }
+  }
+  const sto = $('setup-team-order');
+  if (sto) sto.value = r.teamOrderStr || (r.teamOrder || []).join(', ');
+  const rtx = $('setup-roster-text');
+  if (rtx) {
+    try {
+      rtx.value = localStorage.getItem('anyoRosterRaw') || '';
+    } catch {
+      rtx.value = '';
+    }
+  }
+  const sr = $('setup-root');
+  if (sr) sr.style.display = 'block';
+}
+
+if (!IS_EXTENSION && !IS_QUEUE_DISPLAY) {
+  $('btn-anyo-setup-continue').addEventListener('click', () => completeAnyoSetupFromForm());
+
+  $('btn-setup-cancel').addEventListener('click', () => $('overlay-setup-confirm').classList.add('hidden'));
+  $('btn-setup-open').addEventListener('click', () => {
+    $('overlay-setup-confirm').classList.add('hidden');
+    openAnyoSetupScreen();
+  });
+
+  $('btn-anyo-setup').addEventListener('click', () => {
+    $('overlay-setup-confirm').classList.remove('hidden');
+  });
+
+  const bq = $('btn-open-queue');
+  if (bq) bq.addEventListener('click', () => openAnyoQueueDisplay());
+
+  const bex = $('btn-export-anyo-results');
+  if (bex) bex.addEventListener('click', () => exportAnyoResultsPrint());
+
+  const nameDisp = $('anyo-name-display');
+  const teamDisp = $('anyo-team-display');
+  const nameInp = $('anyo-name-input');
+  const teamInp = $('anyo-team-input');
+  if (nameDisp) nameDisp.addEventListener('dblclick', () => startAnyoEdit('name'));
+  if (teamDisp) teamDisp.addEventListener('dblclick', () => startAnyoEdit('team'));
+  if (nameInp) {
+    nameInp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') finishAnyoEdit('name', true);
+      else if (e.key === 'Escape') finishAnyoEdit('name', false);
+    });
+    nameInp.addEventListener('blur', () => {
+      if (ANYO_EDITING.active === 'name') finishAnyoEdit('name', true);
+    });
+  }
+  if (teamInp) {
+    teamInp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') finishAnyoEdit('team', true);
+      else if (e.key === 'Escape') finishAnyoEdit('team', false);
+    });
+    teamInp.addEventListener('blur', () => {
+      if (ANYO_EDITING.active === 'team') finishAnyoEdit('team', true);
+    });
+  }
+
+  const bpe = $('btn-setup-pdf-extract');
+  if (bpe) {
+    bpe.addEventListener('click', async () => {
+      const inp = $('setup-roster-pdf');
+      const f = inp?.files?.[0];
+      if (!f) {
+        showToast('Choose a PDF', '');
+        return;
+      }
+      try {
+        const text = await extractTextFromPdfFile(f);
+        const box = $('setup-roster-text');
+        if (box) box.value = (box.value ? box.value + '\n' : '') + text;
+        showToast('PDF text added', 'Edit rows to Name, Team, Category');
+      } catch (e) {
+        showToast('PDF failed', String(e.message || e));
+      }
+    });
+  }
+
+  $('btn-prev').addEventListener('click', () => {
+    if (state.currentIdx > 0) {
+      state.currentIdx--;
+      resetTimerState();
+      loadMediaForParticipant(currentParticipant());
+      render();
+    }
+  });
+  $('btn-next').addEventListener('click', () => {
+    if (state.currentIdx < state.participants.length - 1) {
+      state.currentIdx++;
+      resetTimerState();
+      loadMediaForParticipant(currentParticipant());
+      render();
+    }
+  });
+
+  const btnSkipPerf = $('btn-skip-performer');
+  if (btnSkipPerf) btnSkipPerf.addEventListener('click', () => skipCurrentPerformer());
+  const btnNextCatEl = $('btn-next-category');
+  if (btnNextCatEl) btnNextCatEl.addEventListener('click', () => goToNextCategory());
+
+  $('timer-display').addEventListener('click', () => {
+    if (!state.timerEnded) openTimeEdit();
+  });
+  $('timer-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') closeTimeEdit(true);
+    else if (e.key === 'Escape') closeTimeEdit(false);
+  });
+  $('timer-input').addEventListener('blur', () => {
+    if (state.isEditingTime) closeTimeEdit(true);
+  });
+
+  $('btn-timer-toggle').addEventListener('click', () => {
+    if (state.timerEnded) return;
+    state.isRunning = !state.isRunning;
+    if (state.isRunning) startTimerLoop();
+    else clearInterval(timerInterval);
+    render();
+  });
+
+  function doResetPerformanceTimer() {
+    resetTimerState();
+    render();
+  }
+  $('btn-timer-reset').addEventListener('click', doResetPerformanceTimer);
+  $('btn-timer-reset2').addEventListener('click', doResetPerformanceTimer);
+
+  $('btn-end-performance').addEventListener('click', () => {
+    if (state.timerEnded) return;
+    state.isRunning = false;
+    clearInterval(timerInterval);
+    timerInterval = null;
+    state.timerEnded = true;
+    render();
+    showToast('Performance ended', 'Enter judge scores (1–10).');
+  });
+
+  document.querySelectorAll('[data-deduct]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const p = currentParticipant();
+      if (!p || !state.timerEnded) return;
+      const amt = parseFloat(btn.getAttribute('data-deduct'));
+      const sc = { ...getScore(p.id) };
+      sc.deduction = Math.round(((sc.deduction || 0) + amt) * 100) / 100;
+      if (!Array.isArray(sc.deductHistory)) sc.deductHistory = [];
+      sc.deductHistory.push(amt);
+      state.scores = { ...state.scores, [p.id]: sc };
+      saveBracket();
+      render();
+    });
+  });
+
+  $('btn-deduct-undo').addEventListener('click', () => {
+    const p = currentParticipant();
+    if (!p) return;
+    const sc = { ...getScore(p.id) };
+    if (!Array.isArray(sc.deductHistory) || !sc.deductHistory.length) return;
+    const last = sc.deductHistory.pop();
+    sc.deduction = Math.max(0, Math.round(((sc.deduction || 0) - last) * 100) / 100);
+    state.scores = { ...state.scores, [p.id]: sc };
+    saveBracket();
+    render();
+  });
+
+  $('btn-finish').addEventListener('click', () => {
+    saveBracket();
+    showToast('Saved', 'Performance scores stored.');
+    if (state.currentIdx < state.participants.length - 1) {
+      state.currentIdx++;
+      resetTimerState();
+      loadMediaForParticipant(currentParticipant());
+    }
+    render();
+  });
+
+  $('btn-media-pick').addEventListener('click', () => $('media-file').click());
+  $('media-file').addEventListener('change', async (e) => {
+    const f = e.target.files?.[0];
+    const p = currentParticipant();
+    if (!f || !p) return;
+    try {
+      const buf = await f.arrayBuffer();
+      await idbPutMedia('anyo-' + p.id, buf, f.name, f.type);
+      showToast('Media saved', f.name);
+      loadMediaForParticipant(p);
+    } catch {
+      showToast('Save failed', '');
+    }
+    e.target.value = '';
+  });
+  $('btn-media-play').addEventListener('click', () => {
+    if (currentMediaEl && currentMediaEl.play) currentMediaEl.play();
+  });
+  $('btn-media-pause').addEventListener('click', () => {
+    if (currentMediaEl && currentMediaEl.pause) currentMediaEl.pause();
+  });
+  $('btn-media-clear').addEventListener('click', async () => {
+    const p = currentParticipant();
+    if (!p) return;
+    try {
+      const db = await idbOpen();
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction(IDB_STORE, 'readwrite');
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+        tx.objectStore(IDB_STORE).delete('anyo-' + p.id);
+      });
+    } catch (_) {}
+    clearMediaPlayback();
+    $('media-status').textContent = 'Cleared.';
+    $('btn-media-play').disabled = true;
+    $('btn-media-pause').disabled = true;
+  });
+}
+
+if (IS_EXTENSION) {
+  renderExtensionFromStorage();
+  setInterval(renderExtensionFromStorage, 400);
+  window.addEventListener('storage', renderExtensionFromStorage);
+  window.addEventListener('bracketUpdate', renderExtensionFromStorage);
+} else if (IS_QUEUE_DISPLAY) {
+  renderQueueFromStorage();
+  setInterval(renderQueueFromStorage, 400);
+  window.addEventListener('storage', renderQueueFromStorage);
+  window.addEventListener('bracketUpdate', renderQueueFromStorage);
+} else {
+  const la = $('link-audience-ext');
+  if (la) la.href = new URL('?display=extension', window.location.href).href;
+  if (localStorage.getItem('anyoSetupComplete')) {
+    loadData();
+  } else {
+    if ($('setup-anyo-min')) $('setup-anyo-min').value = 1;
+    if ($('setup-anyo-sec')) $('setup-anyo-sec').value = 30;
+    if ($('setup-num-judges')) $('setup-num-judges').value = 5;
+    if ($('setup-form-category')) $('setup-form-category').value = 'traditional';
+    if ($('setup-weapon-category')) $('setup-weapon-category').value = 'single-stick';
+    populateSetupDivisionSelects();
+  }
+}
+</script>
+</body>
+</html>
