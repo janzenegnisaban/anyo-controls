@@ -245,7 +245,7 @@
     }
     #setup-root .setup-card {
       width: 100%;
-      max-width: min(720px, 100%);
+      max-width: min(880px, 100%);
       background: #fff;
       border-radius: 14px;
       border: 1px solid #e4e4e7;
@@ -255,14 +255,11 @@
     #setup-root .setup-card-header { padding: 14px 18px 10px; border-bottom: 1px solid #e4e4e7; }
     #setup-root .setup-card-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #b91c1c; margin-bottom: 2px; }
     #setup-root .setup-card-title { font-size: clamp(1.15rem, 2.5vw, 1.35rem); font-weight: 800; color: #18181b; margin-top: 0; line-height: 1.2; }
-    #setup-root .setup-card-body { padding: 0 12px; }
-    @media (min-width: 720px) {
-      #setup-root .setup-card-body {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        column-gap: 10px;
-        align-items: start;
-      }
+    #setup-root .setup-card-body {
+      padding: 0 12px;
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: start;
     }
     #setup-root .setup-section {
       margin-top: 10px;
@@ -273,47 +270,220 @@
       border-left: 3px solid #3b82f6;
       background: linear-gradient(180deg, #fff 0%, #fafafa 100%);
     }
-    #setup-root .setup-manual-row {
+    #setup-root .anyo-setup-section-brackets {
+      border-left-color: #16a34a;
+      background: linear-gradient(180deg, #f7fef9 0%, #fafafa 100%);
+    }
+    #setup-root .anyo-cat-card {
+      border: 1px solid #e4e4e7;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+    #setup-root .anyo-cat-order-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+      padding: 8px 10px;
+      background: #f4f4f5;
+      border-radius: 8px;
+      border: 1px solid #e4e4e7;
+    }
+    #setup-root .anyo-order-badge {
+      font-weight: 800;
+      color: #15803d;
+      font-size: 13px;
+      margin-right: 4px;
+    }
+    #setup-root .anyo-order-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      min-height: 34px;
+      padding: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #18181b;
+      border-radius: 6px;
+      border: 1px solid #d4d4d8;
+      background: #fff;
+      cursor: pointer;
+    }
+    #setup-root .anyo-order-btn .anyo-move-icon {
+      display: block;
+      flex-shrink: 0;
+    }
+    #setup-root .anyo-order-btn:disabled {
+      color: #a1a1aa;
+      opacity: 1;
+      cursor: not-allowed;
+    }
+    #setup-root .anyo-cat-card-head {
       display: grid;
-      grid-template-columns: 1fr 1fr minmax(160px, 1.2fr) auto;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    @media (min-width: 720px) {
+      #setup-root .anyo-cat-card-head {
+        grid-template-columns: 1.2fr 1fr 1fr auto;
+        align-items: end;
+      }
+    }
+    #setup-root .anyo-setup-icon {
+      display: block;
+      flex-shrink: 0;
+    }
+    #setup-root .anyo-setup-icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    #setup-root .anyo-cat-remove {
+      grid-column: 1 / -1;
+      justify-self: start;
+      padding: 6px 10px;
+      min-width: 34px;
+      min-height: 34px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #18181b;
+      border-radius: 8px;
+      border: 1px solid #d4d4d8;
+      background: #fff;
+      cursor: pointer;
+    }
+    @media (min-width: 720px) {
+      #setup-root .anyo-cat-remove {
+        grid-column: auto;
+        align-self: end;
+      }
+    }
+    #setup-root .anyo-performers-head {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #52525b;
+      margin: 10px 0 6px;
+    }
+    #setup-root .anyo-performer-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
       gap: 8px;
       align-items: end;
       margin-bottom: 8px;
     }
-    @media (max-width: 719px) {
-      #setup-root .setup-manual-row {
-        grid-template-columns: 1fr 1fr;
-      }
-      #setup-root .setup-manual-row select.setup-input {
-        grid-column: 1 / -1;
-      }
-      #setup-root .setup-manual-row .setup-manual-remove {
-        grid-column: 1 / -1;
-        justify-self: start;
-      }
-    }
-    #setup-root .setup-manual-remove {
-      padding: 8px 10px;
+    #setup-root .anyo-performer-remove {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      min-width: 34px;
+      min-height: 34px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #18181b;
+      border-radius: 8px;
       border: 1px solid #d4d4d8;
+      background: #fff;
+      cursor: pointer;
+    }
+    #setup-root .anyo-add-performer {
+      margin-top: 6px;
+      font-size: 12px;
+    }
+    #setup-root .anyo-team-order-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    #setup-root .anyo-team-order-empty {
+      margin: 0;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px dashed #d4d4d8;
+      background: #fafafa;
+      font-size: 12px;
+      line-height: 1.45;
+      color: #52525b;
+    }
+    #setup-root .anyo-team-order-row {
+      display: grid;
+      grid-template-columns: minmax(7em, auto) minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 10px;
+      border: 1px solid #e4e4e7;
       border-radius: 8px;
       background: #fff;
+    }
+    @media (max-width: 720px) {
+      #setup-root .anyo-team-order-row {
+        grid-template-columns: 1fr;
+      }
+      #setup-root .anyo-team-order-actions {
+        justify-content: flex-start;
+      }
+    }
+    #setup-root .anyo-team-ordinal {
       font-size: 12px;
+      font-weight: 700;
+      color: #18181b;
+      white-space: nowrap;
+    }
+    #setup-root .anyo-team-name-input {
+      min-width: 0;
+    }
+    #setup-root .anyo-team-order-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    #setup-root .anyo-team-row-btn {
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #18181b;
+      border-radius: 6px;
+      border: 1px solid #d4d4d8;
+      background: #fff;
       cursor: pointer;
       white-space: nowrap;
     }
-    #setup-root .setup-section-manual { border-left-color: #16a34a; }
-    @media (min-width: 720px) {
-      #setup-root .setup-section:nth-of-type(3),
-      #setup-root .setup-section:nth-of-type(4),
-      #setup-root .setup-section:nth-of-type(5) {
-        grid-column: 1 / -1;
-      }
-      #setup-root .setup-section {
-        margin-left: 0;
-        margin-right: 0;
-      }
+    #setup-root .anyo-team-row-btn:disabled {
+      color: #a1a1aa;
+      cursor: not-allowed;
     }
-    #setup-root .setup-section:nth-of-type(2) { border-left-color: #dc2626; }
+    #setup-root .anyo-team-order-actions .anyo-team-edit,
+    #setup-root .anyo-team-order-actions .anyo-team-delete {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      min-height: 34px;
+      padding: 6px;
+    }
+    #setup-root .anyo-team-order-actions .anyo-team-move-up,
+    #setup-root .anyo-team-order-actions .anyo-team-move-down {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      min-height: 34px;
+      padding: 6px;
+    }
+    #setup-root .anyo-team-row-btn .anyo-move-icon {
+      display: block;
+      flex-shrink: 0;
+    }
     #setup-root .setup-section:nth-of-type(3) { border-left-color: #ca8a04; }
     #setup-root .setup-section:nth-of-type(4) { border-left-color: #3b82f6; }
     #setup-root .setup-section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #52525b; margin-bottom: 8px; }
@@ -1487,13 +1657,7 @@
       </div>
       <div class="setup-card-body">
         <section class="setup-section">
-          <h2 class="setup-section-title">Category &amp; division</h2>
-          <div class="setup-field">
-            <label for="setup-sel-category">Bracket category</label>
-            <select id="setup-sel-category" class="setup-input">
-              <option value="">Select category</option>
-            </select>
-          </div>
+          <h2 class="setup-section-title">Game type</h2>
           <div class="setup-field">
             <label for="setup-sel-gametype">Game type</label>
             <select id="setup-sel-gametype" class="setup-input">
@@ -1501,46 +1665,36 @@
             </select>
           </div>
         </section>
-        <section class="setup-section">
-          <h2 class="setup-section-title">Performance &amp; category order</h2>
-          <div class="setup-field">
-            <label for="setup-category-order">Categories (order)</label>
-            <textarea id="setup-category-order" class="setup-input" rows="4" placeholder="Featherweight (Boys, 12-15)&#10;Bantamweight (Girls, 10-12)"></textarea>
-          </div>
-          <div class="setup-field">
-            <label for="setup-team-order">Team order (uniform rotation)</label>
-            <input type="text" id="setup-team-order" class="setup-input" placeholder="Team Alpha, Team Beta, Team Gamma" />
-          </div>
+        <section class="setup-section anyo-setup-section-brackets">
+          <h2 class="setup-section-title">Brackets &amp; performers</h2>
+          <p class="text-xs text-muted" style="margin:0 0 10px;line-height:1.45">
+            Add one <strong>category</strong> per performance group (weight class, gender division, age range). Add <strong>performers</strong> (name and team) under each category.
+            <strong>Performance order</strong> is the order categories are listed: the top category is <strong>1st</strong> in the queue, then 2nd, 3rd, and so on. Use the <strong>↑</strong> / <strong>↓</strong> arrow buttons to change that order.
+          </p>
+          <datalist id="anyo-weight-presets">
+            <option value="Strawweight"></option>
+            <option value="Featherweight"></option>
+            <option value="Bantamweight"></option>
+            <option value="Lightweight"></option>
+            <option value="Welterweight"></option>
+            <option value="Middleweight"></option>
+            <option value="Light heavyweight"></option>
+            <option value="Heavyweight"></option>
+          </datalist>
+          <div id="anyo-setup-categories-list"></div>
+          <button type="button" class="setup-btn-primary anyo-setup-icon-btn" id="btn-anyo-setup-add-category" style="margin-top:8px;width:auto;padding:8px 14px;font-size:13px" aria-label="Add category" title="Add category">
+            <svg class="anyo-setup-icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
         </section>
         <section class="setup-section">
-          <h2 class="setup-section-title">Roster (CSV or PDF)</h2>
-          <div class="setup-field">
-            <label for="setup-roster-pdf">Players PDF (optional)</label>
-            <input type="file" id="setup-roster-pdf" accept=".pdf,application/pdf" style="font-size:12px;margin-top:2px" />
-            <button type="button" class="setup-btn-primary" id="btn-setup-pdf-extract">Extract text to roster box</button>
-          </div>
-          <div class="setup-field">
-            <label for="setup-roster-text">Roster lines</label>
-            <textarea id="setup-roster-text" class="setup-input setup-input--mono" rows="6" placeholder="Maria Santos, Team Alpha, Featherweight"></textarea>
-          </div>
-        </section>
-        <section class="setup-section setup-section-manual">
-          <h2 class="setup-section-title">Manual roster (no import)</h2>
-          <div class="setup-field">
-            <label class="setup-manual-check-label" style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-weight:600">
-              <input type="checkbox" id="setup-manual-roster-only" style="margin-top:3px;flex-shrink:0" />
-              <span>Manual entry only — no PDF. Use the rows below so each performer has a <strong>category</strong> (needed for queue order and per-category rankings).</span>
-            </label>
-          </div>
-          <div id="setup-manual-builder-wrap" class="hidden">
-            <p class="text-xs text-muted" style="margin:0 0 10px;line-height:1.45">
-              One row per performer: name, team, category. Event order follows your category list above, then team rotation within each category.
-            </p>
-            <div id="setup-manual-rows"></div>
-            <button type="button" class="setup-btn-primary" id="btn-setup-manual-add-row" style="margin-top:8px;width:auto;padding:8px 14px;font-size:13px">
-              Add row
-            </button>
-          </div>
+          <h2 class="setup-section-title">Team order (queue)</h2>
+          <p class="text-xs text-muted" style="margin: 0 0 10px; line-height: 1.45; font-size: 12px; color: #52525b">
+            List teams in the order they should appear in the <strong>performer queue</strong> (1st team, then 2nd, then 3rd, …). Within each performance category, order follows this rotation. Names must match the <strong>Team</strong> field on performers (spelling).
+          </p>
+          <div id="setup-team-order-list" class="anyo-team-order-list" aria-label="Team order list"></div>
+          <button type="button" class="setup-btn-primary anyo-setup-icon-btn" id="btn-setup-team-add" style="margin-top: 8px; width: auto; padding: 8px 14px; font-size: 13px" aria-label="Add team" title="Add team">
+            <svg class="anyo-setup-icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
         </section>
         <section class="setup-section">
           <h2 class="setup-section-title">Performance &amp; judging</h2>
@@ -1560,6 +1714,13 @@
           <div class="setup-field">
             <label for="setup-num-judges">Number of judges</label>
             <input type="number" id="setup-num-judges" min="1" max="9" value="5" />
+          </div>
+          <div class="setup-field">
+            <label for="setup-max-judge-score">Maximum score per judge</label>
+            <input type="number" id="setup-max-judge-score" class="setup-input" min="1" max="1000" step="0.1" value="10" />
+            <p class="text-xs text-muted" style="margin: 6px 0 0; font-size: 11px; font-weight: 500; color: #71717a; line-height: 1.4">
+              Each judge enters a score from <strong>1</strong> up to this maximum (default <strong>10</strong>). Use any cap your event needs (e.g. 10, 20, 100)—up to <strong>1000</strong> here. Averages and finals use these values after deductions.
+            </p>
           </div>
           <div class="setup-field">
             <label for="setup-form-category">Form category</label>
@@ -1773,9 +1934,12 @@
 
       <div class="card card-compact hidden" id="section-scores">
         <div class="card-header">
-          <span class="card-title-sm">Judges (1–10)</span>
+          <span class="card-title-sm" id="judges-section-title">Judges (1–10)</span>
         </div>
         <div class="card-body">
+          <p class="text-xs text-muted" style="margin:0 0 8px;font-size:11px;line-height:1.4;color:var(--muted-fg)">
+            Type each judge score, then press <strong>Enter</strong> to save (so two-digit scores like 18 or 20 are not saved after the first digit).
+          </p>
           <div class="grid-judges mb-2" id="judge-grid"></div>
 
           <div class="grid-2 mb-2">
@@ -1947,7 +2111,20 @@ const $ = (id) => document.getElementById(id);
 const ANYO_RULES_KEY = 'anyoEventRules';
 const ANYO_LIVE_KEY = 'anyoLiveState';
 const ANYO_QUEUE_KEY = 'anyoQueueState';
+/** Maps synthetic manual category ids (anyo-dyn-*) to display labels */
+const ANYO_DYNAMIC_CATEGORY_LABELS_KEY = 'anyoDynamicCategoryLabels';
+/** Structured bracket cards (weight / division / age + performers) for Anyo setup UI */
+const ANYO_STRUCTURED_SETUP_KEY = 'anyoStructuredSetup';
 const QUEUE_WIN_NAME = 'kaliarena-anyo-queue';
+/** Upper bound for "maximum score per judge" (allows scales above 10, e.g. 20 or 100). */
+const ANYO_JUDGE_SCORE_MAX_CAP = 1000;
+
+/** @type {Array<{id:string,weightClass:string,division:string,ageRange:string,legacyCategoryId?:string|null,performers:Array<{id:string,name:string,team:string}>}>} */
+let anyoSetupCategoriesDraft = [];
+let anyoSetupBracketUiInitDone = false;
+/** Ordered team names for uniform rotation within each category (matches roster spelling). */
+let anyoTeamOrderDraft = [];
+let anyoTeamOrderUiInitDone = false;
 
 const FORM_CATEGORY_LABEL = {
   traditional: 'Traditional',
@@ -2004,6 +2181,10 @@ function getAnyoRules() {
     const r = JSON.parse(localStorage.getItem(ANYO_RULES_KEY) || '{}');
     const sec = Math.max(30, Math.min(30 * 60, (parseInt(r.performanceSec, 10) || 90)));
     const nj = Math.max(1, Math.min(9, parseInt(r.numJudges, 10) || 5));
+    const rawMax = parseFloat(r.maxJudgeScore);
+    const maxJudgeScore = Number.isFinite(rawMax)
+      ? Math.max(1, Math.min(ANYO_JUDGE_SCORE_MAX_CAP, rawMax))
+      : 10;
     const formCategory = r.formCategory === 'non-traditional' ? 'non-traditional' : 'traditional';
     const weaponOk = ['single-stick', 'double-stick', 'espada-y-daga', 'mixed'];
     const weaponCategory = weaponOk.includes(r.weaponCategory) ? r.weaponCategory : 'single-stick';
@@ -2023,6 +2204,7 @@ function getAnyoRules() {
     return {
       performanceSec: sec,
       numJudges: nj,
+      maxJudgeScore,
       formCategory,
       weaponCategory,
       selectedCategoryId,
@@ -2036,6 +2218,7 @@ function getAnyoRules() {
     return {
       performanceSec: 90,
       numJudges: 5,
+      maxJudgeScore: 10,
       formCategory: 'traditional',
       weaponCategory: 'single-stick',
       selectedCategoryId: null,
@@ -2048,7 +2231,665 @@ function getAnyoRules() {
   }
 }
 
+const ANYO_WEIGHT_ORDER = [
+  'straw', 'atom', 'minimum', 'mini', 'feather', 'bantam', 'light', 'welter', 'middle',
+  'light heavy', 'light-heavy', 'heavy', 'super heavy', 'super-heavy', 'cruiser', 'open', 'unlimited',
+];
+
+function anyoNormalizeDivisionToken(s) {
+  const t = String(s || '').trim().toLowerCase();
+  if (!t) return '';
+  if (/^(w|women|womens|girl)/.test(t)) return 'womens';
+  if (/^(m|men|mens|boy)/.test(t)) return 'mens';
+  if (/^mix/.test(t) || /^open/.test(t)) return 'mixed';
+  if (t === 'womens' || t === "women's") return 'womens';
+  if (t === 'mens' || t === "men's") return 'mens';
+  return '';
+}
+
+function anyoDivisionShortLabel(token) {
+  if (token === 'womens') return "Women's";
+  if (token === 'mixed') return 'Mixed';
+  if (token === 'mens') return "Men's";
+  return '';
+}
+
+function anyoFormatManualCategoryLabel(weightClass, divisionToken, ageRange) {
+  const parts = [];
+  const w = String(weightClass || '').trim();
+  const a = String(ageRange || '').trim();
+  const d = anyoDivisionShortLabel(divisionToken);
+  if (w) parts.push(w);
+  if (d) parts.push(d);
+  if (a) parts.push(a);
+  return parts.length ? parts.join(' · ') : '—';
+}
+
+/** Same key as parseRosterLines (5-column manual lines) — drives bracket / rankings groups. */
+function deriveManualCategoryFromFields(weightClass, divisionToken, ageRange) {
+  const w = String(weightClass || '').trim() || 'General';
+  const d = anyoNormalizeDivisionToken(divisionToken) || 'mens';
+  const a = String(ageRange || '').trim();
+  const key = [w.toLowerCase(), d, a.toLowerCase()].join('\t');
+  const categoryId = anyoSyntheticCategoryIdFromKey(key);
+  const categoryLabel = anyoFormatManualCategoryLabel(w, d, a);
+  return { categoryId, categoryLabel, key };
+}
+
+function newAnyoCatCardId() {
+  return 'anyo-cat-' + Math.random().toString(36).slice(2, 11);
+}
+
+function newAnyoPerfRowId() {
+  return 'anyo-perf-' + Math.random().toString(36).slice(2, 11);
+}
+
+function escSetupAttr(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function ordinalQueueLabel(n) {
+  const j = n % 10;
+  const k = n % 100;
+  if (j === 1 && k !== 11) return n + 'st';
+  if (j === 2 && k !== 12) return n + 'nd';
+  if (j === 3 && k !== 13) return n + 'rd';
+  return n + 'th';
+}
+
+function createEmptyAnyoCategory() {
+  return {
+    id: newAnyoCatCardId(),
+    weightClass: '',
+    division: 'mens',
+    ageRange: '',
+    legacyCategoryId: null,
+    performers: [{ id: newAnyoPerfRowId(), name: '', team: '' }],
+  };
+}
+
+function normalizeAnyoCatDraft(c) {
+  const performers = Array.isArray(c.performers)
+    ? c.performers.map((p) => ({
+        id: p && p.id && String(p.id).trim() ? String(p.id) : newAnyoPerfRowId(),
+        name: String(p.name || '').trim(),
+        team: String(p.team || '').trim(),
+      }))
+    : [{ id: newAnyoPerfRowId(), name: '', team: '' }];
+  return {
+    id: c && c.id && String(c.id).trim() ? String(c.id) : newAnyoCatCardId(),
+    weightClass: String(c.weightClass || '').trim(),
+    division: anyoNormalizeDivisionToken(c.division) || 'mens',
+    ageRange: String(c.ageRange || '').trim(),
+    legacyCategoryId: c.legacyCategoryId && String(c.legacyCategoryId).trim() ? String(c.legacyCategoryId) : null,
+    performers: performers.length ? performers : [{ id: newAnyoPerfRowId(), name: '', team: '' }],
+  };
+}
+
+function draftFromParsedRosterRows(rows, categories) {
+  const byCat = new Map();
+  for (const r of rows) {
+    if (!r.name || !String(r.name).trim()) continue;
+    const cid = r.categoryId;
+    if (!byCat.has(cid)) {
+      const isManual = !!r.manualGroup;
+      byCat.set(cid, {
+        id: newAnyoCatCardId(),
+        weightClass: isManual ? String(r.weightClass || '').trim() : String(r.categoryLabel || categoryLabelById(cid, categories) || '').trim(),
+        division: isManual ? anyoNormalizeDivisionToken(r.division) || 'mens' : 'mens',
+        ageRange: isManual ? String(r.ageRange || '').trim() : '',
+        legacyCategoryId: isManual ? null : cid,
+        performers: [],
+      });
+    }
+    const entry = byCat.get(cid);
+    if (r.manualGroup) {
+      entry.weightClass = String(r.weightClass || '').trim() || entry.weightClass;
+      entry.division = anyoNormalizeDivisionToken(r.division) || entry.division;
+      entry.ageRange = String(r.ageRange || '').trim();
+      entry.legacyCategoryId = null;
+    }
+    entry.performers.push({ id: newAnyoPerfRowId(), name: r.name.trim(), team: (r.team || '').trim() });
+  }
+  const out = [...byCat.values()];
+  if (!out.length) return [createEmptyAnyoCategory()];
+  out.forEach((cat) => {
+    if (!cat.performers.length) cat.performers.push({ id: newAnyoPerfRowId(), name: '', team: '' });
+  });
+  return out;
+}
+
+function hydrateAnyoSetupCategoriesFromSaved() {
+  let draft = null;
+  try {
+    const raw = localStorage.getItem(ANYO_STRUCTURED_SETUP_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length) draft = parsed.map(normalizeAnyoCatDraft);
+    }
+  } catch (_) {}
+  if (draft && draft.length) {
+    anyoSetupCategoriesDraft = draft;
+    return;
+  }
+  let rtx = '';
+  try {
+    rtx = localStorage.getItem('anyoRosterRaw') || '';
+  } catch (_) {}
+  const { categories } = loadCategoriesFromStorage();
+  const rows = parseRosterLines(rtx, categories);
+  anyoSetupCategoriesDraft = draftFromParsedRosterRows(rows, categories);
+}
+
+function syncAnyoSetupCategoriesFromDom() {
+  const root = $('anyo-setup-categories-list');
+  if (!root) return;
+  const cards = root.querySelectorAll('.anyo-cat-card');
+  const next = [];
+  cards.forEach((card) => {
+    const catId = card.getAttribute('data-cat-id') || newAnyoCatCardId();
+    const wInp = card.querySelector('.anyo-cat-weight');
+    const sel = card.querySelector('.anyo-cat-division');
+    const aInp = card.querySelector('.anyo-cat-age');
+    const performers = [];
+    card.querySelectorAll('.anyo-performer-row').forEach((row) => {
+      const pid = row.getAttribute('data-perf-id') || newAnyoPerfRowId();
+      const nInp = row.querySelector('.anyo-perf-name');
+      const tInp = row.querySelector('.anyo-perf-team');
+      performers.push({
+        id: pid,
+        name: (nInp?.value || '').trim(),
+        team: (tInp?.value || '').trim(),
+      });
+    });
+    const legacyRaw = card.getAttribute('data-legacy-category-id');
+    const legacyCategoryId = legacyRaw && String(legacyRaw).trim() ? String(legacyRaw).trim() : null;
+    next.push({
+      id: catId,
+      weightClass: (wInp?.value || '').trim(),
+      division: sel?.value || 'mens',
+      ageRange: (aInp?.value || '').trim(),
+      legacyCategoryId,
+      performers: performers.length ? performers : [{ id: newAnyoPerfRowId(), name: '', team: '' }],
+    });
+  });
+  anyoSetupCategoriesDraft = next.length ? next.map(normalizeAnyoCatDraft) : [createEmptyAnyoCategory()];
+}
+
+const ANYO_SVG_CHEV_UP =
+  '<svg class="anyo-move-icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" d="M6 15l6-6 6 6"/></svg>';
+const ANYO_SVG_CHEV_DOWN =
+  '<svg class="anyo-move-icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>';
+const ANYO_SVG_PLUS =
+  '<svg class="anyo-setup-icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+const ANYO_SVG_TRASH =
+  '<svg class="anyo-setup-icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M10 11v6M14 11v6"/></svg>';
+const ANYO_SVG_PENCIL =
+  '<svg class="anyo-setup-icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L8 18l-4 1 1-4 11.5-11.5z"/></svg>';
+
+function renderAnyoSetupCategories() {
+  const root = $('anyo-setup-categories-list');
+  if (!root) return;
+  if (!anyoSetupCategoriesDraft.length) anyoSetupCategoriesDraft = [createEmptyAnyoCategory()];
+  const n = anyoSetupCategoriesDraft.length;
+  root.innerHTML = anyoSetupCategoriesDraft
+    .map((cat, idx) => {
+      const ord = ordinalQueueLabel(idx + 1);
+      const performers = cat.performers || [];
+      const perfHtml = performers
+        .map(
+          (p) =>
+            '<div class="anyo-performer-row" data-perf-id="' +
+            escSetupAttr(p.id) +
+            '">' +
+            '<div><label class="text-xs text-muted" style="display:block;margin-bottom:4px;font-size:11px">Name</label>' +
+            '<input type="text" class="setup-input anyo-perf-name" placeholder="Name" value="' +
+            escSetupAttr(p.name) +
+            '"/></div>' +
+            '<div><label class="text-xs text-muted" style="display:block;margin-bottom:4px;font-size:11px">Team</label>' +
+            '<input type="text" class="setup-input anyo-perf-team" placeholder="Team" value="' +
+            escSetupAttr(p.team) +
+            '"/></div>' +
+            '<button type="button" class="anyo-performer-remove" aria-label="Remove performer" title="Remove performer">' +
+            ANYO_SVG_TRASH +
+            '</button>' +
+            '</div>'
+        )
+        .join('');
+      const legAttr = cat.legacyCategoryId ? ' data-legacy-category-id="' + escSetupAttr(cat.legacyCategoryId) + '"' : '';
+      return (
+        '<div class="anyo-cat-card" data-cat-id="' +
+        escSetupAttr(cat.id) +
+        '"' +
+        legAttr +
+        '>' +
+        '<div class="anyo-cat-order-bar">' +
+        '<span class="anyo-order-badge">' +
+        ord +
+        ' in queue</span>' +
+        '<button type="button" class="anyo-order-btn anyo-order-up" ' +
+        (idx === 0 ? 'disabled' : '') +
+        ' aria-label="Move category up" title="Move up">' +
+        ANYO_SVG_CHEV_UP +
+        '</button>' +
+        '<button type="button" class="anyo-order-btn anyo-order-down" ' +
+        (idx >= n - 1 ? 'disabled' : '') +
+        ' aria-label="Move category down" title="Move down">' +
+        ANYO_SVG_CHEV_DOWN +
+        '</button>' +
+        '</div>' +
+        '<div class="anyo-cat-card-head">' +
+        '<div class="setup-field" style="margin-bottom:0">' +
+        '<label for="anyo-w-' +
+        escSetupAttr(cat.id) +
+        '">Weight class</label>' +
+        '<input id="anyo-w-' +
+        escSetupAttr(cat.id) +
+        '" type="text" class="setup-input anyo-cat-weight" list="anyo-weight-presets" placeholder="e.g. Featherweight" value="' +
+        escSetupAttr(cat.weightClass) +
+        '"/>' +
+        '</div>' +
+        '<div class="setup-field" style="margin-bottom:0">' +
+        '<label for="anyo-d-' +
+        escSetupAttr(cat.id) +
+        '">Division</label>' +
+        '<select id="anyo-d-' +
+        escSetupAttr(cat.id) +
+        '" class="setup-input anyo-cat-division">' +
+        [
+          ['mens', "Men's"],
+          ['womens', "Women's"],
+          ['mixed', 'Mixed'],
+        ]
+          .map(
+            ([val, lab]) =>
+              '<option value="' +
+              val +
+              '"' +
+              (cat.division === val ? ' selected' : '') +
+              '>' +
+              lab +
+              '</option>'
+          )
+          .join('') +
+        '</select></div>' +
+        '<div class="setup-field" style="margin-bottom:0">' +
+        '<label for="anyo-a-' +
+        escSetupAttr(cat.id) +
+        '">Age range</label>' +
+        '<input id="anyo-a-' +
+        escSetupAttr(cat.id) +
+        '" type="text" class="setup-input anyo-cat-age" placeholder="e.g. 12-15" value="' +
+        escSetupAttr(cat.ageRange) +
+        '"/>' +
+        '</div>' +
+        '<button type="button" class="anyo-cat-remove" aria-label="Remove category" title="Remove category">' +
+        ANYO_SVG_TRASH +
+        '</button>' +
+        '</div>' +
+        '<div class="anyo-performers-head">Performers</div>' +
+        perfHtml +
+        '<button type="button" class="anyo-add-performer setup-btn-primary anyo-setup-icon-btn" style="margin-top:8px;width:auto;padding:6px 12px;font-size:12px" aria-label="Add performer" title="Add performer">' +
+        ANYO_SVG_PLUS +
+        '</button>' +
+        '</div>'
+      );
+    })
+    .join('');
+}
+
+function initAnyoSetupBracketUi() {
+  if (anyoSetupBracketUiInitDone) return;
+  anyoSetupBracketUiInitDone = true;
+  const list = $('anyo-setup-categories-list');
+  const addBtn = $('btn-anyo-setup-add-category');
+  if (addBtn) {
+    addBtn.addEventListener('click', () => {
+      syncAnyoSetupCategoriesFromDom();
+      anyoSetupCategoriesDraft.push(createEmptyAnyoCategory());
+      renderAnyoSetupCategories();
+    });
+  }
+  if (!list) return;
+  list.addEventListener('click', (e) => {
+    const t = e.target;
+    if (!(t instanceof HTMLElement)) return;
+    const up = t.closest('.anyo-order-up');
+    const down = t.closest('.anyo-order-down');
+    const rmCat = t.closest('.anyo-cat-remove');
+    const rmPerf = t.closest('.anyo-performer-remove');
+    const addPerf = t.closest('.anyo-add-performer');
+    const card = t.closest('.anyo-cat-card');
+    if (!card) return;
+    const idx = [...list.querySelectorAll('.anyo-cat-card')].indexOf(card);
+    if (idx < 0) return;
+    if (up && !up.hasAttribute('disabled')) {
+      syncAnyoSetupCategoriesFromDom();
+      if (idx > 0) {
+        const tmp = anyoSetupCategoriesDraft[idx - 1];
+        anyoSetupCategoriesDraft[idx - 1] = anyoSetupCategoriesDraft[idx];
+        anyoSetupCategoriesDraft[idx] = tmp;
+        renderAnyoSetupCategories();
+      }
+      return;
+    }
+    if (down && !down.hasAttribute('disabled')) {
+      syncAnyoSetupCategoriesFromDom();
+      if (idx < anyoSetupCategoriesDraft.length - 1) {
+        const tmp = anyoSetupCategoriesDraft[idx + 1];
+        anyoSetupCategoriesDraft[idx + 1] = anyoSetupCategoriesDraft[idx];
+        anyoSetupCategoriesDraft[idx] = tmp;
+        renderAnyoSetupCategories();
+      }
+      return;
+    }
+    if (rmCat) {
+      syncAnyoSetupCategoriesFromDom();
+      anyoSetupCategoriesDraft.splice(idx, 1);
+      if (!anyoSetupCategoriesDraft.length) anyoSetupCategoriesDraft.push(createEmptyAnyoCategory());
+      renderAnyoSetupCategories();
+      return;
+    }
+    if (rmPerf) {
+      syncAnyoSetupCategoriesFromDom();
+      const row = t.closest('.anyo-performer-row');
+      const pid = row?.getAttribute('data-perf-id');
+      const catD = anyoSetupCategoriesDraft[idx];
+      if (!catD || (catD.performers || []).length <= 1) return;
+      catD.performers = (catD.performers || []).filter((p) => p.id !== pid);
+      renderAnyoSetupCategories();
+      return;
+    }
+    if (addPerf) {
+      syncAnyoSetupCategoriesFromDom();
+      const catD = anyoSetupCategoriesDraft[idx];
+      if (!catD.performers) catD.performers = [];
+      catD.performers.push({ id: newAnyoPerfRowId(), name: '', team: '' });
+      renderAnyoSetupCategories();
+    }
+  });
+}
+
+function syncAnyoTeamOrderFromDom() {
+  const root = $('setup-team-order-list');
+  if (!root) return;
+  const rows = root.querySelectorAll('.anyo-team-order-row');
+  const next = [];
+  rows.forEach((row) => {
+    const inp = row.querySelector('.anyo-team-name-input');
+    next.push((inp?.value ?? '').trim());
+  });
+  anyoTeamOrderDraft = next;
+}
+
+function hydrateAnyoTeamOrderFromRules(r) {
+  if (r.teamOrder && Array.isArray(r.teamOrder) && r.teamOrder.length) {
+    anyoTeamOrderDraft = r.teamOrder.map((t) => String(t));
+    return;
+  }
+  const s = r.teamOrderStr || '';
+  anyoTeamOrderDraft = s.split(/[,;]/).map((t) => t.trim()).filter(Boolean);
+}
+
+function renderAnyoTeamOrderList() {
+  const root = $('setup-team-order-list');
+  if (!root) return;
+  const n = anyoTeamOrderDraft.length;
+  if (!n) {
+    root.innerHTML =
+      '<p class="anyo-team-order-empty" role="note">No teams listed yet. Use <strong>Add team</strong> to set 1st, 2nd, 3rd… order. This order drives the <strong>performer queue</strong> (uniform rotation) within each category. Leave empty to use roster order only.</p>';
+    return;
+  }
+  const esc = escSetupAttr;
+  root.innerHTML = anyoTeamOrderDraft
+    .map((name, idx) => {
+      const ord = ordinalQueueLabel(idx + 1);
+      const isFirst = idx === 0;
+      const isLast = idx === n - 1;
+      return (
+        '<div class="anyo-team-order-row" data-team-idx="' +
+        idx +
+        '">' +
+        '<span class="anyo-team-ordinal">' +
+        ord +
+        ' team</span>' +
+        '<input type="text" class="setup-input anyo-team-name-input" placeholder="Team name (must match roster)" value="' +
+        esc(name) +
+        '" />' +
+        '<div class="anyo-team-order-actions">' +
+        '<button type="button" class="anyo-team-row-btn anyo-team-move-up" ' +
+        (isFirst ? 'disabled' : '') +
+        ' aria-label="Move team up" title="Move up">' +
+        ANYO_SVG_CHEV_UP +
+        '</button>' +
+        '<button type="button" class="anyo-team-row-btn anyo-team-move-down" ' +
+        (isLast ? 'disabled' : '') +
+        ' aria-label="Move team down" title="Move down">' +
+        ANYO_SVG_CHEV_DOWN +
+        '</button>' +
+        '<button type="button" class="anyo-team-row-btn anyo-team-edit" aria-label="Edit team name" title="Edit">' +
+        ANYO_SVG_PENCIL +
+        '</button>' +
+        '<button type="button" class="anyo-team-row-btn anyo-team-delete" aria-label="Remove team from order" title="Delete">' +
+        ANYO_SVG_TRASH +
+        '</button>' +
+        '</div></div>'
+      );
+    })
+    .join('');
+}
+
+function initAnyoTeamOrderUi() {
+  if (anyoTeamOrderUiInitDone) return;
+  anyoTeamOrderUiInitDone = true;
+  const list = $('setup-team-order-list');
+  const addBtn = $('btn-setup-team-add');
+  if (addBtn) {
+    addBtn.addEventListener('click', () => {
+      syncAnyoTeamOrderFromDom();
+      anyoTeamOrderDraft.push('');
+      renderAnyoTeamOrderList();
+      const inputs = list?.querySelectorAll('.anyo-team-name-input');
+      const last = inputs && inputs[inputs.length - 1];
+      if (last) {
+        last.focus();
+        last.select();
+      }
+    });
+  }
+  if (!list) return;
+  list.addEventListener('click', (e) => {
+    const t = e.target;
+    if (!(t instanceof HTMLElement)) return;
+    const row = t.closest('.anyo-team-order-row');
+    if (!row) return;
+    const idx = [...list.querySelectorAll('.anyo-team-order-row')].indexOf(row);
+    if (idx < 0) return;
+    if (t.closest('.anyo-team-edit')) {
+      const inp = row.querySelector('.anyo-team-name-input');
+      if (inp) {
+        inp.focus();
+        inp.select();
+      }
+      return;
+    }
+    if (t.closest('.anyo-team-delete')) {
+      syncAnyoTeamOrderFromDom();
+      anyoTeamOrderDraft.splice(idx, 1);
+      renderAnyoTeamOrderList();
+      return;
+    }
+    const mu = t.closest('.anyo-team-move-up');
+    const md = t.closest('.anyo-team-move-down');
+    if (mu && !mu.hasAttribute('disabled')) {
+      syncAnyoTeamOrderFromDom();
+      if (idx > 0) {
+        const tmp = anyoTeamOrderDraft[idx - 1];
+        anyoTeamOrderDraft[idx - 1] = anyoTeamOrderDraft[idx];
+        anyoTeamOrderDraft[idx] = tmp;
+        renderAnyoTeamOrderList();
+      }
+      return;
+    }
+    if (md && !md.hasAttribute('disabled')) {
+      syncAnyoTeamOrderFromDom();
+      if (idx < anyoTeamOrderDraft.length - 1) {
+        const tmp = anyoTeamOrderDraft[idx + 1];
+        anyoTeamOrderDraft[idx + 1] = anyoTeamOrderDraft[idx];
+        anyoTeamOrderDraft[idx] = tmp;
+        renderAnyoTeamOrderList();
+      }
+    }
+  });
+}
+
+function flattenAnyoDraftToRosterRows(draftOrdered, categories) {
+  const rows = [];
+  for (const cat of draftOrdered) {
+    const derived = deriveManualCategoryFromFields(cat.weightClass, cat.division, cat.ageRange);
+    const categoryId = cat.legacyCategoryId || derived.categoryId;
+    const categoryLabel = cat.legacyCategoryId
+      ? categoryLabelById(cat.legacyCategoryId, categories)
+      : derived.categoryLabel;
+    for (const p of cat.performers || []) {
+      if (!(p.name || '').trim()) continue;
+      rows.push({
+        name: p.name.trim(),
+        team: (p.team || '').trim(),
+        categoryId,
+        categoryLabel,
+        weightClass: cat.weightClass,
+        division: cat.division,
+        ageRange: cat.ageRange,
+        manualGroup: !cat.legacyCategoryId,
+      });
+    }
+  }
+  return rows;
+}
+
+function rosterTextFromDraft(draftOrdered) {
+  const lines = [];
+  for (const cat of draftOrdered) {
+    const w = String(cat.weightClass || '').trim() || 'General';
+    const d = anyoNormalizeDivisionToken(cat.division) || 'mens';
+    const a = String(cat.ageRange || '').trim();
+    for (const p of cat.performers || []) {
+      if (!(p.name || '').trim()) continue;
+      lines.push(p.name.trim() + ' | ' + (p.team || '').trim() + ' | ' + w + ' | ' + d + ' | ' + a);
+    }
+  }
+  return lines.join('\n');
+}
+
+function categoryOrderIdsFromDraft(draftOrdered) {
+  const ids = [];
+  const seen = new Set();
+  for (const cat of draftOrdered) {
+    const derived = deriveManualCategoryFromFields(cat.weightClass, cat.division, cat.ageRange);
+    const cid = cat.legacyCategoryId || derived.categoryId;
+    if (!seen.has(cid)) {
+      seen.add(cid);
+      ids.push(cid);
+    }
+  }
+  return ids;
+}
+
+function anyoHashStr(s) {
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = (h * 33) ^ s.charCodeAt(i);
+  return Math.abs(h).toString(36);
+}
+
+function anyoSyntheticCategoryIdFromKey(key) {
+  return 'anyo-dyn-' + anyoHashStr(key);
+}
+
+function anyoWeightSortKey(w) {
+  const s = String(w || '').trim().toLowerCase().replace(/[–—-]/g, ' ');
+  if (!s) return 999;
+  const kg = /(\d+(?:\.\d+)?)\s*kg/.exec(s);
+  if (kg) return parseFloat(kg[1]);
+  for (let i = 0; i < ANYO_WEIGHT_ORDER.length; i++) {
+    if (s.includes(ANYO_WEIGHT_ORDER[i])) return i;
+  }
+  return 500 + Math.min(s.charCodeAt(0) || 0, 200);
+}
+
+function anyoAgeSortKey(age) {
+  const s = String(age || '').trim().toLowerCase();
+  if (!s) return 9999;
+  const under = /(\d+)\s*&\s*under|under\s*(\d+)/i.exec(s);
+  if (under) return parseInt(under[1] || under[2], 10) - 0.5;
+  const m = s.match(/(\d+)\s*[-–]\s*(\d+)/);
+  if (m) return parseInt(m[1], 10);
+  const n = parseInt(s, 10);
+  return Number.isFinite(n) ? n : 8000;
+}
+
+function anyoDivisionSortKey(div) {
+  if (div === 'womens') return 0;
+  if (div === 'mens') return 1;
+  if (div === 'mixed') return 2;
+  return 3;
+}
+
+function deriveCategoryOrderIdsFromRows(rows, categories) {
+  const byId = new Map();
+  rows.forEach((r) => {
+    if (!r.categoryId || byId.has(r.categoryId)) return;
+    byId.set(r.categoryId, r);
+  });
+  const ids = [...byId.keys()];
+  ids.sort((ida, idb) => {
+    const ra = byId.get(ida);
+    const rb = byId.get(idb);
+    const ma = !!ra.manualGroup;
+    const mb = !!rb.manualGroup;
+    if (ma && mb) {
+      const wa = anyoWeightSortKey(ra.weightClass);
+      const wb = anyoWeightSortKey(rb.weightClass);
+      if (wa !== wb) return wa - wb;
+      const aa = anyoAgeSortKey(ra.ageRange);
+      const ab = anyoAgeSortKey(rb.ageRange);
+      if (aa !== ab) return aa - ab;
+      const da = anyoDivisionSortKey(ra.division);
+      const db = anyoDivisionSortKey(rb.division);
+      if (da !== db) return da - db;
+    }
+    const ia = categories.findIndex((c) => c.id === ida);
+    const ib = categories.findIndex((c) => c.id === idb);
+    if (ia >= 0 && ib >= 0) return ia - ib;
+    if (ia >= 0) return -1;
+    if (ib >= 0) return 1;
+    return String(ida).localeCompare(String(idb));
+  });
+  return ids;
+}
+
+function mergeAnyoDynamicCategories(baseCategories, rules) {
+  const seen = new Set(baseCategories.map((c) => c.id));
+  const out = baseCategories.slice();
+  const orderIds = Array.isArray(rules.categoryOrderIds) ? rules.categoryOrderIds : [];
+  for (const id of orderIds) {
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    out.push({ id, fullName: categoryLabelById(id, baseCategories) });
+  }
+  return out;
+}
+
 function categoryLabelById(catId, categories) {
+  if (!catId) return '—';
+  try {
+    const dyn = JSON.parse(localStorage.getItem(ANYO_DYNAMIC_CATEGORY_LABELS_KEY) || '{}');
+    if (dyn && typeof dyn[catId] === 'string' && dyn[catId].trim()) return dyn[catId].trim();
+  } catch (_) {}
   const c = categories.find((x) => x.id === catId);
   if (c?.fullName) return c.fullName;
   const demo = DEMO_CATEGORIES.find((x) => x.id === catId);
@@ -2146,114 +2987,49 @@ function parseRosterLines(text, categories) {
     if (parts.length < 2) continue;
     const name = parts[0];
     const team = parts[1] || '';
+    if (parts.length >= 5) {
+      const weightClass = (parts[2] || 'General').trim() || 'General';
+      const division = anyoNormalizeDivisionToken(parts[3]) || 'mens';
+      const ageRange = (parts[4] || '').trim();
+      const key = [weightClass.toLowerCase(), division, ageRange.toLowerCase()].join('\t');
+      const categoryId = anyoSyntheticCategoryIdFromKey(key);
+      const categoryLabel = anyoFormatManualCategoryLabel(weightClass, division, ageRange);
+      rows.push({
+        name,
+        team,
+        categoryId,
+        categoryLabel,
+        weightClass,
+        division,
+        ageRange,
+        manualGroup: true,
+      });
+      continue;
+    }
+    if (parts.length === 4) {
+      const weightClass = (parts[2] || 'General').trim() || 'General';
+      const division = anyoNormalizeDivisionToken(parts[3]) || 'mens';
+      const ageRange = '';
+      const key = [weightClass.toLowerCase(), division, ageRange.toLowerCase()].join('\t');
+      const categoryId = anyoSyntheticCategoryIdFromKey(key);
+      const categoryLabel = anyoFormatManualCategoryLabel(weightClass, division, ageRange);
+      rows.push({
+        name,
+        team,
+        categoryId,
+        categoryLabel,
+        weightClass,
+        division,
+        ageRange,
+        manualGroup: true,
+      });
+      continue;
+    }
     const catHint = parts[2] || '';
     const cat = matchCategoryHint(catHint, categories);
     rows.push({ name, team, categoryId: cat.id, categoryLabel: cat.fullName || cat.id });
   }
   return rows;
-}
-
-function clearManualSetupRows() {
-  const c = $('setup-manual-rows');
-  if (c) c.innerHTML = '';
-}
-
-function appendManualSetupRow({ name = '', team = '', categoryId = '' } = {}) {
-  const container = $('setup-manual-rows');
-  if (!container) return;
-  const { categories } = loadCategoriesFromStorage();
-  if (!categories.length) return;
-  const row = document.createElement('div');
-  row.className = 'setup-manual-row';
-  const nInp = document.createElement('input');
-  nInp.type = 'text';
-  nInp.className = 'setup-input setup-manual-name';
-  nInp.placeholder = 'Name';
-  nInp.value = name;
-  const tInp = document.createElement('input');
-  tInp.type = 'text';
-  tInp.className = 'setup-input setup-manual-team';
-  tInp.placeholder = 'Team';
-  tInp.value = team;
-  const sel = document.createElement('select');
-  sel.className = 'setup-input setup-manual-cat';
-  sel.setAttribute('aria-label', 'Category');
-  categories.forEach((c) => {
-    const o = document.createElement('option');
-    o.value = c.id;
-    o.textContent = c.fullName || c.id;
-    sel.appendChild(o);
-  });
-  if (categoryId && categories.some((c) => c.id === categoryId)) sel.value = categoryId;
-  else sel.value = categories[0].id;
-  const rm = document.createElement('button');
-  rm.type = 'button';
-  rm.className = 'setup-manual-remove';
-  rm.textContent = 'Remove';
-  rm.addEventListener('click', () => {
-    row.remove();
-    if (!container.querySelector('.setup-manual-row')) appendManualSetupRow({});
-  });
-  row.appendChild(nInp);
-  row.appendChild(tInp);
-  row.appendChild(sel);
-  row.appendChild(rm);
-  container.appendChild(row);
-}
-
-function gatherManualSetupRows() {
-  const container = $('setup-manual-rows');
-  if (!container) return [];
-  const out = [];
-  container.querySelectorAll('.setup-manual-row').forEach((row) => {
-    const nInp = row.querySelector('.setup-manual-name');
-    const tInp = row.querySelector('.setup-manual-team');
-    const sel = row.querySelector('.setup-manual-cat');
-    if (!sel) return;
-    out.push({
-      name: (nInp?.value || '').trim(),
-      team: (tInp?.value || '').trim(),
-      categoryId: sel.value || '',
-    });
-  });
-  return out;
-}
-
-function refillManualSetupRowsFromRosterText() {
-  const { categories } = loadCategoriesFromStorage();
-  const rtx = $('setup-roster-text');
-  clearManualSetupRows();
-  const rows = parseRosterLines(rtx?.value || '', categories);
-  if (!rows.length) appendManualSetupRow({});
-  else rows.forEach((r) => appendManualSetupRow({ name: r.name, team: r.team, categoryId: r.categoryId }));
-}
-
-function applyManualSetupRowsToRosterTextarea() {
-  const manualOnly = $('setup-manual-roster-only')?.checked;
-  const rows = gatherManualSetupRows();
-  const filled = rows.filter((r) => r.name.trim());
-  const { categories } = loadCategoriesFromStorage();
-  const rtx = $('setup-roster-text');
-  if (!rtx) return;
-  if (!manualOnly) {
-    if (!filled.length) return;
-    const extra = filled
-      .map((r) => r.name.trim() + ', ' + (r.team || '').trim() + ', ' + categoryLabelById(r.categoryId, categories))
-      .join('\n');
-    rtx.value = rtx.value.trim() ? rtx.value.trim() + '\n' + extra : extra;
-    return;
-  }
-  if (!filled.length) return;
-  rtx.value = filled
-    .map((r) => r.name.trim() + ', ' + (r.team || '').trim() + ', ' + categoryLabelById(r.categoryId, categories))
-    .join('\n');
-}
-
-function updateManualBuilderVisibility() {
-  const wrap = $('setup-manual-builder-wrap');
-  const chk = $('setup-manual-roster-only');
-  if (!wrap || !chk) return;
-  wrap.classList.toggle('hidden', !chk.checked);
 }
 
 function nextAnyoParticipantId() {
@@ -2275,16 +3051,21 @@ function populateManualQueueCategorySelect() {
   const sel = $('mq-category');
   if (!sel) return;
   const { categories } = loadCategoriesFromStorage();
+  const rules = getAnyoRules();
+  const mergedCats = mergeAnyoDynamicCategories(categories, rules);
   const cur = sel.value;
   sel.innerHTML = '';
-  categories.forEach((c) => {
+  mergedCats.forEach((c) => {
     const o = document.createElement('option');
     o.value = c.id;
     o.textContent = c.fullName || c.id;
     sel.appendChild(o);
   });
-  const prefer = state.selectedCategory && categories.some((x) => x.id === state.selectedCategory) ? state.selectedCategory : categories[0]?.id;
-  if (cur && categories.some((c) => c.id === cur)) sel.value = cur;
+  const prefer =
+    state.selectedCategory && mergedCats.some((x) => x.id === state.selectedCategory)
+      ? state.selectedCategory
+      : mergedCats[0]?.id;
+  if (cur && mergedCats.some((c) => c.id === cur)) sel.value = cur;
   else if (prefer) sel.value = prefer;
 }
 
@@ -2567,19 +3348,11 @@ function loadCategoriesFromStorage() {
   return { categories, gameTypes };
 }
 
-function populateSetupDivisionSelects() {
-  const catSel = $('setup-sel-category');
+function populateAnyoGameTypeSelect() {
   const gtSel = $('setup-sel-gametype');
-  if (!catSel || !gtSel) return;
-  const { categories, gameTypes } = loadCategoriesFromStorage();
+  if (!gtSel) return;
+  const { gameTypes } = loadCategoriesFromStorage();
   const rules = getAnyoRules();
-  catSel.innerHTML = '<option value="">Select category</option>';
-  categories.forEach((c) => {
-    const o = document.createElement('option');
-    o.value = c.id;
-    o.textContent = c.fullName || c.id;
-    catSel.appendChild(o);
-  });
   gtSel.innerHTML = '<option value="">Select game type</option>';
   gameTypes.forEach((gt) => {
     const o = document.createElement('option');
@@ -2587,9 +3360,6 @@ function populateSetupDivisionSelects() {
     o.textContent = gt === 'anyo-traditional' ? 'Anyo — Traditional' : 'Anyo — Non-traditional';
     gtSel.appendChild(o);
   });
-  if (rules.selectedCategoryId && categories.some((c) => c.id === rules.selectedCategoryId)) {
-    catSel.value = rules.selectedCategoryId;
-  }
   if (rules.selectedGameType && gameTypes.includes(rules.selectedGameType)) {
     gtSel.value = rules.selectedGameType;
   }
@@ -2614,6 +3384,10 @@ function updateReadonlyDivisionDisplay() {
 
 function getNumJudges() {
   return getAnyoRules().numJudges;
+}
+
+function getMaxJudgeScore() {
+  return getAnyoRules().maxJudgeScore;
 }
 
 function blankScore() {
@@ -2651,10 +3425,11 @@ function currentScore() {
 
 function calcAvg(sc) {
   const n = getNumJudges();
+  const cap = getMaxJudgeScore();
   const vals = [];
   for (let i = 1; i <= n; i++) {
     const v = parseFloat(sc['j' + i]);
-    if (Number.isFinite(v) && v >= 1 && v <= 10) vals.push(v);
+    if (Number.isFinite(v) && v >= 1 && v <= cap) vals.push(v);
   }
   if (!vals.length) return 0;
   return vals.reduce((a, b) => a + b, 0) / vals.length;
@@ -2695,6 +3470,10 @@ let timerInterval = null;
 let mediaObjectUrl = null;
 let currentMediaEl = null;
 
+/** Draft text per judge before Enter commits (key: `${participantId}:${judgeNum}`). */
+const anyoJudgeDraft = new Map();
+let anyoJudgeDraftParticipantId = null;
+
 function escHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;')
@@ -2722,10 +3501,11 @@ function syncAnyoLiveState() {
   const official = rules.performanceSec;
   const elapsedSec = official - state.timeLeft;
   const elapsedFmt = fmtTimer(Math.max(0, elapsedSec));
+  const cap = getMaxJudgeScore();
   const judgeScores = [];
   for (let i = 1; i <= rules.numJudges; i++) {
     const v = sc ? parseFloat(sc['j' + i]) : NaN;
-    const ok = Number.isFinite(v) && v >= 1 && v <= 10;
+    const ok = Number.isFinite(v) && v >= 1 && v <= cap;
     judgeScores.push({ j: i, label: 'J' + i, value: ok ? Math.round(v * 100) / 100 : null, display: ok ? v.toFixed(1) : '—' });
   }
   const dh = Array.isArray(sc?.deductHistory) ? sc.deductHistory.map((x) => Math.round(x * 100) / 100) : [];
@@ -2753,6 +3533,7 @@ function syncAnyoLiveState() {
         showScores: state.timerEnded,
         officialSec: rules.performanceSec,
         numJudges: rules.numJudges,
+        maxJudgeScore: cap,
         judgeScores,
         formCategory: rules.formCategory,
         formCategoryLabel: labelFormCategory(rules.formCategory),
@@ -2856,10 +3637,9 @@ function resetTimerState() {
 
 function loadData() {
   const { categories, gameTypes } = loadCategoriesFromStorage();
-  state.categories = categories;
-  state.gameTypes = gameTypes;
-
   const rules = getAnyoRules();
+  state.categories = mergeAnyoDynamicCategories(categories, rules);
+  state.gameTypes = gameTypes;
   let ctx = {};
   try {
     ctx = JSON.parse(localStorage.getItem('anyoDisplayContext') || '{}');
@@ -2951,6 +3731,7 @@ function loadBracket() {
 function getParticipantsForCategoryBracket(catId, gameType) {
   if (!catId || !gameType) return [];
   const { categories } = loadCategoriesFromStorage();
+  const merged = mergeAnyoDynamicCategories(categories, getAnyoRules());
   const key = catId + '-' + gameType;
   let list = [];
   try {
@@ -2970,7 +3751,7 @@ function getParticipantsForCategoryBracket(catId, gameType) {
       name: p.name,
       team: p.team || '',
       categoryId: cid,
-      categoryLabel: p.categoryLabel || categoryLabelById(cid, categories),
+      categoryLabel: p.categoryLabel || categoryLabelById(cid, merged),
     };
   });
 }
@@ -3021,7 +3802,9 @@ function renderEventRulesBadges() {
     escHtml(fmtTimer(r.performanceSec)) +
     ' · ' +
     r.numJudges +
-    ' judges</span>';
+    ' judges · 1–' +
+    (r.maxJudgeScore != null ? r.maxJudgeScore : 10) +
+    '</span>';
   updateReadonlyDivisionDisplay();
 }
 
@@ -3054,6 +3837,8 @@ function render() {
   $('section-empty').classList.toggle('hidden', !(hasBoth && !hasP));
 
   if (!hasBoth || !hasP) {
+    anyoJudgeDraft.clear();
+    anyoJudgeDraftParticipantId = null;
     const list = $('participants-list');
     if (list) list.innerHTML = '';
     const plcWrapEarly = $('wrap-performers-lineup-category');
@@ -3062,6 +3847,11 @@ function render() {
   }
 
   const p = currentParticipant();
+  const pid = p?.id ?? null;
+  if (pid !== anyoJudgeDraftParticipantId) {
+    anyoJudgeDraft.clear();
+    anyoJudgeDraftParticipantId = pid;
+  }
   const sc = currentScore();
   const nJ = getNumJudges();
 
@@ -3114,10 +3904,11 @@ function render() {
   const vb = $('timer-violation-banner');
   if (vb) vb.classList.toggle('hidden', !violation);
 
+  const maxJ = getMaxJudgeScore();
   $('timer-label').textContent = violation
     ? 'Violation — overtime (past official limit)'
     : state.timerEnded
-      ? "Performance stopped — enter judges' scores (1–10)"
+      ? "Performance stopped — enter judges' scores (1–" + maxJ + ')'
       : state.isRunning
         ? 'Performance running (elapsed time)'
         : 'Ready';
@@ -3176,6 +3967,9 @@ function render() {
   const uBtn = $('btn-deduct-undo');
   if (uBtn) uBtn.disabled = !state.timerEnded;
 
+  const jst = $('judges-section-title');
+  if (jst) jst.textContent = 'Judges (1–' + getMaxJudgeScore() + ')';
+
   const secScores = $('section-scores');
   if (state.timerEnded) {
     secScores.classList.remove('hidden');
@@ -3187,10 +3981,11 @@ function render() {
     $('avg-score').textContent = avg.toFixed(2);
     $('final-score').textContent = tot.toFixed(2);
 
+    const cap = getMaxJudgeScore();
     let filled = 0;
     for (let i = 1; i <= nJ; i++) {
       const v = parseFloat(scJ['j' + i]);
-      if (Number.isFinite(v) && v >= 1 && v <= 10) filled++;
+      if (Number.isFinite(v) && v >= 1 && v <= cap) filled++;
     }
     $('btn-finish').disabled = filled < nJ;
   } else {
@@ -3202,16 +3997,42 @@ function render() {
   syncAnyoQueueState();
 }
 
+function commitJudgeInput(judgeNum, inputEl) {
+  const p = currentParticipant();
+  if (!p || !inputEl) return;
+  const dk = p.id + ':' + judgeNum;
+  anyoJudgeDraft.delete(dk);
+  const raw = String(inputEl.value ?? '').trim();
+  const value = raw === '' ? NaN : parseFloat(raw);
+  handleJudgeInput(judgeNum, value);
+}
+
 function renderJudges(sc) {
   const grid = $('judge-grid');
+  const p = currentParticipant();
+  if (!p) return;
   const nJ = getNumJudges();
+  const cap = getMaxJudgeScore();
+  const activeId = document.activeElement?.id;
+  const restoreFocusId = activeId && /^judge-\d+$/.test(activeId) ? activeId : null;
+  let restoreSel = [0, 0];
+  if (restoreFocusId) {
+    const el = document.getElementById(restoreFocusId);
+    if (el && typeof el.selectionStart === 'number') {
+      restoreSel = [el.selectionStart, el.selectionEnd];
+    }
+  }
   grid.innerHTML = '';
   for (let i = 1; i <= nJ; i++) {
     const key = 'j' + i;
     const v = sc[key];
-    const ok = Number.isFinite(parseFloat(v)) && parseFloat(v) >= 1 && parseFloat(v) <= 10;
+    const committedOk = Number.isFinite(parseFloat(v)) && parseFloat(v) >= 1 && parseFloat(v) <= cap;
+    const dk = p.id + ':' + i;
+    const hasDraft = anyoJudgeDraft.has(dk);
+    const displayVal = hasDraft ? anyoJudgeDraft.get(dk) : committedOk ? String(v) : '';
+    const showDone = committedOk && !hasDraft;
     const div = document.createElement('div');
-    div.className = 'judge-card' + (ok ? ' judge-card-done' : '');
+    div.className = 'judge-card' + (showDone ? ' judge-card-done' : '');
     div.innerHTML =
       '<label for="judge-' +
       i +
@@ -3220,25 +4041,46 @@ function renderJudges(sc) {
       '</label>' +
       '<input type="number" id="judge-' +
       i +
-      '" min="1" max="10" step="0.1" placeholder="1–10" value="' +
-      (ok ? v : '') +
+      '" min="1" max="' +
+      cap +
+      '" step="0.1" placeholder="1–' +
+      cap +
+      '" value="' +
+      escSetupAttr(displayVal) +
       '" data-j="' +
       i +
-      '" />' +
-      (ok ? '<div class="judge-entered">✓</div>' : '');
+      '" title="Enter the score, then press Enter to save" />' +
+      (showDone ? '<div class="judge-entered">✓</div>' : '');
     grid.appendChild(div);
-    $('judge-' + i).addEventListener('input', function () {
-      handleJudgeInput(i, parseFloat(this.value));
+    const inp = $('judge-' + i);
+    inp.addEventListener('input', function () {
+      anyoJudgeDraft.set(dk, this.value);
     });
+    inp.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        commitJudgeInput(i, this);
+      }
+    });
+  }
+  if (restoreFocusId) {
+    const el = $(restoreFocusId);
+    if (el) {
+      el.focus();
+      try {
+        el.setSelectionRange(restoreSel[0], restoreSel[1]);
+      } catch (_) {}
+    }
   }
 }
 
 function handleJudgeInput(judgeNum, value) {
   const p = currentParticipant();
   if (!p) return;
+  const cap = getMaxJudgeScore();
   let v = value;
   if (!Number.isFinite(v)) v = 0;
-  if (v > 10) v = 10;
+  if (v > cap) v = cap;
   if (v < 0) v = 0;
   const sc = { ...getScore(p.id), ['j' + judgeNum]: v };
   state.scores = { ...state.scores, [p.id]: sc };
@@ -3255,9 +4097,10 @@ function renderParticipantsList() {
     const done = sc && getNumJudges() > 0;
     let filled = 0;
     if (sc) {
+      const cap = getMaxJudgeScore();
       for (let i = 1; i <= getNumJudges(); i++) {
         const v = parseFloat(sc['j' + i]);
-        if (Number.isFinite(v) && v >= 1 && v <= 10) filled++;
+        if (Number.isFinite(v) && v >= 1 && v <= cap) filled++;
       }
     }
     const complete = filled >= getNumJudges();
@@ -3734,32 +4577,17 @@ function completeAnyoSetupFromForm() {
     err.textContent = '';
     err.classList.remove('show');
   }
+  syncAnyoSetupCategoriesFromDom();
+  syncAnyoTeamOrderFromDom();
   const { categories, gameTypes } = loadCategoriesFromStorage();
   const gameTypeSel = $('setup-sel-gametype')?.value?.trim() || '';
-  const catIdSingle = $('setup-sel-category')?.value?.trim() || '';
-  let orderText = $('setup-category-order')?.value || '';
-  let teamStr = $('setup-team-order')?.value || '';
-  let rosterText = $('setup-roster-text')?.value || '';
-  const pdfRosterIn = $('setup-roster-pdf');
-  const hasPlayersPdf = pdfRosterIn && pdfRosterIn.files && pdfRosterIn.files[0];
-  const manualOnlySetup = $('setup-manual-roster-only')?.checked;
-  if (!hasPlayersPdf && typeof KaliArenaMock !== 'undefined' && !manualOnlySetup) {
-    const m = KaliArenaMock;
-    if (!orderText.trim() && m.anyoCategoryOrderText) orderText = m.anyoCategoryOrderText;
-    if (!teamStr.trim() && m.anyoTeamOrder) teamStr = m.anyoTeamOrder;
-    if (!rosterText.trim() && m.anyoRosterText) rosterText = m.anyoRosterText;
+  let teamOrder = anyoTeamOrderDraft.map((t) => String(t).trim()).filter(Boolean);
+  if (!teamOrder.length && typeof KaliArenaMock !== 'undefined' && KaliArenaMock.anyoTeamOrder) {
+    const mock = KaliArenaMock.anyoTeamOrder;
+    if (typeof mock === 'string') teamOrder = mock.split(/[,;]/).map((s) => s.trim()).filter(Boolean);
+    else if (Array.isArray(mock)) teamOrder = mock.map((x) => String(x).trim()).filter(Boolean);
   }
-  let categoryOrderIds = parseCategoryOrderLines(orderText, categories);
-  if (!categoryOrderIds.length && catIdSingle && categories.some((c) => c.id === catIdSingle)) {
-    categoryOrderIds = [catIdSingle];
-  }
-  if (!categoryOrderIds.length) {
-    if (err) {
-      err.textContent = 'Set performance category order (one per line), or select one bracket category above.';
-      err.classList.add('show');
-    }
-    return false;
-  }
+  const teamStr = teamOrder.join(', ');
   if (!gameTypeSel || !gameTypes.includes(gameTypeSel)) {
     if (err) {
       err.textContent = 'Select a game type.';
@@ -3785,20 +4613,42 @@ function completeAnyoSetupFromForm() {
     }
     return false;
   }
+  const rawSetupMax = parseFloat($('setup-max-judge-score')?.value);
+  const maxScore = Number.isFinite(rawSetupMax)
+    ? Math.max(1, Math.min(ANYO_JUDGE_SCORE_MAX_CAP, rawSetupMax))
+    : 10;
   const formCat = $('setup-form-category')?.value === 'non-traditional' ? 'non-traditional' : 'traditional';
   const weaponEl = $('setup-weapon-category');
   const wv = weaponEl ? weaponEl.value : 'single-stick';
   const weaponOk = ['single-stick', 'double-stick', 'espada-y-daga', 'mixed'];
   const weaponCat = weaponOk.includes(wv) ? wv : 'single-stick';
-  const teamOrder = teamStr.split(/[,;]/).map((t) => t.trim()).filter(Boolean);
-  applyManualSetupRowsToRosterTextarea();
-  rosterText = $('setup-roster-text')?.value || '';
-  const rows = parseRosterLines(rosterText, categories);
+  const draftOrdered = anyoSetupCategoriesDraft.slice();
+  const seenCatIds = new Set();
+  for (const cat of draftOrdered) {
+    const derived = deriveManualCategoryFromFields(cat.weightClass, cat.division, cat.ageRange);
+    const cid = cat.legacyCategoryId || derived.categoryId;
+    if (seenCatIds.has(cid)) {
+      if (err) {
+        err.textContent =
+          'Two categories have the same weight class, division, and age. Change one of them, or merge performers into a single category.';
+        err.classList.add('show');
+      }
+      return false;
+    }
+    seenCatIds.add(cid);
+  }
+  const rows = flattenAnyoDraftToRosterRows(draftOrdered, categories);
   if (!rows.length) {
     if (err) {
-      err.textContent = manualOnlySetup
-        ? 'Add at least one manual row with a name and category, or paste roster lines (Name, Team, Category) in the box.'
-        : 'Add roster lines (Name, Team, Category) or extract text from a PDF into the box.';
+      err.textContent = 'Add at least one performer with a name under a category.';
+      err.classList.add('show');
+    }
+    return false;
+  }
+  const categoryOrderIds = categoryOrderIdsFromDraft(draftOrdered);
+  if (!categoryOrderIds.length) {
+    if (err) {
+      err.textContent = 'Add at least one performance category.';
       err.classList.add('show');
     }
     return false;
@@ -3806,18 +4656,20 @@ function completeAnyoSetupFromForm() {
   const participants = buildPerformanceOrder(rows, categoryOrderIds, teamOrder, categories);
   if (!participants.length) {
     if (err) {
-      err.textContent = 'No athletes matched your category order. Check spelling against event categories.';
+      err.textContent = 'No performers matched your categories. Check names and category fields.';
       err.classList.add('show');
     }
     return false;
   }
   const primaryCat = categoryOrderIds[0];
+  const rosterText = rosterTextFromDraft(draftOrdered);
   try {
     localStorage.setItem(
       ANYO_RULES_KEY,
       JSON.stringify({
         performanceSec: total,
         numJudges: nj,
+        maxJudgeScore: maxScore,
         formCategory: formCat,
         weaponCategory: weaponCat,
         selectedCategoryId: primaryCat,
@@ -3825,11 +4677,14 @@ function completeAnyoSetupFromForm() {
         categoryOrderIds,
         teamOrder,
         teamOrderStr: teamStr,
-        manualRosterOnly: !!manualOnlySetup,
+        manualRosterOnly: true,
       })
     );
     localStorage.setItem('anyoRosterRaw', rosterText);
-    localStorage.setItem('anyoCategoryOrderRaw', orderText);
+    localStorage.setItem('anyoCategoryOrderRaw', categoryOrderIds.map((id) => categoryLabelById(id, categories)).join('\n'));
+    try {
+      localStorage.setItem(ANYO_STRUCTURED_SETUP_KEY, JSON.stringify(draftOrdered.map(normalizeAnyoCatDraft)));
+    } catch (_) {}
     localStorage.setItem('anyoSetupComplete', '1');
     let brackets = {};
     try {
@@ -3861,6 +4716,11 @@ function completeAnyoSetupFromForm() {
       };
     }
     localStorage.setItem('eventBrackets', JSON.stringify(brackets));
+    const dynLabels = {};
+    participants.forEach((p) => {
+      if (p.categoryId && p.categoryLabel) dynLabels[p.categoryId] = p.categoryLabel;
+    });
+    localStorage.setItem(ANYO_DYNAMIC_CATEGORY_LABELS_KEY, JSON.stringify(dynLabels));
   } catch {
     if (err) {
       err.textContent = 'Could not save.';
@@ -3879,10 +4739,10 @@ function completeAnyoSetupFromForm() {
     );
   } catch {}
   loadData();
-  const catName = categories.find((c) => c.id === primaryCat)?.fullName || primaryCat;
+  const catName = categoryLabelById(primaryCat, categories);
   showToast(
     'Event configured',
-    participants.length + ' athletes · ' + catName + ' first · ' + fmtTimer(total)
+    participants.length + ' performers · ' + catName + ' first · ' + fmtTimer(total)
   );
   return true;
 }
@@ -4066,41 +4926,23 @@ function exportAnyoResultsPrint() {
 
 function openAnyoSetupScreen() {
   document.body.classList.add('setup-mode');
-  populateSetupDivisionSelects();
+  populateAnyoGameTypeSelect();
   const r = getAnyoRules();
   $('setup-anyo-min').value = Math.floor(r.performanceSec / 60);
   $('setup-anyo-sec').value = r.performanceSec % 60;
   $('setup-num-judges').value = r.numJudges;
+  const mjs = $('setup-max-judge-score');
+  if (mjs) mjs.value = r.maxJudgeScore != null ? String(r.maxJudgeScore) : '10';
   const sfc = $('setup-form-category');
   if (sfc) sfc.value = r.formCategory === 'non-traditional' ? 'non-traditional' : 'traditional';
   const swc = $('setup-weapon-category');
   if (swc) swc.value = ['single-stick', 'double-stick', 'espada-y-daga', 'mixed'].includes(r.weaponCategory) ? r.weaponCategory : 'single-stick';
-  const co = $('setup-category-order');
-  if (co) {
-    try {
-      const { categories: cats } = loadCategoriesFromStorage();
-      co.value =
-        localStorage.getItem('anyoCategoryOrderRaw') ||
-        (r.categoryOrderIds?.length ? r.categoryOrderIds.map((id) => categoryLabelById(id, cats)).join('\n') : '');
-    } catch {
-      co.value = '';
-    }
-  }
-  const sto = $('setup-team-order');
-  if (sto) sto.value = r.teamOrderStr || (r.teamOrder || []).join(', ');
-  const rtx = $('setup-roster-text');
-  if (rtx) {
-    try {
-      rtx.value = localStorage.getItem('anyoRosterRaw') || '';
-    } catch {
-      rtx.value = '';
-    }
-  }
-  const mro = $('setup-manual-roster-only');
-  if (mro) mro.checked = !!r.manualRosterOnly;
-  updateManualBuilderVisibility();
-  if (r.manualRosterOnly) refillManualSetupRowsFromRosterText();
-  else clearManualSetupRows();
+  hydrateAnyoTeamOrderFromRules(r);
+  renderAnyoTeamOrderList();
+  initAnyoTeamOrderUi();
+  hydrateAnyoSetupCategoriesFromSaved();
+  renderAnyoSetupCategories();
+  initAnyoSetupBracketUi();
   const sr = $('setup-root');
   if (sr) sr.style.display = 'block';
 }
@@ -4148,36 +4990,6 @@ if (!IS_EXTENSION && !IS_QUEUE_DISPLAY) {
       if (ANYO_EDITING.active === 'team') finishAnyoEdit('team', true);
     });
   }
-
-  const bpe = $('btn-setup-pdf-extract');
-  if (bpe) {
-    bpe.addEventListener('click', async () => {
-      const inp = $('setup-roster-pdf');
-      const f = inp?.files?.[0];
-      if (!f) {
-        showToast('Choose a PDF', '');
-        return;
-      }
-      try {
-        const text = await extractTextFromPdfFile(f);
-        const box = $('setup-roster-text');
-        if (box) box.value = (box.value ? box.value + '\n' : '') + text;
-        showToast('PDF text added', 'Edit rows to Name, Team, Category');
-      } catch (e) {
-        showToast('PDF failed', String(e.message || e));
-      }
-    });
-  }
-
-  const mroEl = $('setup-manual-roster-only');
-  if (mroEl) {
-    mroEl.addEventListener('change', () => {
-      updateManualBuilderVisibility();
-      if (mroEl.checked && !$('setup-manual-rows')?.querySelector('.setup-manual-row')) appendManualSetupRow({});
-    });
-  }
-  const btnManAdd = $('btn-setup-manual-add-row');
-  if (btnManAdd) btnManAdd.addEventListener('click', () => appendManualSetupRow({}));
 
   const bmq = $('btn-mq-add');
   if (bmq) bmq.addEventListener('click', () => addPerformerFromManualQueue());
@@ -4239,7 +5051,7 @@ if (!IS_EXTENSION && !IS_QUEUE_DISPLAY) {
     timerInterval = null;
     state.timerEnded = true;
     render();
-    showToast('Performance ended', 'Enter judge scores (1–10).');
+    showToast('Performance ended', 'Enter judge scores (1–' + getMaxJudgeScore() + ').');
   });
 
   document.querySelectorAll('[data-deduct]').forEach((btn) => {
@@ -4339,9 +5151,16 @@ if (IS_EXTENSION) {
     if ($('setup-anyo-min')) $('setup-anyo-min').value = 1;
     if ($('setup-anyo-sec')) $('setup-anyo-sec').value = 30;
     if ($('setup-num-judges')) $('setup-num-judges').value = 5;
+    if ($('setup-max-judge-score')) $('setup-max-judge-score').value = 10;
     if ($('setup-form-category')) $('setup-form-category').value = 'traditional';
     if ($('setup-weapon-category')) $('setup-weapon-category').value = 'single-stick';
-    populateSetupDivisionSelects();
+    populateAnyoGameTypeSelect();
+    hydrateAnyoTeamOrderFromRules(getAnyoRules());
+    renderAnyoTeamOrderList();
+    initAnyoTeamOrderUi();
+    hydrateAnyoSetupCategoriesFromSaved();
+    renderAnyoSetupCategories();
+    initAnyoSetupBracketUi();
   }
 }
 </script>
