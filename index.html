@@ -537,7 +537,7 @@
       text-align: center; padding: 8px 8px 4px;
     }
     .ctl-timer-mega {
-      font-size: clamp(3.25rem, 12vw, 6.5rem);
+      font-size: clamp(5.5rem, 20vw, 11rem);
       font-weight: 900;
       font-variant-numeric: tabular-nums;
       line-height: 1;
@@ -3544,98 +3544,92 @@ function finishAnyoEdit(which, save) {
 
 function exportAnyoResultsPrint() {
   const rules = getAnyoRules();
-  const key = (state.selectedCategory || '') + '-' + (state.selectedGameType || '');
-  let brackets = {};
-  try {
-    brackets = JSON.parse(localStorage.getItem('eventBrackets') || '{}');
-  } catch {
-    brackets = {};
-  }
-  const b = brackets[key] || {};
-  const participants = Array.isArray(b.participants) && b.participants.length ? b.participants : state.participants || [];
-  const scoreMap = b.scores && typeof b.scores === 'object' ? b.scores : state.scores || {};
-  const nJ = rules.numJudges || 5;
-  const rows = participants.map((p) => {
-    const sc = migrateScore(scoreMap[p.id]);
-    const tot = calcTotal(sc);
-    const ded = sc.deduction || 0;
-    return { ...p, sc, tot, ded, avg: calcAvg(sc) };
+  let allBrackets = {};
+  try { allBrackets = JSON.parse(localStorage.getItem('eventBrackets') || '{}'); } catch { allBrackets = {}; }
+
+  // Collect all bracket keys; fall back to current state if nothing stored
+  let keys = Object.keys(allBrackets).filter(k => {
+    const b = allBrackets[k];
+    return Array.isArray(b.participants) && b.participants.length > 0;
   });
-  const ranked = rows
-    .filter((r) => r.tot > 0)
-    .sort((a, b) => b.tot - a.tot)
-    .map((r, i) => ({ ...r, rank: i + 1 }));
-  const title = 'KaliArena · Anyo results';
-  const when = new Date().toLocaleString();
-  const html =
-    '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' +
-    escHtml(title) +
-    '</title><style>body{font-family:system-ui,sans-serif;padding:24px;color:#111}table{border-collapse:collapse;width:100%;max-width:900px}th,td{border:1px solid #ccc;padding:8px;text-align:left}th{background:#f4f4f5}.muted{color:#666}.rank{width:48px}</style></head><body>' +
-    '<h1>' +
-    escHtml(title) +
-    '</h1>' +
-    '<p class="muted">' +
-    escHtml(when) +
-    '</p>' +
-    '<p><strong>Time limit</strong> ' +
-    escHtml(fmtTimer(rules.performanceSec)) +
-    ' · <strong>Judges</strong> ' +
-    nJ +
-    ' · <strong>Form</strong> ' +
-    escHtml(labelFormCategory(rules.formCategory)) +
-    '</p>' +
-    '<h2>Standings (by final score)</h2>' +
-    '<table><thead><tr><th class="rank">#</th><th>Name</th><th>Team</th><th>Category</th><th>Avg</th><th>Deduction</th><th>Final</th></tr></thead><tbody>' +
-    (ranked.length
-      ? ranked
-          .map(
-            (r) =>
-              '<tr><td>' +
-              r.rank +
-              '</td><td>' +
-              escHtml(r.name || '') +
-              '</td><td>' +
-              escHtml(r.team || '') +
-              '</td><td>' +
-              escHtml(r.categoryLabel || '') +
-              '</td><td>' +
-              r.avg.toFixed(2) +
-              '</td><td>' +
-              r.ded.toFixed(2) +
-              '</td><td><strong>' +
-              r.tot.toFixed(2) +
-              '</strong></td></tr>'
-          )
-          .join('')
-      : '<tr><td colspan="7">No completed scores in storage for this bracket.</td></tr>') +
-    '</tbody></table>' +
-    '<h2>Start order</h2>' +
-    '<table><thead><tr><th>#</th><th>Name</th><th>Team</th><th>Category</th><th>Final</th></tr></thead><tbody>' +
-    rows
-      .map(
-        (r, i) =>
-          '<tr><td>' +
-          (i + 1) +
-          '</td><td>' +
-          escHtml(r.name || '') +
-          '</td><td>' +
-          escHtml(r.team || '') +
-          '</td><td>' +
-          escHtml(r.categoryLabel || '') +
-          '</td><td>' +
-          (r.tot > 0 ? r.tot.toFixed(2) : '—') +
-          '</td></tr>'
-      )
-      .join('') +
-    '</tbody></table>' +
-    '<scr' +
-    'ipt>window.onload=function(){ window.print(); }</scr' +
-    'ipt></body></html>';
-  const w = window.open('', '_blank');
-  if (!w) {
-    showToast('Popup blocked', 'Allow pop-ups to export.');
-    return;
+  if (keys.length === 0) {
+    const fallbackKey = (state.selectedCategory || 'default') + '-' + (state.selectedGameType || 'anyo');
+    allBrackets[fallbackKey] = { participants: state.participants || [], scores: state.scores || {} };
+    keys = [fallbackKey];
   }
+
+  const when = new Date().toLocaleString();
+  const nJ = rules.numJudges || 5;
+  let htmlSections = '';
+  let pipeLines = '# KaliArena Anyo Results\n# Exported: ' + when + '\n';
+  pipeLines += '# Time limit: ' + escHtml(fmtTimer(rules.performanceSec)) + ' · Judges: ' + nJ + '\n\n';
+
+  keys.forEach(key => {
+    const b = allBrackets[key];
+    const participants = b.participants || [];
+    const scoreMap = b.scores && typeof b.scores === 'object' ? b.scores : {};
+    const catLabel = participants[0]?.categoryLabel || key;
+
+    const rows = participants.map(p => {
+      const sc  = migrateScore(scoreMap[p.id]);
+      const tot = calcTotal(sc);
+      const ded = sc.deduction || 0;
+      return { ...p, sc, tot, ded, avg: calcAvg(sc) };
+    });
+    const ranked = rows.filter(r => r.tot > 0).sort((a, b) => b.tot - a.tot).map((r, i) => ({ ...r, rank: i + 1 }));
+
+    // HTML section
+    htmlSections += '<h2>' + escHtml(catLabel) + '</h2>';
+    htmlSections += '<table><thead><tr><th style="width:40px">#</th><th>Name</th><th>Team</th><th>Avg</th><th>Deduction</th><th>Final</th></tr></thead><tbody>';
+    if (ranked.length) {
+      htmlSections += ranked.map(r =>
+        '<tr><td>' + r.rank + '</td><td>' + escHtml(r.name||'') + '</td><td>' + escHtml(r.team||'') +
+        '</td><td>' + r.avg.toFixed(2) + '</td><td>' + r.ded.toFixed(2) +
+        '</td><td><strong>' + r.tot.toFixed(2) + '</strong></td></tr>'
+      ).join('');
+    } else {
+      htmlSections += '<tr><td colspan="6" style="color:#888">No scored participants in this bracket.</td></tr>';
+    }
+    htmlSections += '</tbody></table>';
+
+    // Pipe-delimited block for organizer portal
+    pipeLines += '## Category: ' + catLabel + '\n';
+    pipeLines += 'RANK|NAME|TEAM|CATEGORY|AVG|DEDUCTION|FINAL\n';
+    if (ranked.length) {
+      pipeLines += ranked.map(r =>
+        r.rank + '|' + (r.name||'') + '|' + (r.team||'') + '|' + catLabel +
+        '|' + r.avg.toFixed(2) + '|' + r.ded.toFixed(2) + '|' + r.tot.toFixed(2)
+      ).join('\n');
+    } else {
+      pipeLines += '(no scores recorded)';
+    }
+    pipeLines += '\n\n';
+  });
+
+  const html =
+    '<!DOCTYPE html><html><head><meta charset="utf-8"><title>KaliArena · Anyo Results</title>' +
+    '<style>body{font-family:system-ui,sans-serif;padding:24px;color:#111;max-width:960px;margin:0 auto}' +
+    'h1{font-size:1.5rem;margin-bottom:.25rem}h2{font-size:1.125rem;margin-top:1.75rem;margin-bottom:.5rem;' +
+    'border-bottom:2px solid #e4e4e7;padding-bottom:.375rem}' +
+    'table{border-collapse:collapse;width:100%;margin-bottom:1rem}' +
+    'th,td{border:1px solid #d4d4d8;padding:7px 10px;text-align:left;font-size:.875rem}' +
+    'th{background:#f4f4f5;font-weight:600}.muted{color:#71717a}' +
+    '.pipe-block{font-family:monospace;font-size:.8125rem;background:#f9f9f9;border:1px solid #d4d4d8;' +
+    'padding:1rem;white-space:pre;overflow-x:auto;margin-top:.5rem}' +
+    '@media print{.no-print{display:none}}' +
+    '</style></head><body>' +
+    '<h1>KaliArena &mdash; Anyo Results</h1>' +
+    '<p class="muted">' + escHtml(when) + ' &nbsp;|&nbsp; Time limit: ' + escHtml(fmtTimer(rules.performanceSec)) +
+    ' &nbsp;|&nbsp; Judges: ' + nJ + '</p>' +
+    htmlSections +
+    '<h2>Organizer Results Format (paste into portal)</h2>' +
+    '<p class="muted no-print" style="font-size:.875rem;">Copy this text and paste it into the Organizer Portal &rarr; Results &rarr; Submit Results.</p>' +
+    '<div class="pipe-block">' + escHtml(pipeLines) + '</div>' +
+    '<scr' + 'ipt>window.onload=function(){ window.print(); }</scr' + 'ipt>' +
+    '</body></html>';
+
+  const w = window.open('', '_blank');
+  if (!w) { showToast('Popup blocked', 'Allow pop-ups to export.'); return; }
   w.document.open();
   w.document.write(html);
   w.document.close();
